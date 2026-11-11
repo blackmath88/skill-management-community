@@ -512,17 +512,27 @@ export function planActivity(data: UserData, input: PlanActivityInput, deps: Com
   }
   let next: UserData = { ...data, activities: [...data.activities, activity] }
   // Record the activity against the campaign step that offered it, so the path stays explainable.
+  // The entry is matched by step id rather than assumed to be the last one: a screen left open
+  // while the campaign advanced would otherwise attach the activity to whatever step the person
+  // has since reached, and the recorded path would say they planned it somewhere they did not.
   if (input.campaignId !== undefined) {
     const campaign = next.campaigns.find((c) => c.id === input.campaignId)
-    if (campaign) {
-      const index = campaign.path.length - 1
-      next = {
-        ...next,
-        campaigns: upsertById(next.campaigns, {
-          ...campaign,
-          path: campaign.path.map((entry, i) => (i === index ? { ...entry, activityIds: [...entry.activityIds, activity.id] } : entry)),
-          updatedAt: now,
-        }),
+    if (campaign && campaign.path.length > 0) {
+      const index =
+        input.stepId === undefined
+          ? campaign.path.length - 1
+          : campaign.path.reduce((found, entry, i) => (entry.stepId === input.stepId ? i : found), -1)
+      if (index >= 0) {
+        next = {
+          ...next,
+          campaigns: upsertById(next.campaigns, {
+            ...campaign,
+            path: campaign.path.map((entry, i) =>
+              i === index ? { ...entry, activityIds: [...entry.activityIds, activity.id] } : entry,
+            ),
+            updatedAt: now,
+          }),
+        }
       }
     }
   }

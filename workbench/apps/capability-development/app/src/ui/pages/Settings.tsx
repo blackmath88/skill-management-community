@@ -56,6 +56,11 @@ export function SettingsPage() {
           </li>
           <li>There is no analytics, no telemetry and no error reporting. Nothing is counted about how you use this.</li>
           <li>
+            This app makes no network request of its own. The only links that leave this device are the source
+            citations on the Methods page, which go to a publisher when you click one; they open in a new tab and
+            send no referrer. Nothing about your records travels with them.
+          </li>
+          <li>
             An export is a plain file you control. Once you have copied it somewhere, deleting your records here cannot
             recall that copy.
           </li>

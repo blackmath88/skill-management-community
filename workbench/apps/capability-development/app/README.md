@@ -4,8 +4,10 @@ A local-first capability-development application. You choose a direction or star
 you are actually in, work through a bounded campaign, rehearse, try something for real, review what
 happened, and see what your own records do and do not show.
 
-Everything you enter stays in this browser. There is no account, no server, no analytics and no
-outbound request of any kind.
+Everything you enter stays in this browser. There is no account, no server and no analytics, and the
+app makes no network request of its own. The only links that leave the device are the source
+citations on the Methods page, which go to a publisher if you click one, in a new tab and with no
+referrer; nothing about your records travels with them.
 
 Status: **a working first implementation.** It has not been used by anybody, it has not been
 piloted, and nothing in it has been shown to improve anybody's practice. See

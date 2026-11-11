@@ -584,3 +584,62 @@ describe('commands never mutate their input', () => {
     void situation
   })
 })
+
+describe('a screen left open while the campaign moved on', () => {
+  it('records the activity against the step that offered it, not the step now current', async () => {
+    // Regression guard: the path entry used to be assumed to be the last one. A form left open
+    // while the campaign advanced would then attach the activity to a step the person had not
+    // planned it at, and the recorded path would describe a route they did not take.
+    const started = expectOk(startCampaign(withSituation(), { situationId: 'sit-1', definitionId: CAMPAIGN }, deps))
+    const atNotice = expectOk(
+      advanceCampaign(started.data, { campaignId: started.value.id, choiceId: 'orient-continue' }, testDeps()),
+    )
+    const atExplanations = expectOk(
+      advanceCampaign(atNotice.data, { campaignId: started.value.id, choiceId: 'notice-have-enough' }, testDeps()),
+    )
+    // The person is now on "explanations" but saves the activity the "notice" step offered.
+    const planned = expectOk(
+      planActivity(
+        atExplanations.data,
+        {
+          situationId: 'sit-1',
+          campaignId: started.value.id,
+          stepId: 'notice',
+          route: 'personal-practice',
+          kind: 'observation',
+          title: 'Watch it happen',
+          plan: plan(),
+          capabilityIds: [],
+          methodIds: [],
+        },
+        testDeps(),
+      ),
+    )
+    const path = planned.data.campaigns[0]?.path ?? []
+    const noticeEntry = path.find((entry) => entry.stepId === 'notice')
+    const currentEntry = path.find((entry) => entry.stepId === 'explanations')
+    expect(noticeEntry?.activityIds).toContain(planned.value.id)
+    expect(currentEntry?.activityIds ?? []).not.toContain(planned.value.id)
+  })
+
+  it('still records the activity when no step id is given', () => {
+    const started = expectOk(startCampaign(withSituation(), { situationId: 'sit-1', definitionId: CAMPAIGN }, deps))
+    const planned = expectOk(
+      planActivity(
+        started.data,
+        {
+          situationId: 'sit-1',
+          campaignId: started.value.id,
+          route: 'personal-practice',
+          kind: 'observation',
+          title: 'Watch it happen',
+          plan: plan(),
+          capabilityIds: [],
+          methodIds: [],
+        },
+        testDeps(),
+      ),
+    )
+    expect(planned.data.campaigns[0]?.path[0]?.activityIds).toContain(planned.value.id)
+  })
+})
