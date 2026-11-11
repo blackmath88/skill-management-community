@@ -29,6 +29,10 @@ No outreach has been sent. The supplied contact email and personalised invitatio
 | N3 | Character, skill growth and adaptation might connect with Leader Me | Owner's idea | Research hypothesis; community participation is not evidence of competence |
 | N4 | Consider a photo follow-up using the owner's “Sharing is Caring” repo tool | Owner's follow-up idea | Repo identity and capabilities not inspected; no delivery or outreach authorised by this note |
 
+## Additional idea from the round
+
+N5 — Future-skills trend radar: mirror external trends into the organisation's own skills/capabilities to develop a target picture. Participant idea supplied by the owner; speaker and method unconfirmed. See [working note](TREND-RADAR.md). No implementation decision implied.
+
 ## Implement's published perspective
 
 Checked publications provide useful conversation anchors. The 2020 learning-organisation article centres self-direction, a broad learning framework and structural/cultural conditions. The 2025 leadership article argues for systemic, contextual development, collective simulations and multiple perspectives. These are provider positions, not independent outcome evaluations. [V2–V3](EVIDENCE.md)

@@ -10,6 +10,7 @@ The central question is how people, teams and organisations develop useful capab
 | --- | --- |
 | [Research synthesis](SYNTHESIS.md) | Concepts, theories, strategic choices and limits of the evidence |
 | [Taxonomy and leadership](TAXONOMY-AND-LEADERSHIP.md) | Develop the two themes raised in the PostFinance input |
+| [Future-skills trend radar](TREND-RADAR.md) | Connect external signals to local work, current evidence and a target capability picture |
 | [Community and people](COMMUNITY.md) | Verified event context, professional contacts, field notes and follow-up |
 | [Practice and questions](PRACTICE.md) | Diagnostic prompts, small experiments and methods before software |
 | [Evidence register](EVIDENCE.md) | Provenance, selective source checks, caveats and research priorities |
