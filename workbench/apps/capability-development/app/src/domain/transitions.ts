@@ -12,14 +12,33 @@ import {
  * Adapted from the quest transition table in blackmath88/leader-me src/domain/quest.ts.
  */
 const ACTIVITY_TRANSITIONS: Record<ActivityState, readonly ActivityState[]> = {
-  planned: ['ready', 'paused', 'abandoned'],
+  // An attempt may be recorded against a plan that was never marked ready: somebody can do the
+  // thing before finishing the form, and refusing the record would lose what actually happened.
+  planned: ['ready', 'attempted', 'paused', 'abandoned'],
   ready: ['planned', 'attempted', 'paused', 'abandoned'],
   // An attempt happened. It can be reviewed, or set aside without a review.
   attempted: ['reviewed', 'paused', 'abandoned'],
   // Terminal for progression purposes; a further attempt is a new activity.
   reviewed: [],
-  paused: ['planned', 'ready', 'attempted', 'abandoned'],
+  // Resuming returns the activity to where it was. `resumeStateFor` decides which, because an
+  // activity with an attempt must never go back to planned or ready: the attempt record would
+  // then describe an activity that says it has not been attempted, which is a shape the stored
+  // records are not allowed to take.
+  paused: ['planned', 'ready', 'attempted', 'reviewed', 'abandoned'],
   abandoned: [],
+}
+
+/**
+ * Where a paused activity goes when it is resumed.
+ *
+ * Resuming is one button, and the user is not asked to choose a state. Sending an activity that
+ * has an attempt back to `planned` was a route to an unreadable record set, so the decision is
+ * made here from what the records contain rather than from which button was pressed.
+ */
+export function resumeStateFor(options: { hasAttempt: boolean; hasReview: boolean; planIsReady: boolean }): ActivityState {
+  if (options.hasReview) return 'reviewed'
+  if (options.hasAttempt) return 'attempted'
+  return options.planIsReady ? 'ready' : 'planned'
 }
 
 export function canTransitionActivity(from: ActivityState, to: ActivityState): boolean {

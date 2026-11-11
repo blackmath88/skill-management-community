@@ -148,6 +148,16 @@ export function createIndexedDbStore(options: IndexedDbStoreOptions = {}): Recor
     },
 
     async save(ns, data, expectedRevision) {
+      // Checked before the transaction opens. `load` refuses a snapshot that fails this same
+      // check, so writing one would leave the namespace unopenable with no export and no delete
+      // reachable from the error screen. One refused save is recoverable; that is not.
+      const checked = validateUserData(data)
+      if (!checked.ok) {
+        throw new StorageError(
+          'invalid',
+          `These changes were not saved, because saving them would make your records unreadable. Nothing was changed. (${checked.errors.slice(0, 2).join('; ')})`,
+        )
+      }
       const db = await openDb()
       const snapshot = await new Promise<StoredSnapshot>((resolve, reject) => {
         let result: StoredSnapshot | null = null

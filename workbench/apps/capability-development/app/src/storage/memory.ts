@@ -1,5 +1,6 @@
 import { emptyUserData } from '~/domain/empty'
 import type { UserData } from '~/domain/types'
+import { validateUserData } from '~/domain/validation'
 import { StorageError, type Namespace, type RecordStore, type StoredSnapshot } from './types'
 
 interface Slot {
@@ -50,6 +51,15 @@ export function createMemoryStore(options: MemoryStoreOptions = {}): RecordStore
     },
     async save(ns, data, expectedRevision) {
       maybeFail()
+      // The same refusal as the IndexedDB store: both implementations honour one contract, so a
+      // test against this store exercises the behaviour the real one has.
+      const checked = validateUserData(data)
+      if (!checked.ok) {
+        throw new StorageError(
+          'invalid',
+          `These changes were not saved, because saving them would make your records unreadable. Nothing was changed. (${checked.errors.slice(0, 2).join('; ')})`,
+        )
+      }
       const current = slot(ns)
       if (current.revision !== expectedRevision) {
         throw new StorageError(

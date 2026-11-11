@@ -47,8 +47,77 @@ baseline before changing anything.
 | Linting | `npm run lint` | clean |
 | Unit / property / integration | `npm run test` | 295 passed, 17 files, 0 failed, 0 skipped |
 | Production build | `npm run build` | succeeded, 456 kB JS (133 kB gzipped) |
-| Browser journeys | `npm run test:browser` | 63 of 63 checks passed |
-| Independent review | two reviewers, domain integrity and privacy, and engineering correctness | see the handoff for findings and what was done about each |
+| Browser journeys | `npm run test:browser` | 79 of 79 checks passed, three journeys |
+| Independent review (domain integrity and privacy) | a reviewer with no part in writing the code, against CONCEPT §§4,5,7,9,10 and ARCHITECTURE §§6,10 | **17 findings, 2 high. All 13 material ones fixed**; the rest recorded as decisions A13 and A14. 13 claims checked and confirmed with their enforcement point |
+| Independent review (engineering correctness) | a second reviewer attacking concurrency, revisions, import, projections and UI state, with runnable probes | **11 findings, 2 high, every one proven with a probe. All fixed**, and the two guards it identified as the suite's blind spot were added |
+
+## What the independent reviewer found, and what was done
+
+Thirteen of seventeen findings were material and are fixed. Two were high severity because each
+made the application tell a user something untrue.
+
+| # | Finding | Severity | Resolution |
+| --- | --- | --- | --- |
+| 1 | A hypothesis marked "evidence supports it" kept saying so after its only evidence was deleted. Four clicks in the demo reached it | high | `deleteEvidenceCascade` reopens a conclusion that rested on deleted evidence alone, keeping the earlier view in the history. Four tests |
+| 2 | The privacy statement claimed information about other people is "kept to a role, never a name". The check is one regex on one field, blocking emails and long digit strings, not names | high | The statement now says exactly what the check does and does not do, in those words. The README limitation was corrected too |
+| 3 | "Anything here can be deleted" was untrue for four of six record types | medium | Delete controls for explanations, strengths, suggestions and share packages; `deleteHypothesis` and `deleteProposal` added |
+| 4 | A perk survived with zero examples while the delete dialog promised the opposite | medium | The cascade removes a perk that loses its last example, matching the invariant `confirmPerk` enforces on creation |
+| 5 | The sparring partner's record checkboxes were pre-ticked under a hint saying nothing is included unless you tick it | medium | They start unticked; sending is disabled until something is selected |
+| 6 | The footer asserted "makes no network request" unconditionally while Settings derived it from the provider | medium | Both read `sendsDataOffDevice` |
+| 7 | A rehearsal reached the legacy milestone "Practising", which in the predecessor meant a real attempted action | medium | Maps to Exploring. This was the only route by which a rehearsal reached a word implying real application |
+| 8 | A Leader Me feedback note became "an account from somebody else" and earned the feedback credit | medium | Imported as the person's own observation, with a note saying the predecessor never recorded who it came from |
+| 9 | A campaign pinned its definition version but nothing preserved the definition | medium | The screen says when the installed version differs. The remaining limitation is decision A14 |
+| 10 | The Progress page told users to write an exploration; no such feature existed, so the stage was unreachable | medium | Applying a method to a situation in writing, on the situation page |
+| 11 | Conversion carried the predecessor's method ids into validation, so one unresolvable id refused a person's entire history | medium | Unknown references dropped with a note; the records are kept |
+| 12 | The home screen counted rehearsals that were never attempted alongside real attempts that were | low | Counts attempted rehearsals |
+| 13 | "Show exactly what would be sent" omitted the request metadata | low | The preview lists it |
+| 14 | The presentation modes promised a character and a journey view that are not built | low | The labels say what the setting does |
+| 15 | The situation-delete warning omitted the explanations it removes | low | Listed |
+| 16 | A stale suggestion was shown as "Refused" with an empty reason list | low | Distinguished, with its own reason |
+| 17 | The three routes are recorded and displayed but reach neither projection | observation | Not changed. Recorded as decision A13, with what would change it |
+
+The reviewer also confirmed thirteen claims it tried and failed to break, each with the code that
+enforces it: the rehearsal/real separation through the ladder and the credit rules, the six ways
+practice experience resists inflation, the absence of any score or streak, deletion leaving no
+dangling contributor, no conditions finding routed into personal training, nothing leaving the
+device, the preview being the request, share packages copying and transmitting nothing, the
+browser-storage statement, the renderer boundary, a campaign always being stoppable, every number
+being traceable to records and a policy version, and AI being unable to write, award or assess.
+
+## What the engineering reviewer found, and what was done
+
+Every finding came with a runnable probe. Both high-severity ones were reachable by ordinary use.
+
+| # | Finding | Severity | Resolution |
+| --- | --- | --- | --- |
+| 1 | `save` did not validate while `load` refused anything invalid, so three clicks — record an attempt, pause, resume — made a namespace permanently unopenable, with no export and no delete reachable from the error screen. A pasted over-long note did the same | high | Both stores now validate before writing and reject (decision A15). The specific gaps are closed as well: an activity with an attempt cannot return to planned, and `decideHypothesis` applies the cap validation enforces |
+| 2 | Pages were not remounted on a route change, so one record's form state was written onto another: activity 2's review form arrived holding activity 1's review, and one click stored it there. Four variants, including the exploration form added hours earlier | high | `key={route.id}` on both record pages. The same mistake had already been fixed inside `Campaign.tsx`; this was the route-level half |
+| 3 | `saveReview` set the state directly instead of consulting the transition table, reviving abandoned activities and crediting them | medium | It goes through the table; `recordAttempt` does too, and the table now says what it means |
+| 4 | Switching namespace while the first load was still running left the cross-tab watcher on the wrong namespace: a false staleness alarm blocked every save, and real changes went unnoticed | medium | The watcher attaches before the await and only reports for the namespace on screen |
+| 5 | `run()` reported `ok: true` for a write into a namespace the caller had switched away from, so the interface said "Saved" and navigated to a record not in view | medium | It reports the truth, naming where the write landed |
+| 6 | A Leader Me quest marked completed with no attempt became an activity no command could move: the home screen asked for a review for ever, and both the review and the attempt were refused | medium | Imported as planned, with a note |
+| 7 | Reflections dropped because their quest was dropped vanished while the summary said every record had a direct equivalent | medium | Every drop is counted and reported |
+| 8 | A perk whose every example was dropped imported with no examples — the exact claim `confirmPerk` refuses to create | medium | Dropped, with a note |
+| 9 | Validation permitted campaign shapes the commands assumed impossible, so a branch choice could be recorded nowhere | low | Validation requires the current step to be the end of the path |
+| 10 | An unreadable Leader Me file was offered as a valid import that would replace everything | low | Refused, as the native format already was |
+| 11 | Ticking a capability on evidence attached to an activity was accepted and then ignored | low | Counted, without double counting what the activity already claims |
+
+Also addressed from its notes: the session is disposed when the provider unmounts, and the
+reopened-conclusion count compares by id rather than by position.
+
+The reviewer separately confirmed what it attacked and could not break: old-generation results
+mutating session state, `deleteAll`/`reload` racing a command, overwriting newer records from a
+stale snapshot, a failed save reported as saved at the store level, revision monotonicity across
+`clear()`, 24 hostile import files including prototype-pollution attempts and a 9 MB file, and
+every dangling-reference path through the projections.
+
+**The blind spot it named, now closed.** 311 green tests coexisted with findings 1, 2 and 3,
+because nothing saved a command's output and read it back, and nothing drove the interface. Both
+guards now exist: `src/application/invariants.test.ts` asserts that whatever any command produces
+validates — for every command against every starting point, and for generated sequences of up to
+eight — and `src/ui/navigation.test.tsx` navigates between two records and asserts the forms
+reset. The navigation guard was checked against the unfixed code: four of its five tests fail
+without the keys.
 
 ## Defects found by the tests and fixed
 

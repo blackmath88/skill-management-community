@@ -71,6 +71,8 @@ export class AppSession {
   /** The namespace the user asked for; may differ from `latest.ns` until its load succeeds. */
   private target: Namespace = 'personal'
   private unsubscribeStore: (() => void) | null = null
+  /** The namespace the cross-tab watcher is currently attached to. */
+  private watching: Namespace | null = null
 
   constructor(options: AppSessionOptions) {
     this.options = options
@@ -123,13 +125,21 @@ export class AppSession {
     this.generation += 1
     this.target = ns
     this.emit({ namespace: ns, status: 'loading' })
-    await this.enqueue(() => this.loadNow(ns, this.generation))
+    // Watch before awaiting. The namespace switch is clickable while "Opening your records…" is
+    // on screen, so a switch during this await used to have its watcher overwritten by this one:
+    // the session then listened to a namespace it was not showing, raised a false staleness
+    // alarm that blocked every save, and missed real changes to the namespace on screen.
     this.watch(ns)
+    await this.enqueue(() => this.loadNow(ns, this.generation))
   }
 
   private watch(ns: Namespace): void {
     this.unsubscribeStore?.()
+    this.watching = ns
     this.unsubscribeStore = this.options.store.subscribe(ns, (revision) => {
+      // Only the namespace actually on screen can go stale, and only against its own revision.
+      if (this.watching !== this.target) return
+      if (ns !== this.latest.ns) return
       if (revision !== this.latest.revision) this.emit({ stale: true })
     })
   }
@@ -173,9 +183,8 @@ export class AppSession {
     this.target = ns
     const generation = this.generation
     this.emit({ namespace: ns, status: 'loading' })
-    const result = this.enqueue(() => this.loadNow(ns, generation))
     this.watch(ns)
-    return result
+    return this.enqueue(() => this.loadNow(ns, generation))
   }
 
   /**
@@ -214,7 +223,13 @@ export class AppSession {
       try {
         const snapshot = await this.options.store.save(ns, outcome.data, expected)
         if (generation !== this.generation) {
-          return { ok: true, value: outcome.value, revision: snapshot.revision, savedAt: snapshot.savedAt }
+          // The write did land, in `ns`. But the caller is looking at something else now, and
+          // every caller reads ok: true as "saved here" — it shows "Saved in this browser." and
+          // navigates to the new record, which does not exist in the namespace now on screen.
+          // Reporting the truth is more useful than reporting a success in the wrong place.
+          const message = `Saved to your ${ns === 'demo' ? 'demo' : 'own'} records, which you have since switched away from. Switch back to see it.`
+          this.emit({ problem: { kind: 'unknown', message } })
+          return { ok: false, kind: 'storage', errors: [message] }
         }
         this.latest = { ns, data: snapshot.data, revision: snapshot.revision }
         this.emit({

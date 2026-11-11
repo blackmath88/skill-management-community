@@ -55,6 +55,8 @@ function date(o: Obj, key: string): string {
 export interface LegacyConversion {
   data: UserData
   notes: string[]
+  /** True when the file held nothing this build could read. The import is refused, not emptied. */
+  unreadable?: boolean
 }
 
 /**
@@ -87,11 +89,16 @@ const OUTCOME_MAP: Record<string, Attempt['outcome']> = {
 export function convertLeaderMeData(input: unknown, now: string, known?: KnownContentIds): LegacyConversion {
   const notes: string[] = []
   const data = emptyUserData(now)
-  if (!isObj(input)) return { data, notes: ['The file contained no records to convert.'] }
+  // A file this app cannot read is refused rather than offered as an empty import. The panel
+  // the person reaches says "Replace my records with this file", and the only clue that the file
+  // was unreadable would have been one line under "What the conversion did".
+  if (!isObj(input)) return { data, notes: [], unreadable: true }
   const knownCapabilities = known ? new Set(known.capabilityIds) : null
   const knownMethods = known ? new Set(known.methodIds) : null
   const droppedCapabilities = new Set<string>()
   const droppedMethods = new Set<string>()
+  let strandedQuests = 0
+  let droppedPerks = 0
   const keepCapabilities = (ids: string[]): string[] =>
     ids.filter((id) => {
       if (!knownCapabilities || knownCapabilities.has(id)) return true
@@ -164,6 +171,16 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
     }
     const createdAt = iso(q, 'createdAt', now)
     const methodId = str(q, 'methodId')
+    // A quest the predecessor called attempted or completed, but which carries no attempt object,
+    // has no record of what happened. Leaving it in `attempted` produced a record no command
+    // could move: the home screen asked for a review for ever, the review was refused because
+    // there was no attempt, and recording an attempt was refused because the state said there
+    // already was one. It goes back to being planned, which is what the file actually shows.
+    const hasAttemptObject = isObj(q.attempt)
+    const mappedState = mapQuestState(state)
+    const resolvedState: PracticeActivity['state'] =
+      mappedState === 'attempted' && !hasAttemptObject ? 'ready' : mappedState
+    if (mappedState === 'attempted' && !hasAttemptObject) strandedQuests += 1
     const activity: PracticeActivity = {
       id,
       situationId,
@@ -181,7 +198,7 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
       },
       capabilityIds: keepCapabilities([...new Set(strArr(q, 'skillIds'))]),
       methodIds: keepMethod(methodId),
-      state: mapQuestState(state),
+      state: resolvedState,
       createdAt,
       updatedAt: iso(q, 'updatedAt', createdAt),
     }
@@ -191,7 +208,7 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
     data.activities.push(activity)
 
     const attemptRaw = q.attempt
-    if (isObj(attemptRaw)) {
+    if (hasAttemptObject && isObj(attemptRaw)) {
       const attemptedAt = iso(attemptRaw, 'attemptedAt', activity.updatedAt)
       data.attempts.push({
         id: `${id}-attempt`,
@@ -215,13 +232,19 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
   for (const ref of arr(input, 'reflections')) {
     const id = str(ref, 'id')
     const activityId = str(ref, 'questId')
-    if (id === '' || !activityIds.has(activityId) || reviewedActivities.has(activityId)) continue
+    // Every reason a reflection is dropped is counted, not only the state mismatch. A reflection
+    // whose quest was itself dropped used to vanish while the summary said every record had a
+    // direct equivalent — the one line the person reads before replacing their records.
+    if (id === '' || !activityIds.has(activityId) || reviewedActivities.has(activityId)) {
+      droppedReflections += 1
+      continue
+    }
     // A review of something that was never attempted is not interpretable, and emitting one
     // would make the converted set fail validation — which refuses the WHOLE file, so one stray
     // record in an edited or truncated export would cost the person every other record in it.
     // Dropping it and saying so is the only outcome that keeps the rest of their history.
     const target = data.activities.find((a) => a.id === activityId)
-    if (!target || (target.state !== 'attempted' && target.state !== 'reviewed' && target.state !== 'abandoned')) {
+    if (target && target.state !== 'attempted' && target.state !== 'reviewed' && target.state !== 'abandoned') {
       droppedReflections += 1
       continue
     }
@@ -293,6 +316,12 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
     const description = str(perk, 'description')
     if (id === '' || description.trim() === '') continue
     const links = strArr(perk, 'evidenceQuestIds').filter((qid) => activityIds.has(qid))
+    // The same bar confirmPerk enforces: a strength has to point at something the person did.
+    // Import is the one door through which an unsupported claim about somebody could arrive.
+    if (links.length === 0) {
+      droppedPerks += 1
+      continue
+    }
     data.perks.push({
       id,
       description,
@@ -310,7 +339,18 @@ export function convertLeaderMeData(input: unknown, now: string, known?: KnownCo
 
   if (droppedReflections > 0) {
     notes.push(
-      `${droppedReflections} ${droppedReflections === 1 ? 'reflection was' : 'reflections were'} not imported, because the activity they belonged to was never recorded as attempted. A review of something that did not happen could not be interpreted here.`,
+      `${droppedReflections} ${droppedReflections === 1 ? 'reflection was' : 'reflections were'} not imported: the quest ${droppedReflections === 1 ? 'it belonged to' : 'they belonged to'} was itself not imported, was never recorded as attempted, or already had a reflection. A review of something that did not happen could not be interpreted here.`,
+    )
+  }
+
+  if (strandedQuests > 0) {
+    notes.push(
+      `${strandedQuests} ${strandedQuests === 1 ? 'quest was' : 'quests were'} marked attempted or completed in the file without any record of what happened. ${strandedQuests === 1 ? 'It is' : 'They are'} imported as planned, so you can record the attempt if you remember it.`,
+    )
+  }
+  if (droppedPerks > 0) {
+    notes.push(
+      `${droppedPerks} confirmed ${droppedPerks === 1 ? 'strength was' : 'strengths were'} not imported, because none of the activities given as examples came through. A strength has to point at something you did.`,
     )
   }
 

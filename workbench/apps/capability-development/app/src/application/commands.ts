@@ -482,6 +482,11 @@ export function decideHypothesis(data: UserData, input: DecideHypothesisInput, d
   const links = input.evidenceIds ?? existing.evidenceIds
   const missing = links.filter((id) => !data.evidence.some((e) => e.id === id))
   if (missing.length > 0) return fail('not-found', `These evidence items no longer exist: ${missing.join(', ')}.`)
+  // Every command that writes free text applies the cap validation enforces. A note longer than
+  // the cap was accepted here and then made the saved records unreadable.
+  const noteErrors: string[] = []
+  if (input.note !== undefined) text(input.note, 'Your reason', noteErrors)
+  if (noteErrors.length > 0) return fail('validation', ...noteErrors)
   const now = deps.clock.now()
   const next: WorkingHypothesis = {
     ...existing,
@@ -628,6 +633,15 @@ export function setActivityState(
   if (input.state === 'ready' && !planReadiness(existing.kind, existing.plan).ready) {
     return fail('validation', `This plan still needs ${planReadiness(existing.kind, existing.plan).missing.join(', ')}.`)
   }
+  // An activity with an attempt may never read as not-yet-attempted: the attempt record would
+  // then contradict it, and the stored set would be one the reader refuses to open.
+  const hasAttempt = data.attempts.some((a) => a.activityId === existing.id)
+  if (hasAttempt && (input.state === 'planned' || input.state === 'ready')) {
+    return fail(
+      'illegal-transition',
+      'This activity has an attempt recorded, so it cannot go back to being planned. Pausing or abandoning it are the available options.',
+    )
+  }
   const next: PracticeActivity = { ...existing, state: input.state, updatedAt: deps.clock.now() }
   return ok({ ...data, activities: upsertById(data.activities, next) }, next)
 }
@@ -652,7 +666,7 @@ export function recordAttempt(data: UserData, input: RecordAttemptInput, deps: C
   if (data.attempts.some((a) => a.activityId === activity.id)) {
     return fail('validation', 'An attempt is already recorded for this activity. Saving it again would not add anything.')
   }
-  if (activity.state !== 'ready' && activity.state !== 'planned' && activity.state !== 'paused') {
+  if (!canTransitionActivity(activity.state, 'attempted')) {
     return fail('illegal-transition', `An activity that is ${activity.state} cannot take a new attempt record.`)
   }
   const errors: string[] = []
@@ -696,6 +710,17 @@ export function saveReview(data: UserData, input: SaveReviewInput, deps: Command
     return fail('validation', 'Record what happened before reviewing it. A review of an attempt that was never made would not mean anything.')
   }
   const existing = data.reviews.find((r) => r.activityId === activity.id)
+  // Reviewing is a transition like any other, and the table is meant to be the single source of
+  // truth about them. Writing the state directly revived an activity the person had deliberately
+  // abandoned, put it back into "waiting for you", and credited it.
+  if (!existing && activity.state !== 'reviewed' && !canTransitionActivity(activity.state, 'reviewed')) {
+    return fail(
+      'illegal-transition',
+      activity.state === 'abandoned'
+        ? 'You abandoned this activity. Reviewing it would bring it back; start a new activity instead if you want to return to this.'
+        : `An activity that is ${activity.state} cannot be reviewed. Resume it first.`,
+    )
+  }
   const errors: string[] = []
   const observation = text(input.observation, 'What you observed', errors, { required: true })
   const interpretation = text(input.interpretation, 'What you take it to mean', errors)
@@ -810,7 +835,10 @@ export function deleteEvidence(
   const present = ids.filter((id) => data.evidence.some((e) => e.id === id))
   if (present.length === 0) return fail('not-found', 'Those evidence items no longer exist.')
   const next = deleteEvidenceCascade(data, new Set(present), deps?.clock.now())
-  const reopened = next.hypotheses.filter((h, i) => h.status === 'open' && data.hypotheses[i]?.status !== 'open').length
+  // Compared by id, not by position. The cascade maps in place today, so an index comparison
+  // would work, but it would break silently the first time anything there filtered.
+  const before = new Map(data.hypotheses.map((h) => [h.id, h.status]))
+  const reopened = next.hypotheses.filter((h) => h.status === 'open' && before.get(h.id) !== 'open').length
   return ok(next, { removed: present.length, reopened })
 }
 

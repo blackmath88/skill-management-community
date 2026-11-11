@@ -251,3 +251,35 @@ records — what they wrote, planned, attempted and reviewed — are untouched e
 
 **What would change it.** Editing a published pack rather than adding a new one. At that point the
 campaign should carry a snapshot of the steps it used.
+
+
+---
+
+## A15 — A store refuses to write what its reader would refuse to read (agreed)
+
+**Decision.** `RecordStore.save` validates the record set and rejects with
+`StorageError('invalid')` rather than persisting something `load` would refuse. Both
+implementations do it, and the interface says so.
+
+**Reason.** An independent reviewer proved that three ordinary clicks — record an attempt, pause
+the activity, resume it — produced a record set that validation rejects. The write succeeded; the
+next read refused the whole snapshot; and because every page sits behind the status gate, the only
+control left on screen was "Try again". No export, no delete, no way back: somebody's entire
+journal, unreachable, from inside the application. A second route reached it by pasting a note
+longer than the stored cap.
+
+The specific gaps are closed too — an activity with an attempt can no longer return to planned,
+`saveReview` goes through the transition table, and every command that writes free text applies
+the cap. But the gaps were the symptom. A reader and a writer that disagree about what is valid
+turn any defect upstream, present or future, into permanent loss of access. The store is where
+that has to be stopped, because it is the last thing between a command and somebody's records.
+
+**What it costs.** Every save validates the whole record set. At the scale this application
+works at — a few hundred records in one browser — that is not measurable, and the alternative
+is a class of bug whose blast radius is everything the person has written.
+
+**The test that keeps it true.** `src/application/invariants.test.ts` applies every command to
+every starting point, and then up to eight commands in sequence against generated orderings, and
+asserts the result validates every time. The reviewer's observation was that 311 green tests
+coexisted with this defect because nothing saved a command's output and read it back. That is now
+the one thing that file does.

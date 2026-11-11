@@ -637,6 +637,19 @@ function checkRelationships(r: Reader, data: UserData, options: ValidationOption
     if ((c.state === 'completed' || c.state === 'abandoned') && c.currentStepId !== null) {
       r.fail(`${path}.currentStepId`, `must be null once a campaign is ${c.state}`)
     }
+    // The commands assume a live campaign's current step is the one its path ends on, and record
+    // the chosen branch there. When the two disagree the choice is written nowhere, and the path
+    // stops describing the route the person actually took.
+    if (c.currentStepId !== null) {
+      if (c.path.length === 0) {
+        r.fail(`${path}.path`, 'must hold at least the current step while a campaign is live')
+      } else if (c.path[c.path.length - 1]?.stepId !== c.currentStepId) {
+        r.fail(
+          `${path}.currentStepId`,
+          `is "${c.currentStepId}" but the path ends at "${c.path[c.path.length - 1]?.stepId}"; they must agree`,
+        )
+      }
+    }
   })
 
   data.hypotheses.forEach((h, i) => {

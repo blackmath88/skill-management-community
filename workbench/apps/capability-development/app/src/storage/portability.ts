@@ -91,7 +91,7 @@ export function parseImport(json: string, options: ParseImportOptions = {}): Imp
           ],
         }
       }
-      const { data: converted, notes } = convertLeaderMeData(
+      const { data: converted, notes, unreadable } = convertLeaderMeData(
         envelope.data,
         now,
         // Only when the caller said which content is installed. Without it, references are
@@ -100,6 +100,14 @@ export function parseImport(json: string, options: ParseImportOptions = {}): Imp
           ? { capabilityIds: options.knownCapabilityIds, methodIds: options.knownMethodIds }
           : undefined,
       )
+      if (unreadable) {
+        return {
+          ok: false,
+          errors: [
+            'This says it is a Leader Me export, but it holds no records this build can read. Nothing was changed.',
+          ],
+        }
+      }
       const checked = validateUserData(converted, validationOptionsOf(options))
       if (!checked.ok) {
         return {

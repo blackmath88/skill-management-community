@@ -28,6 +28,14 @@ export type StorageErrorKind =
   /** Another tab saved a newer revision. Nothing was overwritten. */
   | 'conflict'
   | 'quota'
+  /**
+   * The records offered for storage would not pass the check the reader applies.
+   *
+   * Writing them would make the namespace unreadable the next time it is opened, and the reader
+   * refuses an unreadable snapshot rather than showing a half-record set — so an unchecked write
+   * is a one-way door out of somebody's own journal. Refusing here costs one failed save.
+   */
+  | 'invalid'
   | 'unknown'
 
 export class StorageError extends Error {
@@ -52,6 +60,10 @@ export interface RecordStore {
    * Atomically replaces the namespace's data if the stored revision equals expectedRevision.
    * Resolves with the new snapshot. Rejects with StorageError('conflict') when another tab saved
    * first; never silently overwrites.
+   *
+   * A store must validate what it is about to write and reject with StorageError('invalid')
+   * rather than persist something its own `load` would refuse. Reader and writer have to agree,
+   * or a defect anywhere upstream becomes permanent loss of access to the records.
    */
   save(ns: Namespace, data: UserData, expectedRevision: number): Promise<StoredSnapshot>
   /** Empties the namespace by storing empty data at the next revision (revisions never go back). */

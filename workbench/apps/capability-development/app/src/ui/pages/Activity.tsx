@@ -17,6 +17,7 @@ import {
   updateActivityPlan,
 } from '~/application/commands'
 import { planReadiness, PLAN_FIELD_LABEL, requiredPlanFields } from '~/domain/plan'
+import { resumeStateFor } from '~/domain/transitions'
 import {
   ASSISTANCE_LEVELS,
   ATTEMPT_OUTCOMES,
@@ -119,7 +120,18 @@ export function ActivityPage({ id }: { id: string }) {
         <AttemptForm activityId={activity.id} kind={activity.kind} />
       )}
 
-      {attempt ? <ReviewPanel activityId={activity.id} /> : null}
+      {attempt && (activity.state === 'attempted' || activity.state === 'reviewed') ? (
+        <ReviewPanel activityId={activity.id} />
+      ) : null}
+      {attempt && activity.state === 'abandoned' ? (
+        <section className="panel panel--quiet">
+          <h2>This activity was abandoned</h2>
+          <p>
+            What happened is still recorded above. Reviewing it would bring it back into what is waiting for you, so it
+            is not offered here. If you want to return to this, a new activity is the way.
+          </p>
+        </section>
+      ) : null}
 
       {attempt ? (
         <AiSparring
@@ -206,7 +218,14 @@ export function ActivityPage({ id }: { id: string }) {
               className="btn-quiet"
               onClick={() =>
                 void save.run(async () => {
-                  const result = await run((data, deps) => setActivityState(data, { id: activity.id, state: 'planned' }, deps))
+                  // Back to where it actually was. Resuming an activity with an attempt into
+                  // "planned" would contradict the attempt record.
+                  const resumed = resumeStateFor({
+                    hasAttempt: attempt !== undefined,
+                    hasReview: review !== undefined,
+                    planIsReady: planReadiness(activity.kind, activity.plan).ready,
+                  })
+                  const result = await run((data, deps) => setActivityState(data, { id: activity.id, state: resumed }, deps))
                   return result.ok ? { ok: true } : { ok: false, errors: result.errors }
                 })
               }

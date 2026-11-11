@@ -85,6 +85,9 @@ export function AppProvider({ children, store, content, aiProvider }: AppProvide
     void session.start()
     return () => {
       unsubscribe()
+      // Also drop the session's own cross-tab subscription. Unsubscribing this component only
+      // would leave the store listener alive for the lifetime of the page.
+      session.dispose()
     }
   }, [session])
 

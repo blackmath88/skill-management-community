@@ -37,11 +37,16 @@ function Page({ route }: { route: Route }) {
     case 'new-situation':
       return <NewSituationPage />
     case 'situation':
-      return <SituationPage id={route.id} />
+      // Keyed by the record, not only by the route name. Without it React keeps the same
+      // component instance across a navigation, and every form inside it keeps the state it
+      // initialised from the FIRST record it ever saw — so one record's review, plan or
+      // exploration could be saved onto another with a single click. The same mistake was
+      // already fixed inside Campaign.tsx; this is the route-level half of it.
+      return <SituationPage key={route.id} id={route.id} />
     case 'campaign':
       return <CampaignPage />
     case 'activity':
-      return <ActivityPage id={route.id} />
+      return <ActivityPage key={route.id} id={route.id} />
     case 'progress':
       return <ProgressPage />
     case 'records':

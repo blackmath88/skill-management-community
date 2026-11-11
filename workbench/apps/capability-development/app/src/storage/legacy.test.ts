@@ -208,10 +208,22 @@ describe('convertLeaderMeData', () => {
     expect(activityById(data, 'quest-1').state).toBe('reviewed')
   })
 
-  it('leaves a completed quest with no reflection short of reviewed', () => {
-    // The one that matters most: a converted record must never claim a review that does not
-    // exist, because a review is what the app treats as evidence of learning from an attempt.
-    expect(activityById(converted(), 'quest-2').state).toBe('attempted')
+  it('leaves a completed quest with no record of what happened as planned, not attempted', () => {
+    // Two rules at once. A converted record must never claim a review that does not exist,
+    // because a review is what this app treats as evidence of learning from an attempt. And a
+    // quest the file calls completed while carrying no attempt object has no record of what
+    // happened: importing it as "attempted" produced a record no command could move — the home
+    // screen asked for a review for ever, the review was refused for want of an attempt, and
+    // recording the attempt was refused because the state said there already was one.
+    const activity = activityById(converted(), 'quest-2')
+    expect(activity.state).toBe('ready')
+    expect(converted().attempts.some((a) => a.activityId === 'quest-2')).toBe(false)
+    expect(converted().reviews.some((r) => r.activityId === 'quest-2')).toBe(false)
+  })
+
+  it('says so in the summary, rather than quietly changing what the file claimed', () => {
+    const notes = convertLeaderMeData(leaderMeData(), NOW).notes.join(' ')
+    expect(notes).toMatch(/without any record of what happened/i)
   })
 
   it('keeps a reflection feedback note as the person’s own observation, not somebody else’s account', () => {

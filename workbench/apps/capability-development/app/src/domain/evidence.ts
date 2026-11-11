@@ -197,12 +197,21 @@ export function deriveCapabilityEvidence(
       }
     }
 
-    // Written explorations: evidence the user saved against a capability without acting yet.
+    // Written explorations the user saved against this capability.
+    //
+    // Evidence attached to an activity counts here only when the activity does not already carry
+    // this capability: the activity is counted above, and counting both would be the same piece
+    // of practice twice. But when somebody ticks a capability on the evidence that the activity
+    // itself does not claim, they are saying this observation is about that capability, and
+    // ignoring the tick while offering the control told them nothing was recorded.
     for (const item of liveEvidence) {
       if (!item.capabilityIds.includes(capability.id)) continue
       if (item.kind !== 'self-observation') continue
-      if (item.activityId !== undefined) continue
       if (item.text.trim() === '') continue
+      if (item.activityId !== undefined) {
+        const parent = data.activities.find((a) => a.id === item.activityId)
+        if (!parent || parent.capabilityIds.includes(capability.id)) continue
+      }
       explorations += 1
       const context = item.situationId ? normaliseContext(situations.get(item.situationId)?.context ?? '') : ''
       refs.push({ evidenceId: item.id, kind: 'written exploration', context, title: item.text.slice(0, 60) })

@@ -56,13 +56,18 @@ and exits non-zero rather than reporting a pass it did not run.
 | --- | --- | --- |
 | Type checking | `npm run typecheck` | clean, no errors |
 | Linting | `npm run lint` | clean, no errors |
-| Unit, property, integration | `npm run test` | **295 passed**, 17 files, 0 failed, 0 skipped |
+| Unit, property, integration | `npm run test` | **327 passed**, 20 files, 0 failed, 0 skipped |
 | Production build | `npm run build` | succeeded; 456 kB JS (133 kB gzipped), 8.8 kB CSS |
-| Browser journeys | `npm run test:browser` | **63 of 63 checks passed** |
+| Browser journeys | `npm run test:browser` | **79 of 79 checks passed**, three journeys |
 | Clean install | `npm ci` | succeeded from the lockfile, 217 packages |
 
-Test counts by area: domain 93 (including six property-based invariants over generated record
-sets), application 56, storage 41, content 38, AI boundary 41, plus the browser journeys.
+Test counts by area: domain 124 (including six property-based invariants over generated record
+sets), application 74 — among them a guard asserting that whatever any command produces is
+something storage will accept, for every command and for generated sequences of up to eight —
+storage 45, content 38, AI boundary 42, interface navigation 5, a second-domain walk-through, plus
+the browser journeys. Two independent reviewers examined the code for domain integrity and
+privacy, and for engineering correctness; what they found and what was done about each is in
+[CHECKLIST.md](CHECKLIST.md).
 
 Passing tests demonstrate specified software behaviour. They say nothing about psychological
 validity or whether anybody learns anything.
@@ -85,6 +90,12 @@ that no amount of personal practice would have produced the decision. The reques
 comes back, and that is recorded as an outcome: nothing is credited for the attempt, 1 is credited
 for reviewing why, no capability claims to have been practised, and the campaign can be stopped
 without that reading as a failure.
+
+**Journey C — the controls the interface promises.** Writing an exploration without committing to
+an activity; checking it earns no practice experience but does record that the capability was
+explored; deleting a single record rather than everything; and the sparring partner, whose record
+checkboxes start unticked, whose send button is disabled until something is selected, and whose
+preview lists the metadata as well as the content.
 
 It also checks accessibility basics: a skip link, a declared language, one level-1 heading, a
 focusable main region, and a keyboard-operable records/demo switch.
