@@ -1,6 +1,16 @@
-# Project foundation
+# Skill Management Community
 
-Every project starts with a shared picture of the work and a small, explicit knowledge base.
+Knowledge and working notes for organisational development, skills and capability development, centred on the Implement Zürich community.
+
+Start with the **[knowledge foundation](docs/knowledge/oe-skills/README.md)**: research synthesis, taxonomy and leadership, community context, practice questions and source qualifications.
+
+Research claims, participant notes and proposed experiments remain distinct. This is an independent practitioner notebook, not an official Implement or PostFinance publication. Leader Me is a related application, not the owner of this knowledge base.
+
+This repository is public. Private peer cases, assessments, invitation tokens and photo links do not belong here. Source copies omit Perplexity conversation links.
+
+## Working foundation
+
+The inherited template provides a shared picture of the work and a small, explicit knowledge base.
 
 **Use this template → Create a new repository**, then clone it and run:
 
