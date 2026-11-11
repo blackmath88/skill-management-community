@@ -40,7 +40,13 @@ export class StorageError extends Error {
 }
 
 export interface RecordStore {
-  /** Returns an empty snapshot (revision 0) when nothing is stored. Rejects with StorageError. */
+  /**
+   * Returns an empty snapshot (revision 0) when nothing is stored. Rejects with StorageError.
+   *
+   * Every snapshot a store returns is the caller's own copy: mutating it must not change what a
+   * later load returns, and must not change what is stored. Both implementations clone, so an
+   * aliasing bug cannot hide behind whichever store the tests happen to use.
+   */
   load(ns: Namespace): Promise<StoredSnapshot>
   /**
    * Atomically replaces the namespace's data if the stored revision equals expectedRevision.

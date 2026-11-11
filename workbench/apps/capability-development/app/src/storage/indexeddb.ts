@@ -33,7 +33,7 @@ export interface IndexedDbStoreOptions {
 }
 
 const UNAVAILABLE_MESSAGE =
-  'Browser storage is not available here (for example in a private window, with storage disabled, or or in a tool without browser storage). Nothing can be saved in this browser right now; please use a regular browser window.'
+  'Browser storage is not available here (for example in a private window, with storage disabled, or in a tool without browser storage). Nothing can be saved in this browser right now; please use a regular browser window.'
 
 function abortQuietly(tx: IDBTransaction): void {
   try {
@@ -166,7 +166,10 @@ export function createIndexedDbStore(options: IndexedDbStoreOptions = {}): Recor
             const record: StoredRecord = { data, revision: current + 1, savedAt: new Date().toISOString() }
             try {
               store.put(record, ns)
-              result = { data: record.data, revision: record.revision, savedAt: record.savedAt }
+              // A copy, not the caller's object: RecordStore promises a snapshot the caller may
+              // hold, and the in-memory store clones too. Honouring the contract differently in
+              // each implementation is how an aliasing bug survives a green test suite.
+              result = { data: structuredClone(record.data), revision: record.revision, savedAt: record.savedAt }
             } catch (error) {
               failure = toStorageError(error, 'Your changes could not be saved.')
               tx.abort()

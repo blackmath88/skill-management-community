@@ -154,13 +154,20 @@ export function deriveDevelopmentSummary(data: UserData, lookupStep?: StepLookup
       reason: 'You can start from a real situation. A direction is optional and can come later.',
     })
   } else if (!activeCampaign) {
-    const situation = data.situations[data.situations.length - 1]
-    nextActions.push({
-      kind: 'start-campaign',
-      label: 'Start a campaign on one of your situations',
-      reason: 'A campaign is a bounded intention, not a course. You can stop it at any step.',
-      ...(situation ? { situationId: situation.id } : {}),
-    })
+    // Only a situation that has never had a campaign is offered one. Re-offering a campaign on
+    // ground somebody has already covered would be inventing work to bring them back, which is
+    // exactly what this product is not for: finishing has to be allowed to mean finished.
+    const covered = new Set(data.campaigns.map((c) => c.situationId))
+    const untouched = data.situations.filter((s) => !covered.has(s.id))
+    const situation = untouched[untouched.length - 1]
+    if (situation) {
+      nextActions.push({
+        kind: 'start-campaign',
+        label: 'Start a campaign on one of your situations',
+        reason: 'A campaign is a bounded intention, not a course. You can stop it at any step.',
+        situationId: situation.id,
+      })
+    }
   }
   if (!activeDirection && data.directions.length === 0 && nextActions.length < 3) {
     nextActions.push({

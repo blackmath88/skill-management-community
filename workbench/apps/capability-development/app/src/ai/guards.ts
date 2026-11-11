@@ -9,6 +9,12 @@
  *
  * A refused proposal is recorded as invalid rather than silently dropped, so the behaviour is
  * visible in the interface and in the tests.
+ *
+ * These patterns are necessarily incomplete: a determined or differently worded response will get
+ * past them. They are not the safeguard that matters most. The safeguard that matters is
+ * structural — a proposal is never a record, accepting one runs an ordinary command with the user
+ * as the author, and no proposal can reach progression at all, because every total is derived
+ * from activities and attempts rather than from anything a provider returns.
  */
 
 export interface GuardViolation {
@@ -31,12 +37,16 @@ const RULES: readonly Rule[] = [
   },
   {
     id: 'claims-progression-authority',
-    pattern: /\b(you (have )?(now )?(reached|unlocked|achieved)|i(’|')?ve (marked|recorded|logged|saved))\b/i,
+    pattern:
+      /\byou (?:have )?(?:now )?(?:reached|unlocked|achieved)\b|\bi(?:(?:’|')ve|\s+have)\s+(?:marked|recorded|logged|saved|added)\b/i,
     reason: 'A suggestion cannot record anything or mark a milestone. Nothing is saved until you save it.',
   },
   {
     id: 'personality-type',
-    pattern: /\byou(’|')?re? (an?|the) \b(introvert|extrovert|extravert|enfp|intj|type [a-z]|\w+ personality)\b|\byour personality type\b|\byou are a natural\b/i,
+    // Matches both "you are an introvert" and "you're an introvert"; an optional adjective is
+    // allowed between the article and the noun ("you are a classic extrovert").
+    pattern:
+      /\byou(?:\s+are|(?:’|')re)\s+(?:a|an|the)\s+(?:[\w-]+\s+)?(?:introvert|extrovert|extravert|enfp|intj|type\s+[a-z]\b|[\w-]+\s+personality)\b|\byour personality type\b|\byou are a natural\b/i,
     reason: 'This app does not diagnose personality. A suggestion may not describe who you are.',
   },
   {

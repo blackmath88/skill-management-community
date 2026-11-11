@@ -318,7 +318,7 @@ const HANDOVER_CAMPAIGN: CampaignDefinition = {
         {
           id: 'explain-own-practice',
           label: 'What I hand over may be unclear',
-          nextStepId: 'choose-next-move',
+          nextStepId: 'choose-handover-move',
           route: 'personal-practice',
           seedHypothesis: {
             category: 'personal-practice',
@@ -328,7 +328,7 @@ const HANDOVER_CAMPAIGN: CampaignDefinition = {
         {
           id: 'explain-missing-routine',
           label: 'The two units never agreed a routine',
-          nextStepId: 'choose-next-move',
+          nextStepId: 'choose-handover-move',
           route: 'shared-practice',
           seedHypothesis: {
             category: 'shared-practice',
@@ -338,7 +338,7 @@ const HANDOVER_CAMPAIGN: CampaignDefinition = {
         {
           id: 'explain-conditions',
           label: 'The conditions pull the two sides apart',
-          nextStepId: 'choose-next-move',
+          nextStepId: 'choose-handover-move',
           route: 'conditions',
           seedHypothesis: {
             category: 'conditions',
@@ -348,7 +348,7 @@ const HANDOVER_CAMPAIGN: CampaignDefinition = {
       ],
     },
     {
-      id: 'choose-next-move',
+      id: 'choose-handover-move',
       title: 'Choose one next move',
       kind: 'choose',
       intent:

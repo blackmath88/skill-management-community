@@ -48,7 +48,6 @@ const REHEARSE_CLOSING_QUESTION: ActivityTemplate = {
     opening:
       'We have been over this. I do not think turning it into a process question helps anybody — can we just get on with the work?',
     lines: [
-      'We have been over this. I do not think turning it into a process question helps anybody — can we just get on with the work?',
       'Honestly, every time someone asks who owns something, it means another month of meetings.',
       'Fine — but who decides is not really the problem. The problem is that the other two units keep changing their minds.',
       'If you want to ask someone, ask them. I am not going to be the one who escalates it.',

@@ -88,8 +88,13 @@ export interface MethodDefinition {
 export interface RehearsalScript {
   /** The role the counterpart plays, e.g. "a colleague who resists a governance discussion". */
   role: string
+  /** The counterpart's first utterance, shown before the person says anything. */
   opening: string
-  /** Lines the counterpart may say, in order. Deterministic: no generated persona. */
+  /**
+   * The counterpart's REPLIES, in order, after the opening: `lines[0]` answers the person's first
+   * turn. Do not repeat `opening` here — two packs following opposite conventions is how an
+   * authored line silently never gets shown. Deterministic: nobody is being simulated.
+   */
   lines: string[]
   /** Shown with the script, every time. */
   note: string

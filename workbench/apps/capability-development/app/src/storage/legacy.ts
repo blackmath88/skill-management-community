@@ -177,10 +177,20 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
 
   // A reflection becomes a review. Its next move was not recorded, so it is "adapt" by default.
   const reviewedActivities = new Set<string>()
+  let droppedReflections = 0
   for (const ref of arr(input, 'reflections')) {
     const id = str(ref, 'id')
     const activityId = str(ref, 'questId')
     if (id === '' || !activityIds.has(activityId) || reviewedActivities.has(activityId)) continue
+    // A review of something that was never attempted is not interpretable, and emitting one
+    // would make the converted set fail validation — which refuses the WHOLE file, so one stray
+    // record in an edited or truncated export would cost the person every other record in it.
+    // Dropping it and saying so is the only outcome that keeps the rest of their history.
+    const target = data.activities.find((a) => a.id === activityId)
+    if (!target || (target.state !== 'attempted' && target.state !== 'reviewed' && target.state !== 'abandoned')) {
+      droppedReflections += 1
+      continue
+    }
     reviewedActivities.add(activityId)
     const reflectedAt = iso(ref, 'reflectedAt', now)
     const review: Review = {
@@ -250,6 +260,12 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
       createdAt: iso(perk, 'createdAt', now),
       updatedAt: iso(perk, 'updatedAt', now),
     })
+  }
+
+  if (droppedReflections > 0) {
+    notes.push(
+      `${droppedReflections} ${droppedReflections === 1 ? 'reflection was' : 'reflections were'} not imported, because the activity they belonged to was never recorded as attempted. A review of something that did not happen could not be interpreted here.`,
+    )
   }
 
   const claims = arr(input, 'claims')

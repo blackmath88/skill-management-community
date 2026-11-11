@@ -59,7 +59,10 @@ export function createRegistry(packs: readonly ContentPack[]): ContentRegistry {
   for (const pack of packs) {
     if (packIds.has(pack.id)) throw new DuplicateContentIdError(`Duplicate content pack id "${pack.id}".`)
     packIds.add(pack.id)
-    for (const group of pack.capabilityGroups) groups.set(group.id, group)
+    // Group definitions are display metadata and two packs may legitimately use the same group.
+    // The first pack's wording wins, deterministically: silently taking the last one would make
+    // the heading a person sees depend on pack load order.
+    for (const group of pack.capabilityGroups) if (!groups.has(group.id)) groups.set(group.id, group)
     for (const capability of pack.capabilities) {
       claim(capabilities, capability.id, capability, 'capability')
       capabilityPack.set(capability.id, pack)
