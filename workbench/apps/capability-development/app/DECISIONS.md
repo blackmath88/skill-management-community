@@ -204,3 +204,50 @@ matching Playwright and installing a second copy would not find that browser. Th
 it three ways and, if none works, says so and exits non-zero rather than reporting a pass it did
 not run. `npm test` does not depend on it. Elsewhere, `npm run test:browser` needs Playwright and
 its Chromium installed first.
+
+---
+
+## A13 — The three routes are recorded and shown, but not weighted (agreed)
+
+**Decision.** Every activity carries a route — your own practice, shared practice, conditions —
+and it is shown wherever the activity is. Neither projection reads it: asking a sponsor earns the
+same credit as practising a question yourself, and raises the same capability evidence.
+
+**Reason.** An independent review raised this as a silent default, and it is better as a stated
+one. Crediting the routes differently would mean deciding which kind of work is worth more. The
+person did really do the thing either way, and this application is not in a position to say that
+clarifying a mandate is worth less than rehearsing a sentence — nor more. Weighting them would
+also give somebody a reason to label work as whichever route scores higher, which is exactly the
+reward-chasing [`../PLAN.md`](../PLAN.md) §11 says to watch for.
+
+**What it costs.** The distinction the concept treats as central is absent from every number.
+Somebody reading only the Progress page cannot see how much of their practice was personal and
+how much was asking other people.
+
+**What would change it.** A pilot finding that people cannot tell the two apart from their own
+records. The cheaper answer first would be a breakdown by route on the Progress page — showing
+the split without weighting it.
+
+---
+
+## A14 — A campaign shows the installed content and says when it has changed (agreed)
+
+**Decision.** A campaign pins the definition id and version it started on. It does not store a
+copy of the authored steps. When the installed version differs from the pinned one, the campaign
+screen says so, in terms: the step text and options come from the installed version and may not be
+the words the person was shown.
+
+**Reason.** An independent review pointed out that pinning a version number is not preserving a
+definition: with version 2 installed, a running campaign would re-render under the new text while
+labelled "content version 1". Storing a snapshot of every campaign definition in every person's
+records is the thorough fix and a significant change to the record format. Saying plainly that the
+text may have moved costs a paragraph and removes the false impression, which is the part that
+actually harms somebody.
+
+**The limitation that remains.** History is still re-rendered under current content. "The path you
+took" resolves historical step ids against the installed pack, so a step that was reworded shows
+its new wording, and a branch removed in a later version shows as a raw id. The person's own
+records — what they wrote, planned, attempted and reviewed — are untouched either way.
+
+**What would change it.** Editing a published pack rather than adding a new one. At that point the
+campaign should carry a snapshot of the steps it used.

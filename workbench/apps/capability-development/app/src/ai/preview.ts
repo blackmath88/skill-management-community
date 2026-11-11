@@ -116,15 +116,29 @@ export function buildRequest(options: {
   }
 }
 
-/** Plain text the user reads before confirming a send. What is shown is what is sent. */
+/**
+ * Plain text the user reads before confirming a send. What is shown is what is sent — including
+ * the metadata, which is listed rather than left out: the record identifiers are specific to this
+ * person's records, and a preview that quietly omitted them would not deserve the word "exactly".
+ */
 export function previewText(request: AiRequest, sendsDataOffDevice: boolean): string {
   const header = sendsDataOffDevice
     ? 'This would be sent off this device to the configured provider:'
     : 'This would be handed to the local stand-in provider. Nothing leaves this device:'
+  const metadata = [
+    `purpose: ${request.purpose}`,
+    `prompt template: ${request.promptId}`,
+    `your records at revision: ${request.baseRevision}`,
+    ...(request.rehearsalTurn !== undefined ? [`rehearsal turn: ${request.rehearsalTurn}`] : []),
+    ...(request.context.length > 0
+      ? [`record identifiers: ${request.context.map((item) => `${item.recordKind} ${item.recordId}`).join(', ')}`]
+      : []),
+  ]
+  const footer = `\n\nAlso sent, as labels rather than content:\n${metadata.map((line) => `· ${line}`).join('\n')}`
   if (request.context.length === 0 && (request.userText ?? '') === '') {
-    return `${header}\n\n(nothing — no records are selected)`
+    return `${header}\n\n(nothing — no records are selected)${footer}`
   }
   const items = request.context.map((item) => `— ${item.label}\n${item.text}`)
   if (request.userText !== undefined && request.userText !== '') items.push(`— What you typed\n${request.userText}`)
-  return `${header}\n\n${items.join('\n\n')}`
+  return `${header}\n\n${items.join('\n\n')}${footer}`
 }

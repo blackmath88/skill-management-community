@@ -35,7 +35,9 @@ export function AiSparring({
   const { state, content, run, aiProvider } = useApp()
   const save = useSave()
   const [open, setOpen] = useState(false)
-  const [include, setInclude] = useState({ situation: true, activity: true, attempt: true, review: true })
+  // Nothing is ticked to begin with. The panel says nothing is included unless you tick it, and
+  // a pre-ticked box would make that sentence false the moment anybody pressed Send.
+  const [include, setInclude] = useState({ situation: false, activity: false, attempt: false, review: false })
   const [preview, setPreview] = useState(false)
   const [report, setReport] = useState<ValidationReport | null>(null)
   const [edits, setEdits] = useState<Record<string, string>>({})
@@ -152,13 +154,16 @@ export function AiSparring({
         <button type="button" className="btn-quiet" onClick={() => setPreview(!preview)}>
           {preview ? 'Hide what would be sent' : 'Show exactly what would be sent'}
         </button>
-        <button type="button" onClick={() => void send()} disabled={busy}>
+        <button type="button" onClick={() => void send()} disabled={busy || context.length === 0}>
           {busy ? 'Waiting…' : 'Send it'}
         </button>
         <button type="button" className="btn-quiet" onClick={() => setOpen(false)}>
           Close
         </button>
       </div>
+      {context.length === 0 ? (
+        <p className="hint">Tick at least one record above. Nothing is selected, so there is nothing to send.</p>
+      ) : null}
       {preview ? <pre>{previewText(request, aiProvider.sendsDataOffDevice)}</pre> : null}
 
       {report ? (
@@ -253,16 +258,27 @@ export function AiSparring({
 
           {report.refused.map(({ proposal, violations }) => (
             <div className="panel panel--caution" key={proposal.id}>
-              <p className="kicker">Refused suggestion</p>
+              {/* A stale suggestion broke no rule; it was simply computed from records that have
+                  since changed. Filing it under "refused" with an empty reason list told the
+                  person the sparring partner had done something wrong. */}
+              <p className="kicker">{proposal.state === 'stale' ? 'Out-of-date suggestion' : 'Refused suggestion'}</p>
               <p>{proposal.text.length > 300 ? `${proposal.text.slice(0, 300)}…` : proposal.text}</p>
-              <ul>
-                {violations.map((violation) => (
-                  <li key={violation.rule}>{violation.reason}</li>
-                ))}
-              </ul>
+              {violations.length > 0 ? (
+                <ul>
+                  {violations.map((violation) => (
+                    <li key={violation.rule}>{violation.reason}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  Your records changed while this was being prepared, so it was computed from a state you are no longer
+                  looking at. Ask again to get a suggestion based on what you have now.
+                </p>
+              )}
               <p className="meta">
-                It is shown here rather than hidden, so you can see what the sparring partner tried to do. It cannot be
-                accepted.
+                {violations.length > 0
+                  ? 'It is shown here rather than hidden, so you can see what the sparring partner tried to do. It cannot be accepted.'
+                  : 'Nothing was wrong with it; it is simply out of date. It cannot be accepted.'}
               </p>
             </div>
           ))}

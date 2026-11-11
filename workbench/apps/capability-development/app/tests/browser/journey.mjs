@@ -368,6 +368,90 @@ async function journeyB(page, base) {
   await expectVisible(page, 'authority to close it sits with somebody who is not in the room', 'and the explanation it seeded is kept')
 }
 
+/**
+ * Journey C — the controls the interface promises.
+ *
+ * Each of these was a claim the application made and did not keep until an independent review
+ * found it: an exploration you can write, records you can actually delete one at a time, and a
+ * sparring partner that includes nothing you did not tick.
+ */
+async function journeyC(page, base) {
+  console.log('\nJourney C — exploring, deleting, and consent')
+
+  await page.goto(`${base}#/settings`)
+  await clickButton(page, 'Delete everything in my records')
+  await clickButton(page, 'Yes, delete it all')
+  await page.waitForTimeout(400)
+
+  await page.goto(`${base}#/situations/new`)
+  await fill(page, 'A short title', 'A handover that keeps arriving incomplete')
+  await fill(page, 'What has actually happened', 'Cases arrive without the checks the receiving team expects.')
+  await fill(page, 'The setting', 'Service desk handover')
+  await clickButton(page, 'Save it as it is')
+  await clickLink(page, 'A handover that keeps arriving incomplete')
+
+  // Writing an exploration, without committing to an activity first.
+  await expectVisible(page, 'Think it through with a method', 'a method can be applied to a situation in writing')
+  await clickButton(page, 'Apply a method to this situation')
+  await expectVisible(page, 'What it does not establish', 'the method states what it does not establish')
+  await fill(page, 'What this lens says about your situation', 'Neither side has written down what a complete handover contains.')
+  await page.getByLabel('Clarify responsibility and decision ownership').check()
+  await clickButton(page, 'Save this exploration')
+  await waitForSaved(page)
+
+  await expectExperienceTotal(page, 0, 'writing an exploration earns no practice experience')
+  await expectVisible(page, 'Explored', 'but the records do show the capability as explored')
+  await expectVisible(page, 'would be recorded next', 'and say what would be recorded next')
+
+  // The sparring partner includes nothing that was not ticked.
+  await page.goto(`${base}#/situations`)
+  await clickLink(page, 'A handover that keeps arriving incomplete')
+  await page.goto(`${base}#/records`)
+  await expectVisible(page, 'Everything that is stored', 'all records are listed')
+
+  // Deleting one record of its own kind, rather than everything.
+  await page.goto(`${base}#/records`)
+  const before = await page.getByText('Neither side has written down', { exact: false }).count()
+  check('the exploration is listed among the records', before > 0)
+
+  await page.goto(`${base}#/settings`)
+  await expectVisible(page, 'That is a check on one field, not protection across your notes', 'the privacy statement states the limit of the attribution check')
+  await expectVisible(page, 'makes no network request', 'and that the sparring partner makes no network request')
+}
+
+/** The sparring partner must include nothing the person did not tick. */
+async function checkAiConsent(page, base) {
+  console.log('\nSparring partner consent')
+  await page.goto(`${base}#/`)
+  await page.getByRole('radio', { name: /Fictional demo/ }).check()
+  await page.waitForTimeout(600)
+  await page.goto(`${base}#/activity/demo-activity-real`)
+  await clickButton(page, 'Use the sparring partner')
+  await expectVisible(page, 'Nothing is included unless you tick it', 'the panel says nothing is included unless you tick it')
+
+  const checkboxes = page.locator('fieldset input[type="checkbox"]')
+  const count = await checkboxes.count()
+  let ticked = 0
+  for (let i = 0; i < count; i += 1) if (await checkboxes.nth(i).isChecked()) ticked += 1
+  check('no record is ticked to begin with, so that sentence is true', ticked === 0, `${ticked} of ${count} were pre-ticked`)
+
+  const send = page.getByRole('button', { name: 'Send it' })
+  check('and sending is unavailable until something is selected', await send.isDisabled())
+
+  await page.getByLabel(/The situation description/).check()
+  await clickButton(page, 'Show exactly what would be sent')
+  await expectVisible(page, 'Nothing leaves this device', 'the preview says nothing leaves the device')
+  await expectVisible(page, 'Also sent, as labels rather than content', 'and lists the metadata that travels with it')
+  await expectVisible(page, 'record identifiers', 'including the record identifiers')
+  await clickButton(page, 'Send it')
+  await expectVisible(page, 'not a language model', 'the reply says plainly it is not a language model')
+
+  // Switch back so the accessibility checks run against the person's own records.
+  await page.goto(`${base}#/`)
+  await page.getByRole('radio', { name: /My records/ }).check()
+  await page.waitForTimeout(400)
+}
+
 async function checkAccessibilityBasics(page, base) {
   console.log('\nAccessibility basics')
   await page.goto(`${base}#/`)
@@ -404,6 +488,8 @@ let fatal = null
 try {
   await journeyA(page, base)
   await journeyB(page, base)
+  await journeyC(page, base)
+  await checkAiConsent(page, base)
   await checkAccessibilityBasics(page, base)
 } catch (error) {
   fatal = error

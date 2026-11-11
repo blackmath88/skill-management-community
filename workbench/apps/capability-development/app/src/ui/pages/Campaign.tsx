@@ -90,6 +90,22 @@ export function CampaignPage() {
         </section>
       ) : null}
 
+      {definition && definition.version !== campaign.definitionVersion ? (
+        <section className="panel panel--caution" role="alert">
+          <h2>The content has changed since this campaign started</h2>
+          <p>
+            You started this campaign on version {campaign.definitionVersion} of “{definition.title}”, and version{' '}
+            {definition.version} is installed now. The step text, the options and the guidance below come from the
+            installed version, so they may not be the words you were actually shown earlier.
+          </p>
+          <p>
+            Your own records — what you wrote, planned, attempted and reviewed — are unaffected and are exactly as you
+            left them. Only the authored text around them has moved. The path below names the steps you took; their
+            wording may have changed.
+          </p>
+        </section>
+      ) : null}
+
       {campaign.state === 'active' && !step && campaign.currentStepId ? (
         <section className="panel panel--caution" role="alert">
           <h2>This step is not in the installed content</h2>

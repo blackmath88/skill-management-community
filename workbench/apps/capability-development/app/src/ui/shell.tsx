@@ -64,7 +64,7 @@ function Page({ route }: { route: Route }) {
 
 export function Shell(): ReactNode {
   const route = useRoute()
-  const { state, switchNamespace, session } = useApp()
+  const { state, switchNamespace, session, aiProvider } = useApp()
 
   // Move focus to the main region on navigation so keyboard and screen-reader users are not
   // returned to the top of the navigation on every page change.
@@ -146,9 +146,13 @@ export function Shell(): ReactNode {
       <footer className="site-footer">
         <div>
           <p>
-            Everything you enter is stored in this browser only. There is no account, no server and no analytics. The
-            optional sparring partner is a local stand-in that makes no network request. Practice experience is a
-            product convention, not an assessment of anybody’s ability.
+            Everything you enter is stored in this browser only. There is no account, no server and no analytics.{' '}
+            {/* Read from the provider rather than asserted, so this sentence cannot outlive the
+                build it was written for: a live provider would change it here too. */}
+            {aiProvider.sendsDataOffDevice
+              ? `The optional sparring partner sends what you select to ${aiProvider.id}, off this device.`
+              : 'The optional sparring partner is a local stand-in that makes no network request.'}{' '}
+            Practice experience is a product convention, not an assessment of anybody’s ability.
           </p>
           <p className="meta">
             Records revision {state.revision}

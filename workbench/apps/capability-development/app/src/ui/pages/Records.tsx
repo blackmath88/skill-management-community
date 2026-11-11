@@ -6,12 +6,19 @@
  * the one action that belongs to the whole record set rather than to a single activity.
  */
 import { useState } from 'react'
-import { decideHypothesis } from '~/application/commands'
+import {
+  deleteHypothesis,
+  deletePerk,
+  deleteProposal,
+  deleteSharePackage,
+  decideHypothesis,
+} from '~/application/commands'
 import { HYPOTHESIS_STATUS_LABEL, EVIDENCE_LABEL, NEXT_MOVE_LABEL, OUTCOME_LABEL } from './labels'
 import { ConfirmButton, Field, formatDateTime, KindTag, PageHead, RouteTag, SaveStatus, useSave } from '../primitives'
 import { href } from '../router'
 import { useApp } from '../state'
-import type { HypothesisStatus } from '~/domain/types'
+import type { HypothesisStatus, UserData } from '~/domain/types'
+import type { CommandOutcome } from '~/application/results'
 
 export function RecordsPage() {
   const { state, content } = useApp()
@@ -44,7 +51,13 @@ export function RecordsPage() {
               {hypothesis.evidenceIds.length > 0 ? (
                 <p className="meta">{hypothesis.evidenceIds.length} evidence item(s) linked.</p>
               ) : null}
-              <HypothesisDecision id={hypothesis.id} status={hypothesis.status} />
+              <div className="row">
+                <HypothesisDecision id={hypothesis.id} status={hypothesis.status} />
+                <DeleteRecord
+                  label="Delete this explanation"
+                  command={(d) => deleteHypothesis(d, hypothesis.id)}
+                />
+              </div>
               {hypothesis.history.length > 1 ? (
                 <details>
                   <summary>How your view of it changed</summary>
@@ -122,6 +135,7 @@ export function RecordsPage() {
               <p>{perk.description}</p>
               {perk.possibleOveruse ? <p className="meta">Where it can go wrong: {perk.possibleOveruse}</p> : null}
               <p className="meta">{perk.evidenceActivityIds.length} activity/activities given as examples.</p>
+              <DeleteRecord label="Delete this strength" command={(d) => deletePerk(d, perk.id)} />
             </li>
           ))}
         </ul>
@@ -143,6 +157,7 @@ export function RecordsPage() {
                 computed at records revision {proposal.baseRevision}
               </p>
               <p>{proposal.text.length > 300 ? `${proposal.text.slice(0, 300)}…` : proposal.text}</p>
+              <DeleteRecord label="Delete this suggestion" command={(d) => deleteProposal(d, proposal.id)} />
             </li>
           ))}
         </ul>
@@ -161,6 +176,7 @@ export function RecordsPage() {
               <p className="meta">Snapshot taken {formatDateTime(pkg.snapshotAt)}.</p>
               {pkg.structuralObstacle ? <p>Structural obstacle: {pkg.structuralObstacle}</p> : null}
               {pkg.supportRequest ? <p>Support request: {pkg.supportRequest}</p> : null}
+              <DeleteRecord label="Delete this package" command={(d) => deleteSharePackage(d, pkg.id)} />
             </li>
           ))}
         </ul>
@@ -169,6 +185,39 @@ export function RecordsPage() {
         </p>
       </section>
     </div>
+  )
+}
+
+/**
+ * A delete control for a record type that has no page of its own.
+ *
+ * The page tells people "anything here can be deleted". That was not true for explanations,
+ * strengths, suggestions and share packages: the only way to remove one was to delete every
+ * record in the namespace. Control over your own records is not a slogan.
+ */
+function DeleteRecord({
+  label,
+  command,
+}: {
+  label: string
+  command: (data: UserData) => CommandOutcome<unknown>
+}) {
+  const { run } = useApp()
+  const save = useSave()
+  return (
+    <>
+      <ConfirmButton
+        label={label}
+        confirmLabel="Yes, delete it"
+        onConfirm={() =>
+          void save.run(async () => {
+            const result = await run((data) => command(data))
+            return result.ok ? { ok: true } : { ok: false, errors: result.errors }
+          })
+        }
+      />
+      <SaveStatus state={save.state} />
+    </>
   )
 }
 

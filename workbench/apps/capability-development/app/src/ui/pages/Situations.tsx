@@ -9,7 +9,7 @@ import { AUTHORITY_LABEL, CHALLENGE_LABEL, CONSTRAINT_LABEL, OWNERSHIP_LABEL, SU
 import { ConfirmButton, Field, KindTag, PageHead, RouteTag, SaveStatus, useSave } from '../primitives'
 import { href, navigate } from '../router'
 import { useApp } from '../state'
-import { deleteSituation, recordSituation, startCampaign } from '~/application/commands'
+import { deleteSituation, recordEvidence, recordSituation, startCampaign } from '~/application/commands'
 import { CONSTRAINT_KINDS, SUPPORT_KINDS, type ChallengeKind, type ConstraintKind, type SupportKind } from '~/domain/types'
 import { situationsWithoutCampaign } from '~/domain/summary'
 
@@ -221,6 +221,139 @@ export function NewSituationPage() {
   )
 }
 
+/**
+ * Applying a method to a situation in writing.
+ *
+ * The Progress page tells somebody with no records that "writing how a method applies to one of
+ * your situations would record an exploration". Until this existed, it did not: evidence could
+ * only be created from an activity, so the explored stage was unreachable and the instruction
+ * pointed at nothing. Exploring before acting is the first move in the behavioural model, and it
+ * should not require committing to an activity first.
+ */
+function ExploreMethod({ situationId }: { situationId: string }) {
+  const { content, run } = useApp()
+  const save = useSave()
+  const [open, setOpen] = useState(false)
+  const [methodId, setMethodId] = useState(content.methods()[0]?.id ?? '')
+  const [response, setResponse] = useState('')
+  const [linked, setLinked] = useState<string[]>([])
+  const method = content.method(methodId)
+
+  if (!open) {
+    return (
+      <section className="panel">
+        <h2>Think it through with a method</h2>
+        <p className="hint">
+          Apply a lens to this situation in writing, before deciding whether to do anything. What you write is recorded
+          as an exploration — something you thought about, not something you did.
+        </p>
+        <button type="button" className="btn-quiet" onClick={() => setOpen(true)}>
+          Apply a method to this situation
+        </button>
+      </section>
+    )
+  }
+
+  return (
+    <section className="panel">
+      <h2>Think it through with a method</h2>
+      <Field label="Which lens">
+        <select
+          value={methodId}
+          onChange={(e) => {
+            setMethodId(e.target.value)
+            setLinked(content.method(e.target.value)?.capabilityIds ?? [])
+          }}
+        >
+          {content.methods().map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.title}
+            </option>
+          ))}
+        </select>
+      </Field>
+      {method ? (
+        <>
+          <p className="meta">{method.summary}</p>
+          <p className="meta">What it does not establish: {method.limits}</p>
+          <ul>
+            {method.prompts.map((prompt) => (
+              <li key={prompt}>{prompt}</li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      <Field label="What this lens says about your situation" hint="There is no credit for length. A few sentences is plenty.">
+        <textarea value={response} onChange={(e) => setResponse(e.target.value)} />
+      </Field>
+      <fieldset>
+        <legend>Capabilities this is about</legend>
+        <ul className="choice-list">
+          {content.capabilities().map((capability) => (
+            <li key={capability.id}>
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={linked.includes(capability.id)}
+                  onChange={() =>
+                    setLinked(
+                      linked.includes(capability.id)
+                        ? linked.filter((c) => c !== capability.id)
+                        : [...linked, capability.id],
+                    )
+                  }
+                />
+                {capability.title}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </fieldset>
+      <div className="row">
+        <button
+          type="button"
+          disabled={response.trim() === ''}
+          onClick={() =>
+            void save
+              .run(async () => {
+                const result = await run((data, deps) =>
+                  recordEvidence(
+                    data,
+                    {
+                      situationId,
+                      kind: 'self-observation',
+                      text: response,
+                      ...(method ? { sourceRef: `Applied the method "${method.title}" to this situation` } : {}),
+                      capabilityIds: linked,
+                    },
+                    deps,
+                  ),
+                )
+                return result.ok ? { ok: true } : { ok: false, errors: result.errors }
+              })
+              .then((done) => {
+                if (done) {
+                  setResponse('')
+                  setOpen(false)
+                }
+              })
+          }
+        >
+          Save this exploration
+        </button>
+        <button type="button" className="btn-quiet" onClick={() => setOpen(false)}>
+          Cancel
+        </button>
+      </div>
+      <p className="meta">
+        An exploration records that you thought this through. It does not record that you did anything, and it never
+        becomes a rehearsal or an attempt.
+      </p>
+      <SaveStatus state={save.state} />
+    </section>
+  )
+}
+
 export function SituationPage({ id }: { id: string }) {
   const { state, content, run, models } = useApp()
   const save = useSave()
@@ -308,6 +441,8 @@ export function SituationPage({ id }: { id: string }) {
         <SaveStatus state={save.state} />
       </section>
 
+      <ExploreMethod situationId={situation.id} />
+
       {hypotheses.length > 0 ? (
         <section className="panel">
           <h2>Explanations under test</h2>
@@ -344,8 +479,9 @@ export function SituationPage({ id }: { id: string }) {
       <section className="panel panel--caution">
         <h2>Delete this situation</h2>
         <p>
-          This removes the situation and everything attached to it: {campaigns.length} campaign(s), {activities.length}{' '}
-          activity/activities, their attempts, reviews and evidence. Everything your records show about those
+          This removes the situation and everything attached to it: {campaigns.length} campaign(s), {hypotheses.length}{' '}
+          explanation(s) under test, {activities.length} activity/activities, their attempts, reviews and evidence, and
+          any confirmed strength whose only examples were among them. Everything your records show about those
           capabilities is recalculated, so any claim they supported disappears with them. This cannot be undone.
         </p>
         <ConfirmButton

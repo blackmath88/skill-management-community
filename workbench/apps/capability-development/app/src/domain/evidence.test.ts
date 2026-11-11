@@ -211,7 +211,9 @@ describe('the predecessor’s vocabulary is retained', () => {
     // this app's "transferred", so an imported record keeps the meaning it had.
     expect(legacyMilestoneFor('none')).toBe('unexplored')
     expect(legacyMilestoneFor('explored')).toBe('exploring')
-    expect(legacyMilestoneFor('rehearsed')).toBe('practising')
+    // The predecessor had no rehearsal, and its "Practising" meant an attempted, reflected action
+    // at work. Mapping a rehearsal up to it would make the old word mean something it never meant.
+    expect(legacyMilestoneFor('rehearsed')).toBe('exploring')
     expect(legacyMilestoneFor('tried')).toBe('practising')
     expect(legacyMilestoneFor('repeated')).toBe('practising')
     expect(legacyMilestoneFor('transferred')).toBe('broadening')
@@ -232,5 +234,18 @@ describe('the explanation', () => {
       CAP,
     )[0]
     expect(top?.explanation).toMatch(/not mastery|not an assessment/i)
+  })
+})
+
+
+describe('the old vocabulary never implies real application for a rehearsal', () => {
+  it('shows a reviewed rehearsal as Exploring, not Practising', () => {
+    // Regression: this was the one route by which a rehearsal reached a word meaning real
+    // practice. A reader of an imported history would have taken "Practising" to mean work.
+    const data = build({ kind: 'rehearsal', count: 3, reviewed: true, contexts: ['a', 'b'] })
+    const row = deriveCapabilityEvidence(data, CAP)[0]
+    expect(row?.stage).toBe('rehearsed')
+    expect(row?.legacyMilestone).toBe('exploring')
+    expect(row?.counts.realAttempts).toBe(0)
   })
 })

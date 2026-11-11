@@ -205,7 +205,11 @@ export function deriveDevelopmentSummary(data: UserData, lookupStep?: StepLookup
       situations: data.situations.length,
       activities: data.activities.length,
       realAttempts,
-      rehearsals: data.activities.filter((a) => a.kind === 'rehearsal').length,
+      // Attempted rehearsals only, so this number means the same kind of thing as realAttempts
+      // above it. A count of rehearsals merely planned would read as practice that happened.
+      rehearsals: data.activities.filter(
+        (a) => a.kind === 'rehearsal' && data.attempts.some((t) => t.activityId === a.id),
+      ).length,
       reviews: data.reviews.length,
       evidence: data.evidence.length,
     },

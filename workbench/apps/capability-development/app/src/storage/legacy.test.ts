@@ -214,10 +214,15 @@ describe('convertLeaderMeData', () => {
     expect(activityById(converted(), 'quest-2').state).toBe('attempted')
   })
 
-  it('turns a reflection feedback note into attributed feedback', () => {
+  it('keeps a reflection feedback note as the person’s own observation, not somebody else’s account', () => {
+    // Leader Me captured a free-text "feedback note" and never captured who it came from.
+    // Importing it as attributed feedback would show the person corroboration the records never
+    // contained — and this app credits exactly that with a point of practice experience.
     const item = only(converted().evidence, (e) => e.reviewId === 'ref-1', 'feedback from ref-1')
 
-    expect(item.kind).toBe('attributed-feedback')
+    expect(item.kind).toBe('self-observation')
+    expect(item.attribution).toBeUndefined()
+    expect(item.sourceRef).toMatch(/who it came from was not recorded/i)
     expect(item.text).toBe('A participant said it was the first time anybody had asked out loud.')
   })
 
@@ -370,5 +375,130 @@ describe('a reflection on a quest that was never attempted', () => {
     expect(result.data.activities).toHaveLength(2)
     expect(result.summary.notes.join(' ')).toMatch(/1 reflection was not imported/)
     expect(result.summary.notes.join(' ')).toMatch(/never recorded as attempted/)
+  })
+})
+
+describe('a real Leader Me export whose content ids this app does not define', () => {
+  const envelopeWith = (skillIds: string[], methodId: string) => ({
+    app: 'leader-me',
+    schemaVersion: 2,
+    exportedAt: '2026-10-01T09:00:00.000Z',
+    data: {
+      schemaVersion: 2,
+      profile: { values: [], aspirations: [], focusSkillId: 'a-skill-we-never-had', updatedAt: '2026-10-01T09:00:00.000Z' },
+      claims: [],
+      situations: [
+        {
+          id: 'sit-y',
+          title: 'A situation',
+          description: '',
+          context: 'A group',
+          desiredOutcome: '',
+          authority: 'recommend',
+          decisionOwnership: 'unclear',
+          challenge: 'ownership',
+          createdAt: '2026-10-01T09:00:00.000Z',
+        },
+      ],
+      applications: [
+        {
+          id: 'app-1',
+          situationId: 'sit-y',
+          methodId,
+          skillIds,
+          prompt: 'How does this lens apply?',
+          response: 'It suggests the owner is unclear.',
+          createdAt: '2026-10-01T09:00:00.000Z',
+          updatedAt: '2026-10-01T09:00:00.000Z',
+        },
+      ],
+      quests: [
+        {
+          id: 'quest-1',
+          situationId: 'sit-y',
+          methodId,
+          skillIds,
+          title: 'Ask the closing question',
+          action: 'Ask who can close this',
+          intendedSignal: 'A recorded answer',
+          reviewDate: '2026-10-20',
+          state: 'attempted',
+          attempt: { outcome: 'changed', note: 'Asked it.', attemptedAt: '2026-10-05T09:00:00.000Z' },
+          createdAt: '2026-10-01T09:00:00.000Z',
+          updatedAt: '2026-10-05T09:00:00.000Z',
+        },
+      ],
+      reflections: [],
+      perks: [],
+    },
+  })
+
+  const installed = {
+    knownCapabilityIds: ['clarify-ownership'],
+    knownMethodIds: ['decision-rights'],
+    now: '2026-11-11T09:00:00.000Z',
+  }
+
+  it('keeps the records and drops the references this app cannot resolve', () => {
+    // Regression: the converter carried the predecessor's method ids straight through, and the
+    // import then validated them against the installed packs. Because an import is all-or-nothing,
+    // one unresolvable method id refused the person's ENTIRE history — and the predecessor
+    // required a method on every quest, so that was most real files.
+    const result = parseImport(JSON.stringify(envelopeWith(['clarify-ownership', 'a-skill-we-never-had'], 'a-method-we-never-had')), installed)
+    expect(result.ok, result.ok ? '' : result.errors.join('; ')).toBe(true)
+    if (!result.ok) return
+
+    const activity = result.data.activities[0]
+    expect(activity).toBeDefined()
+    expect(activity?.title).toBe('Ask the closing question')
+    // The activity survived; only the references that resolve are kept.
+    expect(activity?.capabilityIds).toEqual(['clarify-ownership'])
+    expect(activity?.methodIds).toEqual([])
+    expect(result.data.attempts).toHaveLength(1)
+
+    const notes = result.summary.notes.join(' ')
+    expect(notes).toMatch(/method reference was removed/i)
+    expect(notes).toMatch(/a-method-we-never-had/)
+    expect(notes).toMatch(/skill reference(s)? (was|were) removed/i)
+    expect(notes).toMatch(/a-skill-we-never-had/)
+    // The direction's focus pointed at a skill this app does not define, and was dropped too.
+    expect(result.data.directions[0]?.focusCapabilityId).toBeUndefined()
+  })
+
+  it('keeps every reference when the installed ids are not supplied', () => {
+    // Without knowing what is installed, the converter must not guess which ids are real.
+    const { data } = convertLeaderMeData(
+      envelopeWith(['clarify-ownership', 'a-skill-we-never-had'], 'a-method-we-never-had').data,
+      NOW,
+    )
+    expect(data.activities[0]?.methodIds).toEqual(['a-method-we-never-had'])
+    expect(data.activities[0]?.capabilityIds).toContain('a-skill-we-never-had')
+  })
+
+  it('imports a reflection’s feedback note as the person’s own observation, not as somebody else’s account', () => {
+    // Regression: it arrived as `attributed-feedback`, which this app displays as "feedback from
+    // others" and credits with a point of practice experience. Leader Me never recorded who the
+    // feedback came from, so that was corroboration the records did not contain.
+    const envelope = envelopeWith(['clarify-ownership'], 'decision-rights')
+    envelope.data.reflections = [
+      {
+        id: 'refl-1',
+        questId: 'quest-1',
+        observation: 'Nobody could name the approver.',
+        interpretation: '',
+        alternativeExplanation: '',
+        nextAdjustment: '',
+        feedbackNote: 'Someone said afterwards that it was a good question.',
+        reflectedAt: '2026-10-06T09:00:00.000Z',
+        updatedAt: '2026-10-06T09:00:00.000Z',
+      },
+    ] as never
+    const result = parseImport(JSON.stringify(envelope), installed)
+    expect(result.ok, result.ok ? '' : result.errors.join('; ')).toBe(true)
+    if (!result.ok) return
+    const item = result.data.evidence.find((e) => e.text.includes('good question'))
+    expect(item?.kind).toBe('self-observation')
+    expect(item?.attribution).toBeUndefined()
+    expect(result.summary.notes.join(' ')).toMatch(/not as an account from somebody else/i)
   })
 })

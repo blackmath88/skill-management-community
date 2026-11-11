@@ -15,6 +15,8 @@ import {
   createSharePackage,
   decideHypothesis,
   deleteEvidence,
+  deleteHypothesis,
+  deleteProposal,
   markProposalAccepted,
   planActivity,
   recordAttempt,
@@ -671,5 +673,47 @@ describe('record identifiers', () => {
       ),
     )
     expect(outcome.errors[0]).toMatch(/unique identifier/i)
+  })
+})
+
+describe('removing a single record of any kind', () => {
+  it('deletes one explanation without touching anything else', () => {
+    // The All records page tells people anything there can be deleted. Until these existed, an
+    // explanation, a strength, a suggestion or a package could only be removed by deleting every
+    // record in the namespace.
+    const data = reviewedRealAttempt()
+    const added = expectOk(addWorkingHypothesis(data, { situationId: 'sit-1', category: 'conditions', text: 'A possibility.' }, deps))
+    const outcome = expectOk(deleteHypothesis(added.data, added.value.id))
+    expect(outcome.data.hypotheses).toHaveLength(0)
+    expect(outcome.data.activities).toHaveLength(1)
+    expect(outcome.data.evidence).toHaveLength(1)
+  })
+
+  it('deletes one suggestion', () => {
+    const data = reviewedRealAttempt()
+    data.proposals.push({
+      id: 'prop-1',
+      kind: 'hypothesis',
+      text: 'A possibility.',
+      referencedIds: ['act-1'],
+      baseRevision: 1,
+      provenance: { providerId: 'local-stand-in', model: 'x', promptId: 'p', requestedAt: at(1) },
+      state: 'rejected',
+      createdAt: at(1),
+      updatedAt: at(1),
+    })
+    expect(expectOk(deleteProposal(data, 'prop-1')).data.proposals).toHaveLength(0)
+    expect(expectFail(deleteProposal(data, 'nope')).kind).toBe('not-found')
+  })
+
+  it('reports how many conclusions deleting evidence reopened', () => {
+    // So the interface can tell somebody that removing evidence changed a conclusion they had
+    // recorded, rather than changing it silently.
+    const data = reviewedRealAttempt()
+    const added = expectOk(addWorkingHypothesis(data, { situationId: 'sit-1', category: 'conditions', text: 'A possibility.' }, deps))
+    const decided = expectOk(decideHypothesis(added.data, { id: added.value.id, status: 'supported', evidenceIds: ['ev-1'] }, deps))
+    const outcome = expectOk(deleteEvidence(decided.data, ['ev-1'], deps))
+    expect(outcome.value.reopened).toBe(1)
+    expect(outcome.data.hypotheses[0]?.status).toBe('open')
   })
 })

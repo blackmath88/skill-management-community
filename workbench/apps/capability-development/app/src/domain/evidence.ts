@@ -53,17 +53,25 @@ export const LEGACY_MILESTONE_LABEL: Readonly<Record<LegacyMilestone, string>> =
 }
 
 /**
- * Documented equivalence between this app's stages and Leader Me's milestones. Broadening meant
- * three reflected quests across two contexts, which is this app's `transferred`; `repeated`
- * without a second context stays Practising, exactly as before.
+ * Documented equivalence between this app's stages and Leader Me's milestones.
+ *
+ * The predecessor had no rehearsal: every quest was a real action, so its "Practising" meant an
+ * attempted, reflected action at work, and "Exploring" meant a saved piece of writing. A rehearsal
+ * is more than writing and less than doing, and the old vocabulary has no word for it. It maps to
+ * Exploring rather than Practising, because mapping it up would make the old label mean something
+ * it never meant — and it is the only route by which a rehearsal could reach a word that implies
+ * real application.
+ *
+ * Broadening meant three reflected quests across two contexts, which is this app's `transferred`;
+ * `repeated` without a second context stays Practising, exactly as before.
  */
 export function legacyMilestoneFor(stage: EvidenceStage): LegacyMilestone {
   switch (stage) {
     case 'none':
       return 'unexplored'
     case 'explored':
-      return 'exploring'
     case 'rehearsed':
+      return 'exploring'
     case 'tried':
     case 'repeated':
       return 'practising'

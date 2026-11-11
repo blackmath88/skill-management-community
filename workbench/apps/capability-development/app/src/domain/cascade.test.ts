@@ -74,11 +74,51 @@ describe('deleting evidence', () => {
     expect(pruned.hypotheses[0]?.evidenceIds).toEqual([])
   })
 
-  it('leaves the hypothesis itself alone', () => {
-    // Deleting the evidence for an explanation is not the same as withdrawing the explanation.
+  it('leaves the explanation itself, because deleting its evidence is not withdrawing it', () => {
     const pruned = deleteEvidenceCascade(full(), new Set(['ev-1']))
     expect(pruned.hypotheses).toHaveLength(1)
+  })
+
+  it('reopens a conclusion that rested on the deleted evidence alone', () => {
+    // Regression: a hypothesis marked "evidence supports it" kept saying so after its only
+    // evidence was deleted. The user would have read a conclusion as evidence-backed with
+    // nothing behind it.
+    const data = full()
+    const hypothesis = data.hypotheses[0]
+    if (hypothesis) {
+      hypothesis.status = 'supported'
+      hypothesis.evidenceIds = ['ev-1']
+    }
+    const pruned = deleteEvidenceCascade(data, new Set(['ev-1']), at(50))
     expect(pruned.hypotheses[0]?.status).toBe('open')
+    expect(pruned.hypotheses[0]?.evidenceIds).toEqual([])
+    // The earlier view is kept rather than rewritten.
+    const history = pruned.hypotheses[0]?.history ?? []
+    expect(history[history.length - 1]?.note).toMatch(/evidence this conclusion rested on was deleted/i)
+  })
+
+  it('leaves a conclusion alone when other evidence still supports it', () => {
+    const data = full()
+    data.evidence.push(evidence({ id: 'ev-2' }))
+    const hypothesis = data.hypotheses[0]
+    if (hypothesis) {
+      hypothesis.status = 'supported'
+      hypothesis.evidenceIds = ['ev-1', 'ev-2']
+    }
+    const pruned = deleteEvidenceCascade(data, new Set(['ev-1']), at(50))
+    expect(pruned.hypotheses[0]?.status).toBe('supported')
+    expect(pruned.hypotheses[0]?.evidenceIds).toEqual(['ev-2'])
+  })
+
+  it('does not reopen a conclusion the person reached without linking evidence', () => {
+    const data = full()
+    const hypothesis = data.hypotheses[0]
+    if (hypothesis) {
+      hypothesis.status = 'supported'
+      hypothesis.evidenceIds = []
+    }
+    const pruned = deleteEvidenceCascade(data, new Set(['ev-1']), at(50))
+    expect(pruned.hypotheses[0]?.status).toBe('supported')
   })
 
   it('does not touch the chosen appearance', () => {
@@ -102,10 +142,23 @@ describe('deleting an activity', () => {
     expect(pruned.evidence).toHaveLength(0)
   })
 
-  it('unlinks it from a perk’s examples and from the campaign path', () => {
+  it('removes a perk whose every example has gone, rather than leaving an unsupported claim', () => {
+    // confirmPerk refuses to create a strength with no example. A perk whose examples have all
+    // been deleted no longer meets that bar, and a standing claim about somebody with nothing
+    // behind it is the one thing this product must not leave behind.
     const pruned = deleteActivityCascade(full(), 'act-1')
-    expect(pruned.perks[0]?.evidenceActivityIds).toEqual([])
+    expect(pruned.perks).toHaveLength(0)
     expect(pruned.campaigns[0]?.path[0]?.activityIds).toEqual([])
+  })
+
+  it('keeps a perk that still has at least one example', () => {
+    const data = full()
+    data.activities.push(activity({ id: 'act-2', state: 'reviewed' }))
+    const perk = data.perks[0]
+    if (perk) perk.evidenceActivityIds = ['act-1', 'act-2']
+    const pruned = deleteActivityCascade(data, 'act-1')
+    expect(pruned.perks).toHaveLength(1)
+    expect(pruned.perks[0]?.evidenceActivityIds).toEqual(['act-2'])
   })
 
   it('invalidates an AI suggestion that referred to it', () => {

@@ -91,7 +91,15 @@ export function parseImport(json: string, options: ParseImportOptions = {}): Imp
           ],
         }
       }
-      const { data: converted, notes } = convertLeaderMeData(envelope.data, now)
+      const { data: converted, notes } = convertLeaderMeData(
+        envelope.data,
+        now,
+        // Only when the caller said which content is installed. Without it, references are
+        // carried through unchanged and validated as they are.
+        options.knownCapabilityIds && options.knownMethodIds
+          ? { capabilityIds: options.knownCapabilityIds, methodIds: options.knownMethodIds }
+          : undefined,
+      )
       const checked = validateUserData(converted, validationOptionsOf(options))
       if (!checked.ok) {
         return {

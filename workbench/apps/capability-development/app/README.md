@@ -179,9 +179,15 @@ These are things that are genuinely true of this build, not caveats for form's s
 - **One visual presentation.** The four worlds in `../VISUAL-DIRECTIONS.md` are not built, and the
   character is a CSS emblem rather than the predecessor's 3-D figure. That was deliberate; see
   [PROVENANCE.md](PROVENANCE.md).
-- **The data-minimisation check is narrow.** Validation refuses something that looks like a contact
-  detail in an evidence *attribution*. It does not and cannot stop somebody typing a name into a
-  free-text note. The protection is a guard on one structured field, not a filter over the journal.
+- **The data-minimisation check is narrow.** Validation refuses something that looks like an email
+  address or a phone number in an evidence *attribution* — one structured field. It does not stop a
+  name in that field, and it does not look at free text at all: notes, reviews, descriptions and
+  share packages accept anything. Keeping other people out of your records is something you do; the
+  app asks for a role and checks one field, and the Settings page now says exactly that.
+- **Campaign history is re-rendered under installed content.** A campaign pins the definition
+  version it started on and warns when the installed version differs, but it does not store a copy
+  of the steps. Reword a published pack and an older campaign's path shows the new wording. Your
+  own records are unaffected. See [DECISIONS.md A14](DECISIONS.md).
 - **The AI guard rules are patterns.** A differently worded response gets past them. What holds is
   the structure, not the patterns.
 - **Share packages are text you write.** Nothing is transmitted and nothing is copied from your

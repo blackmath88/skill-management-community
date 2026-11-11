@@ -1,4 +1,4 @@
-import type { Id, UserData } from './types'
+import type { Id, IsoUtc, UserData } from './types'
 
 /**
  * Deletion cascades. Every projection recomputes from records, so removing a record must remove
@@ -8,17 +8,51 @@ import type { Id, UserData } from './types'
  * Adapted from blackmath88/leader-me src/domain/quest.ts cascade helpers.
  */
 
-/** Remove evidence items and unlink them from hypotheses. */
-export function deleteEvidenceCascade(data: UserData, evidenceIds: ReadonlySet<Id>): UserData {
+/**
+ * Remove evidence items, unlink them from hypotheses, and reopen any conclusion that rested on
+ * them alone.
+ *
+ * The unlinking is the easy half. The half that matters: a hypothesis a person marked "evidence
+ * supports it" must not keep saying so once the evidence is gone. Leaving the status alone would
+ * show them a conclusion as evidence-backed with nothing behind it, which is precisely what an
+ * evidence-linked view is supposed to prevent.
+ *
+ * Only a conclusion that was *derived from evidence* is reopened. A hypothesis somebody decided
+ * without linking anything never had links to lose, so it is untouched.
+ */
+export function deleteEvidenceCascade(
+  data: UserData,
+  evidenceIds: ReadonlySet<Id>,
+  /** Used only for the history entry on a reopened conclusion. */
+  now?: IsoUtc,
+): UserData {
   if (evidenceIds.size === 0) return data
+  const at = now ?? new Date().toISOString()
   return {
     ...data,
     evidence: data.evidence.filter((e) => !evidenceIds.has(e.id)),
-    hypotheses: data.hypotheses.map((h) =>
-      h.evidenceIds.some((id) => evidenceIds.has(id))
-        ? { ...h, evidenceIds: h.evidenceIds.filter((id) => !evidenceIds.has(id)) }
-        : h,
-    ),
+    hypotheses: data.hypotheses.map((h) => {
+      if (!h.evidenceIds.some((id) => evidenceIds.has(id))) return h
+      const remaining = h.evidenceIds.filter((id) => !evidenceIds.has(id))
+      const restsOnDeletedEvidence =
+        remaining.length === 0 && (h.status === 'supported' || h.status === 'contradicted')
+      if (!restsOnDeletedEvidence) return { ...h, evidenceIds: remaining }
+      return {
+        ...h,
+        evidenceIds: remaining,
+        status: 'open' as const,
+        updatedAt: at,
+        history: [
+          ...h.history,
+          {
+            at,
+            status: 'open' as const,
+            text: h.text,
+            note: `Reopened automatically: the evidence this conclusion rested on was deleted. Your earlier view (${h.status}) is kept above.`,
+          },
+        ],
+      }
+    }),
   }
 }
 
@@ -43,11 +77,15 @@ export function deleteActivitiesCascade(data: UserData, activityIds: ReadonlySet
     activities: pruned.activities.filter((a) => !activityIds.has(a.id)),
     attempts: pruned.attempts.filter((a) => !activityIds.has(a.activityId)),
     reviews: pruned.reviews.filter((r) => !activityIds.has(r.activityId)),
-    perks: pruned.perks.map((p) =>
-      p.evidenceActivityIds.some((id) => activityIds.has(id))
-        ? { ...p, evidenceActivityIds: p.evidenceActivityIds.filter((id) => !activityIds.has(id)) }
-        : p,
-    ),
+    // A confirmed strength must point at something the person actually did: `confirmPerk`
+    // refuses to create one without an example. A perk whose every example has been deleted no
+    // longer meets that bar, so it goes with them rather than standing as an unsupported claim
+    // about somebody — which is the one thing this product must not leave behind.
+    perks: pruned.perks.flatMap((p) => {
+      if (!p.evidenceActivityIds.some((id) => activityIds.has(id))) return [p]
+      const remaining = p.evidenceActivityIds.filter((id) => !activityIds.has(id))
+      return remaining.length === 0 ? [] : [{ ...p, evidenceActivityIds: remaining }]
+    }),
     campaigns: pruned.campaigns.map((c) =>
       c.path.some((entry) => entry.activityIds.some((id) => activityIds.has(id)))
         ? {

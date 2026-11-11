@@ -802,10 +802,28 @@ export function recordEvidence(data: UserData, input: RecordEvidenceInput, deps:
  * records, so a stage or a total that depended on this item disappears with it. The appearance
  * the user chose is deliberately untouched: see domain/experience.ts.
  */
-export function deleteEvidence(data: UserData, ids: readonly Id[]): CommandOutcome<{ removed: number }> {
+export function deleteEvidence(
+  data: UserData,
+  ids: readonly Id[],
+  deps?: CommandDeps,
+): CommandOutcome<{ removed: number; reopened: number }> {
   const present = ids.filter((id) => data.evidence.some((e) => e.id === id))
   if (present.length === 0) return fail('not-found', 'Those evidence items no longer exist.')
-  return ok(deleteEvidenceCascade(data, new Set(present)), { removed: present.length })
+  const next = deleteEvidenceCascade(data, new Set(present), deps?.clock.now())
+  const reopened = next.hypotheses.filter((h, i) => h.status === 'open' && data.hypotheses[i]?.status !== 'open').length
+  return ok(next, { removed: present.length, reopened })
+}
+
+/** Remove one explanation under test. Its history goes with it; nothing else is affected. */
+export function deleteHypothesis(data: UserData, id: Id): CommandOutcome {
+  if (!data.hypotheses.some((h) => h.id === id)) return fail('not-found', 'That explanation no longer exists.')
+  return ok({ ...data, hypotheses: data.hypotheses.filter((h) => h.id !== id) }, undefined)
+}
+
+/** Remove one suggestion from the record, whatever state it was in. */
+export function deleteProposal(data: UserData, id: Id): CommandOutcome {
+  if (!data.proposals.some((p) => p.id === id)) return fail('not-found', 'That suggestion no longer exists.')
+  return ok({ ...data, proposals: data.proposals.filter((p) => p.id !== id) }, undefined)
 }
 
 // ------------------------------------------------------------------ Perk

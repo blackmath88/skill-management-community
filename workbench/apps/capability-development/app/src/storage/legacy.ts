@@ -57,6 +57,21 @@ export interface LegacyConversion {
   notes: string[]
 }
 
+/**
+ * Capability and method ids the installed content packs define.
+ *
+ * A Leader Me export carries the predecessor's own skill and method ids. The capability ids were
+ * deliberately kept the same, so those usually resolve; the method ids largely do not, because
+ * this app authored its own methods. Carrying an unknown id straight through would make the
+ * converted set fail validation — and an import is all-or-nothing, so a single unresolvable
+ * method id would refuse the person's entire history. Unknown references are dropped from the
+ * activity and reported, exactly as Gallup themes and profile claims are.
+ */
+export interface KnownContentIds {
+  capabilityIds: readonly string[]
+  methodIds: readonly string[]
+}
+
 /** Which attempt outcomes the predecessor recorded, mapped onto this application's outcomes. */
 const OUTCOME_MAP: Record<string, Attempt['outcome']> = {
   'as-planned': 'as-planned',
@@ -69,17 +84,35 @@ const OUTCOME_MAP: Record<string, Attempt['outcome']> = {
  * Convert a validated-shape Leader Me `data` object. Called only after the envelope said the file
  * is a Leader Me export of a convertible version; the result is validated like any other import.
  */
-export function convertLeaderMeData(input: unknown, now: string): LegacyConversion {
+export function convertLeaderMeData(input: unknown, now: string, known?: KnownContentIds): LegacyConversion {
   const notes: string[] = []
   const data = emptyUserData(now)
   if (!isObj(input)) return { data, notes: ['The file contained no records to convert.'] }
+  const knownCapabilities = known ? new Set(known.capabilityIds) : null
+  const knownMethods = known ? new Set(known.methodIds) : null
+  const droppedCapabilities = new Set<string>()
+  const droppedMethods = new Set<string>()
+  const keepCapabilities = (ids: string[]): string[] =>
+    ids.filter((id) => {
+      if (!knownCapabilities || knownCapabilities.has(id)) return true
+      droppedCapabilities.add(id)
+      return false
+    })
+  const keepMethod = (id: string): string[] => {
+    if (id === '') return []
+    if (!knownMethods || knownMethods.has(id)) return [id]
+    droppedMethods.add(id)
+    return []
+  }
 
   const profile = isObj(input.profile) ? input.profile : {}
   const displayName = str(profile, 'displayName')
   if (displayName !== '') data.profile.displayName = displayName
   data.profile.updatedAt = iso(profile, 'updatedAt', now)
 
-  const focus = str(profile, 'focusSkillId')
+  const rawFocus = str(profile, 'focusSkillId')
+  const focus = rawFocus === '' || !knownCapabilities || knownCapabilities.has(rawFocus) ? rawFocus : ''
+  if (rawFocus !== '' && focus === '') droppedCapabilities.add(rawFocus)
   const aspirations = strArr(profile, 'aspirations')
   if (aspirations.length > 0 || focus !== '') {
     const text = aspirations[0] ?? 'Continue the development focus carried over from Leader Me.'
@@ -146,8 +179,8 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
         signal: str(q, 'intendedSignal'),
         reviewOn: date(q, 'reviewDate'),
       },
-      capabilityIds: [...new Set(strArr(q, 'skillIds'))],
-      methodIds: methodId === '' ? [] : [methodId],
+      capabilityIds: keepCapabilities([...new Set(strArr(q, 'skillIds'))]),
+      methodIds: keepMethod(methodId),
       state: mapQuestState(state),
       createdAt,
       updatedAt: iso(q, 'updatedAt', createdAt),
@@ -178,6 +211,7 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
   // A reflection becomes a review. Its next move was not recorded, so it is "adapt" by default.
   const reviewedActivities = new Set<string>()
   let droppedReflections = 0
+  let convertedFeedbackNotes = 0
   for (const ref of arr(input, 'reflections')) {
     const id = str(ref, 'id')
     const activityId = str(ref, 'questId')
@@ -210,20 +244,26 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
 
     const feedback = str(ref, 'feedbackNote')
     if (feedback.trim() !== '') {
+      // Recorded as the person's OWN note, not as an account from somebody else. The predecessor
+      // captured a free-text "feedback note" written by the user and never captured who it came
+      // from. Importing it as attributed feedback would show them corroboration from another
+      // person that was never recorded — and would earn the practice-experience credit this app
+      // gives for exactly that. If it really came from somebody else, they can re-record it.
       const item: EvidenceItem = {
         id: `${id}-feedback`,
         reviewId: id,
         activityId,
-        kind: 'attributed-feedback',
+        kind: 'self-observation',
         text: feedback,
         source: 'user',
-        attribution: 'reported by you in Leader Me',
+        sourceRef: 'Leader Me reflection, "feedback note" field. Who it came from was not recorded.',
         visibility: 'private',
         capabilityIds: activity ? [...activity.capabilityIds] : [],
         recordedAt: reflectedAt,
         updatedAt: reflectedAt,
       }
       data.evidence.push(item)
+      convertedFeedbackNotes += 1
     }
   }
 
@@ -241,7 +281,7 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
       source: 'user',
       sourceRef: `Leader Me concept application (method ${str(app, 'methodId') || 'unknown'})`,
       visibility: 'private',
-      capabilityIds: [...new Set(strArr(app, 'skillIds'))],
+      capabilityIds: keepCapabilities([...new Set(strArr(app, 'skillIds'))]),
       recordedAt: iso(app, 'createdAt', now),
       updatedAt: iso(app, 'updatedAt', now),
     })
@@ -262,9 +302,26 @@ export function convertLeaderMeData(input: unknown, now: string): LegacyConversi
     })
   }
 
+  if (convertedFeedbackNotes > 0) {
+    notes.push(
+      `${convertedFeedbackNotes} feedback ${convertedFeedbackNotes === 1 ? 'note' : 'notes'} from your reflections ${convertedFeedbackNotes === 1 ? 'was' : 'were'} imported as your own observation, not as an account from somebody else: Leader Me did not record who the feedback came from.`,
+    )
+  }
+
   if (droppedReflections > 0) {
     notes.push(
       `${droppedReflections} ${droppedReflections === 1 ? 'reflection was' : 'reflections were'} not imported, because the activity they belonged to was never recorded as attempted. A review of something that did not happen could not be interpreted here.`,
+    )
+  }
+
+  if (droppedCapabilities.size > 0) {
+    notes.push(
+      `${droppedCapabilities.size} skill ${droppedCapabilities.size === 1 ? 'reference was' : 'references were'} removed because no installed content pack defines ${droppedCapabilities.size === 1 ? 'it' : 'them'} (${[...droppedCapabilities].join(', ')}). The records themselves were kept.`,
+    )
+  }
+  if (droppedMethods.size > 0) {
+    notes.push(
+      `${droppedMethods.size} method ${droppedMethods.size === 1 ? 'reference was' : 'references were'} removed because no installed content pack defines ${droppedMethods.size === 1 ? 'it' : 'them'} (${[...droppedMethods].join(', ')}). The activities themselves were kept; a method is a lens, not part of what you did.`,
     )
   }
 

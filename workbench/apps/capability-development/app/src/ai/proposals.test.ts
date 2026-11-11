@@ -231,3 +231,15 @@ describe('the preview is the request', () => {
     expect(context).toHaveLength(1)
   })
 })
+
+describe('an out-of-date suggestion is not a refused one', () => {
+  it('carries no rule violation, so the interface can say why without blaming the provider', () => {
+    const report = run([{ kind: 'hypothesis', text: 'A possibility.', referencedIds: ['act-1'] }], {
+      baseRevision: 4,
+      currentRevision: 9,
+    })
+    expect(report.refused).toHaveLength(1)
+    expect(report.refused[0]?.proposal.state).toBe('stale')
+    expect(report.refused[0]?.violations).toEqual([])
+  })
+})

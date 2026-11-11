@@ -23,10 +23,19 @@ import { useApp } from '../state'
 
 const EMBLEMS = ['◆', '▲', '●', '■', '✦', '⌘']
 const PALETTES = ['slate', 'clay', 'moss', 'ink']
+/**
+ * The presentation modes.
+ *
+ * Only the emblem's shape changes today: the character and journey views described in
+ * ../../../VISUAL-DIRECTIONS.md are not built, and choosing one of those worlds is design work
+ * that has not happened. The labels say what the setting does now rather than what it is meant to
+ * become, because a setting that promises a figure which does not exist is a small lie told on
+ * every visit.
+ */
 const MODES: { value: PresentationMode; label: string; hint: string }[] = [
-  { value: 'character', label: 'A character', hint: 'A figure that carries your chosen appearance.' },
-  { value: 'journey', label: 'A journey', hint: 'The same records, shown as a path rather than a figure.' },
-  { value: 'evidence', label: 'Records only', hint: 'No figure and no ornament. The records on their own.' },
+  { value: 'character', label: 'Solid emblem', hint: 'A square mark. Intended later to carry a character; that view is not built yet.' },
+  { value: 'journey', label: 'Round emblem', hint: 'A round mark. Intended later to show your records as a path; that view is not built yet.' },
+  { value: 'evidence', label: 'Outlined emblem', hint: 'An outlined mark, for the plainest presentation.' },
 ]
 
 export function SettingsPage() {
@@ -65,8 +74,11 @@ export function SettingsPage() {
             recall that copy.
           </li>
           <li>
-            Information about other people is kept to a role, never a name or a contact detail. The app refuses to save
-            something that looks like a contact detail.
+            Where you record what somebody else said, the app asks for their role rather than their name, and refuses
+            to save that field if it looks like an email address or a phone number.{' '}
+            <strong>That is a check on one field, not protection across your notes.</strong> Nothing stops you typing a
+            name into a description, a note or a review, and the app does not read your text looking for one. Keeping
+            other people out of your records is something you do, not something this app enforces.
           </li>
         </ul>
       </section>
@@ -269,8 +281,9 @@ function AppearanceSection() {
           ))}
         </ul>
         <p className="meta">
-          All three show the same records with the same rules. A presentation never changes what counts as evidence, who
-          can see a record, or how practice is counted.
+          Today this only changes how the mark above is drawn. Whatever a presentation ever becomes, it cannot change
+          what counts as evidence, who can see a record, or how practice is counted: those live below the interface,
+          and a renderer receives counts rather than anything you wrote.
         </p>
       </fieldset>
       <Field label="Emblem">
