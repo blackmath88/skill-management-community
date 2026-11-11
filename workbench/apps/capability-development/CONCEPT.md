@@ -1,8 +1,8 @@
-# Capability development application — product concept
+# Skilling Me Softly — product concept
 
-Date: 11 November 2026. Status: idea / proposed product direction. Documentation only; no implementation or effectiveness claim. Working description, not an agreed product name.
+Date: 11 November 2026. Status: idea / proposed product direction. Documentation only; no implementation or effectiveness claim. Working name supplied by the owner: Skilling Me Softly.
 
-[Architecture](ARCHITECTURE.md) · [Delivery plan](PLAN.md) · [Evidence and prior art](PRIOR-ART.md) · [App index](../README.md)
+[Visual directions](VISUAL-DIRECTIONS.md) · [Architecture](ARCHITECTURE.md) · [Delivery plan](PLAN.md) · [Evidence and prior art](PRIOR-ART.md) · [App index](../README.md)
 
 ## 1. Purpose and scope
 
@@ -77,9 +77,9 @@ Retain existing milestones and their historical meaning. Broadening is practice 
 
 An evidence-linked view must recompute after deletion. Cosmetic ownership and evidence are separate: propose preserving previously chosen appearance while removing unsupported evidence claims; decide and test this policy explicitly before implementation. Cosmetic choices must never certify competence.
 
-## 8. Complete first campaign
+## 8. Candidate first campaign
 
-Help a group move from recurring discussion to a clear next decision.
+Candidate from the supplied plan: help a group move from recurring discussion to a clear next decision. The separate rebuild review also proposes an AI-briefing campaign to test a more distant skill domain. Selection and delivery order remain open; see the [app index](../README.md) for repository ownership.
 
 A user says three units repeatedly reopen an issue. The system explores existing strengths and asks what the user can decide, recommend or negotiate. Branches include personal practice, contested ownership, competing priorities and lack of opportunity.
 

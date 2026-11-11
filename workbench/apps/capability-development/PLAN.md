@@ -4,11 +4,13 @@ Date: 11 November 2026. Status: proposed plan. No implementation, installations,
 
 [Concept](CONCEPT.md) · [Architecture](ARCHITECTURE.md) · [Prior art](PRIOR-ART.md)
 
+The staged sequence and example campaigns below are proposals. The [app index](../README.md) links the rebuild review, which recommends bringing one complete campaign forward and testing an AI-briefing use case. Choose a single bounded delivery brief before execution.
+
 ## 1. Working mandate for a future implementation agent
 
 Act as an integrated senior engineer, design-thinking practitioner and OD practitioner. Use this concept and the existing Leader Me project instructions. Implement in the application repository only after receiving an implementation mandate. Preserve active work. Rebuild means migrated evolution, not a replacement scaffold.
 
-Inspect current code rather than treating these observations as permanently current. Record consequential decisions concisely, then build a working journey; do not stop at an architecture essay or create a speculative platform. Keep concrete UI style out of scope except essential accessible interactions.
+Inspect current code rather than treating these observations as permanently current. Record consequential decisions concisely, then build a working journey; do not stop at an architecture essay or create a speculative platform. Keep implementation of concrete UI styles out of this engine scope except essential accessible interactions. The separate [visual exploration brief](VISUAL-DIRECTIONS.md) describes proposed design work, not approval to build several themes.
 
 ## 2. Stage 0 — baseline and decisions
 
