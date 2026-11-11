@@ -1,12 +1,11 @@
 # Project concept
 
-Status: candidate — replace this seed with the project's actual direction.
+Status: agreed scope, 11 November 2026.
 
-- Problem and intended users:
-- Context and constraints:
-- Smallest useful outcome:
-- Non-goals:
-- Evidence and open assumptions:
-- Acceptance check:
+Organise community context, domain knowledge and a personal workbench for organisational-development practice.
 
-When a direction is agreed, change its manifest status from candidate to current and add a declared_in quote that exists in this document. Do not mark an empty template as an accepted direction.
+The owner selected this repository and approved the three-space structure. The useful outcome is a navigable, sourced foundation linking community questions to research, practical materials and proposed experiments.
+
+This is an independent public practitioner notebook. It is not an official community service, personnel database, competency assessment or new app implementation. Private cases and reflections remain elsewhere.
+
+Acceptance: the three entry points are discoverable; the radar thread connects session, knowledge, worksheet and experiment; sources and uncertainty are explicit; local links resolve.

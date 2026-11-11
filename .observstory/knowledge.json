@@ -1,6 +1,6 @@
 {
   "schema": "observstory.knowledge-manifest/v1",
-  "title": "New project",
+  "title": "Skill Management Community",
   "selection_policy": "explicit-declaration/v1",
   "audience": "private",
   "records": [
@@ -39,6 +39,24 @@
       "type": "plan",
       "path": "docs/HANDOFF.md",
       "status": "current"
+    },
+    {
+      "id": "community-index",
+      "type": "research",
+      "path": "community/README.md",
+      "status": "input"
+    },
+    {
+      "id": "knowledge-index",
+      "type": "research",
+      "path": "knowledge/README.md",
+      "status": "input"
+    },
+    {
+      "id": "workbench-index",
+      "type": "research",
+      "path": "workbench/README.md",
+      "status": "input"
     }
   ],
   "links": []

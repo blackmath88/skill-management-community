@@ -1,0 +1,3038 @@
+{
+  "schema": "oe-research-catalogue/v1",
+  "created_at": "2026-11-11",
+  "note": "Selective verification lives in ../source-register.md. Catalogue entries remain unreviewed unless explicitly checked there. Original references preserved; visible citation is not validation. Public copies omit conversation links; sha256 values identify original supplied reports, not the public copies.",
+  "reports": [
+    {
+      "id": "R1",
+      "original_filename": "Fähigkeiten entwickeln – und ihre Nutzung ermöglic.md",
+      "stored_filename": "2026-11-11-domain-briefing.md",
+      "sha256": "f85051be6930d2614ab83f0d25f9e0866070c77c816fa3ba560811766a30c583",
+      "references": [
+        {
+          "id": "R1-1",
+          "original_reference": "https://pubmed.ncbi.nlm.nih.gov/40705621/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-2",
+          "original_reference": "https://journals.sagepub.com/doi/10.1177/0149206309352880",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-3",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/full/10.1002/hrm.22200",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-4",
+          "original_reference": "https://link.springer.com/article/10.1038/s41562-026-02566-6",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-5",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/abs/10.1002/smj.640",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-6",
+          "original_reference": "https://www.jstor.org/stable/2393553",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-7",
+          "original_reference": "https://books.google.no/books?id=ZVogAwAAQBAJ",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-8",
+          "original_reference": "https://www.deloitte.com/global/en/issues/work/skills-based-organizations.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-9",
+          "original_reference": "https://www.wtwco.com/en-us/insights/2025/05/skills-focused-organizations-see-better-performance-across-multiple-key-metrics-of-success",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-10",
+          "original_reference": "https://hbsp.harvard.edu/product/77502-PDF-ENG",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-11",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/full/10.1155/2024/1960806",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-12",
+          "original_reference": "https://journals.sagepub.com/doi/abs/10.1177/0956797614535810",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-13",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/14479338.2018.1428105",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-14",
+          "original_reference": "https://iaap-journals.onlinelibrary.wiley.com/doi/full/10.1111/apps.12425",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-15",
+          "original_reference": "https://www.hks.harvard.edu/publications/practice-adaptive-leadership-tools-and-tactics-changing-your-organization-and-world",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-16",
+          "original_reference": "https://www.semanticscholar.org/paper/Psychological-Safety:-A-Meta‐Analytic-Review-and-Frazier-Fainshmidt/c8f36ec88a732ef124d7a5c4a3f6ba7c114db845",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-17",
+          "original_reference": "https://journals.sagepub.com/doi/abs/10.1177/20413866211006173",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-18",
+          "original_reference": "https://implementconsultinggroup.com/article/create-leader-and-team-resilience-in-organisations",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-19",
+          "original_reference": "https://psycnet.apa.org/fulltext/2017-32276-001.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-20",
+          "original_reference": "https://link.springer.com/article/10.1007/s11613-024-00910-1",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-21",
+          "original_reference": "https://implementconsultinggroup.com/article/the-future-of-leadership-looks-bright-if-you-know-where-to-look",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-22",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/full/10.1002/ev.20614",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-23",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10564133/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-24",
+          "original_reference": "https://www.semanticscholar.org/paper/Do-Team-and-Individual-Debriefs-Enhance-Performance-Tannenbaum-Cerasoli/1298d66c04a5e91afae5f1f7cce50945abb9cb8f",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-25",
+          "original_reference": "https://academic.oup.com/qje/article/140/2/889/7990658",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-26",
+          "original_reference": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12232635/pdf/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-27",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/abs/10.1002/hrdq.21330",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-28",
+          "original_reference": "https://journals.sagepub.com/doi/10.1111/j.1539-6053.2009.01038.x",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-29",
+          "original_reference": "https://www.deloitte.com/us/en/services/consulting/blogs/human-capital/skills-based-organization-skills-framework.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-30",
+          "original_reference": "https://implementconsultinggroup.com/events/organisational-development-community",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-31",
+          "original_reference": "https://implementconsultinggroup.com/article/growing-the-learning-organisation",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-32",
+          "original_reference": "https://studios.implementconsultinggroup.com/unlock-the-full-potential-of-your-4",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-33",
+          "original_reference": "https://implementconsultinggroup.com/what-we-do/projects",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-34",
+          "original_reference": "https://implementconsultinggroup.com/article/ai-in-banking",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R1-35",
+          "original_reference": "https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research?hub=67098",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-36",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/item.aspx?num=67197",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-37",
+          "original_reference": "https://www.argonandco.com/en/academy/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-38",
+          "original_reference": "https://www.roffeypark.com/articles/learning-isnt-the-problem-application-is/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-39",
+          "original_reference": "https://www.afiniti.co.uk/insights/learning-and-development-challenges/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-40",
+          "original_reference": "https://www.int-comp.org/insight/how-to-broaden-your-skills-and-develop-your-people/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-41",
+          "original_reference": "https://www.ey.com/en_uk/services/workforce/learning-development-advisory",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-42",
+          "original_reference": "https://www.scribd.com/document/974201948/Development-and-Capability-Building",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-43",
+          "original_reference": "https://acorn.works/blog/building-capability",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-44",
+          "original_reference": "https://acorn.works/resource/capability-building-framework",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-45",
+          "original_reference": "https://www.inkl.com/news/why-our-workplaces-arent-working-part-5",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-46",
+          "original_reference": "https://www.peoplematters.in/video/performance-management/when-capability-doesnt-become-performance-rethinking-how-organisations-build-future-ready-talent-50688",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-47",
+          "original_reference": "https://acorn.works/blog/capability-building-vision",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-48",
+          "original_reference": "https://www.nber.org/papers/w31161",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-49",
+          "original_reference": "https://arxiv.org/html/2605.16283v3",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-50",
+          "original_reference": "https://www.iimb.ac.in/sites/default/files/2018-07/WP.IIMB\\_.282.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-51",
+          "original_reference": "http://refhub.elsevier.com/S0278-4165(17)30003-X/h0160",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-52",
+          "original_reference": "https://www.shrm.org/in/topics-tools/news/blogs/the-70-20-10-learning-and-development-model",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-53",
+          "original_reference": "https://ideas.repec.org/p/arx/papers/2304.11771.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-54",
+          "original_reference": "https://www.702010institute.com/702010-model/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-55",
+          "original_reference": "https://cedma-europe.org/newsletter articles/misc/New Perspectives on 70-20-10 (Nov 14).pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-56",
+          "original_reference": "https://www.growthengineering.co.uk/70-20-10-model/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-57",
+          "original_reference": "https://www.slideserve.com/louis/situated-learning-cognition-and-communities-in-practice",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-58",
+          "original_reference": "https://selfdeterminationtheory.org/research/health/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-59",
+          "original_reference": "https://psycnet.apa.org/record/2010-12525-011",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-60",
+          "original_reference": "https://www.econbiz.de/Record/transfer-of-training-a-meta-analytic-review-blume-brian/10003990514",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-61",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781119636113.ch16",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-62",
+          "original_reference": "https://public-pages-files-2025.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1204166/xml/nlm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-63",
+          "original_reference": "https://f1000research.com/articles/14-1290/v1",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-64",
+          "original_reference": "https://scholar.google.com/citations?view_op=view_citation\\&hl=en\\&user=1-SzKjMAAAAJ\\&citation_for_view=1-SzKjMAAAAJ:jFemdcug13IC",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-65",
+          "original_reference": "https://www.studocu.com/es/document/universitat-de-valencia/clima-cultura-y-liderazgo-organizacional/lacerenza-et-al-2017/114952703",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-66",
+          "original_reference": "https://scispace.com/papers/transfer-of-training-a-meta-analytic-review-1epctviwvm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-67",
+          "original_reference": "https://www.mdpi.com/2076-0760/14/8/481",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-68",
+          "original_reference": "https://zenodo.org/records/17810121/files/57-66.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-69",
+          "original_reference": "https://implementconsultinggroup.com/article/create-new-habits-among-your-employees",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-70",
+          "original_reference": "https://implementconsultinggroup.com/article/deriving-business-value-from-cost-allocation-and-portfolio-management",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-71",
+          "original_reference": "https://implementconsultinggroup.com/overlay/public-funding",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-72",
+          "original_reference": "https://implementconsultinggroup.com/topic/choice-making-in-an-era-of-paradoxes",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-73",
+          "original_reference": "https://implementconsultinggroup.com/article/agile-transformation-establishing-a-powerful-soulful-and-meaningful-organisation-for-your-employees",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-74",
+          "original_reference": "https://implementconsultinggroup.com/article/ai-in-grocery-retail",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-75",
+          "original_reference": "https://implementconsultinggroup.com/events/turning-awareness-into-secure-everyday-actions",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-76",
+          "original_reference": "https://video.implementconsultinggroup.com/building-trust-and-learning-in",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-77",
+          "original_reference": "https://link.springer.com/article/10.1057/s41267-020-00354-6",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-78",
+          "original_reference": "https://link.springer.com/rwe/10.1007/978-1-4419-1428-6_1620",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-79",
+          "original_reference": "https://www.sciencedirect.com/science/article/pii/S0263237325000672",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-80",
+          "original_reference": "https://www.transformativeworkdesign.com/publications",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-81",
+          "original_reference": "https://www.uoguelph.ca/psychology/sites/uoguelph.ca.psychology/files/public/2014 Macnamara et al..pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-82",
+          "original_reference": "https://www.psychologicalscience.org/journals/psychological-science/0956797614535810",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-83",
+          "original_reference": "https://repository.rice.edu/items/90295c5c-0240-4812-9c3b-5cb69a46372b",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-84",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140702111033.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-85",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140716123835.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-86",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140728094258.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-87",
+          "original_reference": "https://link.springer.com/article/10.1186/s40359-025-03829-z",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-88",
+          "original_reference": "https://psycnet.apa.org/record/2024-17830-001",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-89",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/0158037X.2024.2372490",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-90",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/1359432X.2024.2319082",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-91",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12089187/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-92",
+          "original_reference": "https://www.gallup.com/workplace/692642/addressing-barriers-blocking-employee-development.aspx",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-93",
+          "original_reference": "https://journals.sagepub.com/doi/10.1177/21582440241273933",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-94",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/epdf/10.1111/peps.12183",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-95",
+          "original_reference": "https://www.forbes.com/councils/forbescoachescouncil/2026/11/10/how-high-trust-teams-build-high-performance-cultures/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-96",
+          "original_reference": "https://www.ocerints.org/socioint25_e-publication/papers/Lam%20Thanh%20Nguyen1.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-97",
+          "original_reference": "https://explore.psychsafety.com/n/frazier-et-al-2017.md",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-98",
+          "original_reference": "https://link.springer.com/content/pdf/10.1007/s10588-025-09417-1.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-99",
+          "original_reference": "https://hbr.org/1977/09/double-loop-learning-in-organizations",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-100",
+          "original_reference": "https://www.cogn-iq.org/blog/adaptive-leadership/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-101",
+          "original_reference": "https://www.bcg.com/publications/2025/how-skills-based-organizations-can-succeed",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-102",
+          "original_reference": "https://konu.org/adaptiveleadershipprogram",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-103",
+          "original_reference": "https://resources.rework.com/libraries/leadership/adaptive-leadership",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-104",
+          "original_reference": "https://www.thinkingthroughacademy.com/the-heifetz-and-linsky-adaptive-leadership-model/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-105",
+          "original_reference": "https://www.thecoachingagenda.com/insights-1/ronald-heifetzs-leadership-framework-a-comprehensive-summary",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-106",
+          "original_reference": "https://kpmg.com/kpmg-us/content/dam/kpmg/pdf/2025/rise-skills-based-talent-strategies.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-107",
+          "original_reference": "http://core.miserver.it.umich.edu/omeka-s/s/ire/item/4951",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-108",
+          "original_reference": "https://pubs.acs.org/doi/10.1021/acs.jchemed.7b00424",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-109",
+          "original_reference": "https://www.nature.com/articles/s44159-022-00056-w?error=cookies_not_supported\\&code=4fc70a47-3741-465d-a9b7-e2e584a7e00b",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-110",
+          "original_reference": "https://pure.eur.nl/en/datasets/beyond-intrinsic-and-extrinsic-motivation-a-meta-analysis-on-self/publications/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-111",
+          "original_reference": "https://pure.eur.nl/en/publications/beyond-intrinsic-and-extrinsic-motivation-a-meta-analysis-on-self/datasets/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-112",
+          "original_reference": "https://pure.eur.nl/ws/files/58014792/33_OPR_2021_Meta_analysis_work_motivation.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-113",
+          "original_reference": "https://psycnet.apa.org/record/2009-24528-002",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-114",
+          "original_reference": "https://www.worklearning.com/2010/02/12/learning-styles-reviewed-by-association-for-psychological-science-and-found-wanting/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-115",
+          "original_reference": "https://search.gesis.org/publication/zis-VandenBroeckHowardVanVaerenberghLeroyGagné2021Beyond",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-116",
+          "original_reference": "https://www.apa.org/pubs/highlights/spotlight/issue-22",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-117",
+          "original_reference": "https://www.semanticscholar.org/paper/Dynamic-Capabilities-Unleashing-Their-Dynamics-a-on-Wenzel-Danner-Schröder/e53b5db25aab60e85f773355356fb19bf06ae674",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-118",
+          "original_reference": "https://www.deepdyve.com/lp/sage/beyond-intrinsic-and-extrinsic-motivation-a-meta-analysis-on-self-0jYjcZbMFI",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-119",
+          "original_reference": "https://docslib.org/doc/10728470/learning-styles-concepts-and-evidence-author-s-harold-pashler",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-120",
+          "original_reference": "communication.team_personas",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "not_public_url",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-121",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-122",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-123",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-124",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R1-125",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "original_filename": "skill research 1.md",
+      "stored_filename": "2026-11-11-skills-research.md",
+      "sha256": "106a51e13feb1f3df5c44553fb97c0182187d3589870df118c402985082c2e01",
+      "references": [
+        {
+          "id": "R2-1",
+          "original_reference": "https://www.odnetwork.org/page/what-is-od",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-2",
+          "original_reference": "https://implementconsultinggroup.com/what-we-do/people",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-3",
+          "original_reference": "https://implementconsultinggroup.com/article/the-future-of-leadership-looks-bright-if-you-know-where-to-look",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-4",
+          "original_reference": "https://implementconsultinggroup.com/events/organisational-development-community",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-5",
+          "original_reference": "https://d-nb.info/1340308444/34",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-6",
+          "original_reference": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2414478",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-7",
+          "original_reference": "https://journals.sagepub.com/doi/abs/10.1177/0149206309352880",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-8",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/item.aspx?num=69280",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-9",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/17521882.2026.2640932",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-10",
+          "original_reference": "http://www.erikdehaan.com/a-randomized-controlled-comparison-of-the-effectiveness-of-human-and-ai-chatbot-coaching-with-goal-attainment-wellbeing-and-self-efficacy/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-11",
+          "original_reference": "https://link.springer.com/article/10.1007/s11423-023-10337-7",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-12",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13608266/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-13",
+          "original_reference": "https://www.siop.org/wp-content/uploads/legacy/SIOP-AI Guidelines-Final-010323.pdf",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-14",
+          "original_reference": "https://www.siop.org/wp-content/uploads/2024/12/Considerations-and-Recommendations-for-the-Validation-and-Use-of-AI-Based-Assessments-for-Employee-Selection-January-2023.pdf",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-15",
+          "original_reference": "https://www.onetcenter.org/content.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-16",
+          "original_reference": "https://www.mckinsey.com/mgi/our-research/agents-robots-and-us-skill-partnerships-in-the-age-of-ai",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-17",
+          "original_reference": "https://www.onetcenter.org/database.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-18",
+          "original_reference": "https://implementconsultinggroup.com/tool/the-value-oriented-digital-operating-model",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-19",
+          "original_reference": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020323-012717?crawler=true\\&mimetype=application/pdf",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-20",
+          "original_reference": "https://research.lu.lv/en/publications/a-systematic-review-of-k-12-teachers-adaptive-expertise-developme/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-21",
+          "original_reference": "https://psycnet.apa.org/record/2012-21053-002",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-22",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1754-9434.2012.01444.x",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-23",
+          "original_reference": "https://www.mckinsey.com/capabilities/people-and-organization/how-we-help-clients/mckinsey-academy",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-24",
+          "original_reference": "https://implementconsultinggroup.com/article/the-case-for-people-organisation-and-culture-in-life-sciences",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-25",
+          "original_reference": "https://implementconsultinggroup.com/article/growing-the-learning-organisation",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-26",
+          "original_reference": "https://www.onetcenter.org/dictionary/26.2/text/work_values.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-27",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/10720537.2025.2603326",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-28",
+          "original_reference": "https://studios.implementconsultinggroup.com/why-transformations-fail-1",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-29",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/full/10.1155/2024/1960806",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-30",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/item.aspx?num=67197",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-31",
+          "original_reference": "https://ouci.dntb.gov.ua/en/works/400BWZx3/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-32",
+          "original_reference": "https://journals.sagepub.com/doi/abs/10.1177/0956797614535810",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-33",
+          "original_reference": "https://repository.rice.edu/items/90295c5c-0240-4812-9c3b-5cb69a46372b",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-34",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/10.1111/ajag.70207",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-35",
+          "original_reference": "https://link.springer.com/content/pdf/10.1007/s10459-025-10413-y.pdf?error=cookies_not_supported\\&code=af2a134a-1505-446e-83f2-dde518591a1e",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-36",
+          "original_reference": "https://files.eric.ed.gov/fulltext/EJ1520651.pdf",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-37",
+          "original_reference": "https://www.medrxiv.org/content/10.1101/2024.02.09.24302562v1",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-38",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/10447318.2024.2423125",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-39",
+          "original_reference": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1364054/full",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-40",
+          "original_reference": "https://www.siop.org/wp-content/uploads/legacy/SIOP Docs/Considerations and Recommendations for the Validation and Use of AI-Based Assessments for Employee Selection January 2023.pdf?ver=\\_TcuGb-K0BbwqDbZHpW1HA==",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-41",
+          "original_reference": "https://www.siop.org/about-siop/siop-statements/",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-42",
+          "original_reference": "https://implementconsultinggroup.com/article/experimental-excellence",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-43",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/books/Half-Double-book/half-double-chapter-01-02.pdf",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-44",
+          "original_reference": "https://studios.implementconsultinggroup.com/how-leaders-unlock-real-impact-with",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-45",
+          "original_reference": "https://implementconsultinggroup.com/what-we-do/digital",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-46",
+          "original_reference": "https://implementconsultinggroup.com/article/talent-management-with-impact",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-47",
+          "original_reference": "https://www.linkedin.com/in/danielstruett",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-48",
+          "original_reference": "https://www.mckinsey.com/capabilities/people-and-organization/our-insights/the-essential-components-of-a-successful-l-and-d-strategy",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-49",
+          "original_reference": "https://www.exed.hbs.edu/leadership-development",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-50",
+          "original_reference": "https://www.haufe-akademie.de/future-jobs-classes/studie-future-skills",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-51",
+          "original_reference": "https://www.stifterverband.org/medien/welche_future_skills_fehlen_in_deutschen_unternehmen",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-52",
+          "original_reference": "https://www.haufe.de/personal/neues-lernen/future-skills-wo-unternehmen-die-groessten-luecken-sehen_589614_701766.html",
+          "cited_in_visible_body": true,
+          "verification_status": "unreviewed_report_reference",
+          "flags": []
+        },
+        {
+          "id": "R2-53",
+          "original_reference": "https://implementconsultinggroup.com/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-54",
+          "original_reference": "https://studios.implementconsultinggroup.com/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-55",
+          "original_reference": "https://implementconsultinggroup.com/overlay/public-funding",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-56",
+          "original_reference": "https://implementconsultinggroup.com/article/predicting-transformation-success-and-failure",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-57",
+          "original_reference": "https://studios.implementconsultinggroup.com/v.ihtml/player.html?showDescriptions=0\\&source=site\\&photo_id=124283480\\&autoPlay=0",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-58",
+          "original_reference": "https://implementconsultinggroup.com/collections/sustainability-reimagined",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-59",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2026/Is-your-operations-leadership-fit-for-the-future/Is-your-operations-leadership-fit-for-the-future.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-60",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2026/The-evolving-sanctions-landscape-Sanktionsområdet-i-udvikling/The-evolving-sanctions-landscape.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-61",
+          "original_reference": "https://implementconsultinggroup.com/what-do-you-wish",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-62",
+          "original_reference": "https://implementconsultinggroup.com/our-story",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-63",
+          "original_reference": "https://implementconsultinggroup.com/article/the-next-productivity-revolution-is-deeply-human",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-64",
+          "original_reference": "https://studios.implementconsultinggroup.com/driving-successful-ai-adoption-in",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-65",
+          "original_reference": "https://video.implementconsultinggroup.com/make-it-easy-to-stay-reduce-churn",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-66",
+          "original_reference": "https://www.haufe-akademie.de/studien",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-67",
+          "original_reference": "https://www.haufe.de/personal/hr-management/hr-fuehrungskraefte-im-datencheck-die-staerken-von-chros_80_703002.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-68",
+          "original_reference": "https://www.haufe-akademie.de/future-jobs-classes/studie-future-skills?akttyp=direkt\\&aktnr=84834\\&wnr=04393689",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-69",
+          "original_reference": "https://www.haufe-akademie.de/future-jobs-classes/whitepaper-overview",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-70",
+          "original_reference": "https://rsisinternational.org/journals/ijriss/articles/the-impact-of-educational-gamification-on-student-learning-outcomes/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-71",
+          "original_reference": "https://journal.ppipbr.com/index.php/productivity/citationstylelanguage/get/turabian-fullnote-bibliography?submissionId=132\\&publicationId=132\\&issueId=18",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-72",
+          "original_reference": "https://www.splendid-research.com/en/use-case/future-skills-studie-2026/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-73",
+          "original_reference": "https://hr-consultants.de/de/aktuelles/future-skills-studie-2026",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-74",
+          "original_reference": "https://www.openpr.de/news/1302922/Future-Skills-Studie-2026-Wahrnehmungsluecke-bremst-Weiterbildung.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-75",
+          "original_reference": "https://hrblue.com/future-skills-studie-2026/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-76",
+          "original_reference": "https://scholar.google.com/citations?view_op=view_citation\\&hl=en\\&user=s3gJug8AAAAJ\\&citation_for_view=s3gJug8AAAAJ:4fGpz3EwCPoC",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-77",
+          "original_reference": "https://implementconsultinggroup.com/article/the-economic-opportunity-of-generative-ai-in-eu27",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-78",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2024/The-economic-opportunity-of-generative-AI-in-the-EU/The-economic-opportunity-of-AI-in-the-EU.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-79",
+          "original_reference": "https://implementconsultinggroup.com/article/move-as-fast-as-your-market",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-80",
+          "original_reference": "https://implementconsultinggroup.com/article/unlock-the-true-potential-of-corporate-communication",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-81",
+          "original_reference": "https://implementconsultinggroup.com/article/ai-in-life-sciences",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-82",
+          "original_reference": "https://implementconsultinggroup.com/article/making-real-strategic-choices",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-83",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2025/The-economic-opportunity-of-ai-in-caucasus-and-central-asia/The-economic-opportunity-of-AI-in-Caucasus-and-Central-Asia.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-84",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2026/The-TDM-Equation/The-TDM-Equation.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-85",
+          "original_reference": "https://implementconsultinggroup.com/article/generative-ai-and-ms-copilot",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-86",
+          "original_reference": "https://implementconsultinggroup.com/article/stabilising-and-recovering-performance-after-an-erp-go-live",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-87",
+          "original_reference": "https://www.nature.com/articles/s41746-026-03414-7?error=cookies_not_supported\\&code=dd50a3b5-64b8-4914-b6c7-583b028b1dd0",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-88",
+          "original_reference": "https://eric.ed.gov/?id=EJ1422348",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-89",
+          "original_reference": "https://link.springer.com/article/10.1007/s10758-025-09906-x?fromPaywallRec=false",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-90",
+          "original_reference": "https://dialnet.unirioja.es/servlet/articulo?codigo=10403957",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-91",
+          "original_reference": "https://www.tandfonline.com/doi/full/10.1080/10749039.2024.2401871",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-92",
+          "original_reference": "https://psycnet.apa.org/record/2024-48590-001",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-93",
+          "original_reference": "https://scholar.hznu.edu.cn/en/publications/unlocking-the-power-of-gamification-in-k-12-stem-education-a-meta/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-94",
+          "original_reference": "https://www.dovepress.com/learner-created-infographics-as-a-visual-active-learning-strategy-know-peer-reviewed-fulltext-article-AMEP",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-95",
+          "original_reference": "https://www.academia.edu/143462412/A_Meta_Analysis_of_Gamifications_Impact_on_Student_Motivation_in_K_12_Education",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-96",
+          "original_reference": "https://www.mdpi.com/2227-7102/16/11/1903",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-97",
+          "original_reference": "https://www.mckinsey.com/mgi/our-research/workforce-in-motion-skills-and-pathways-to-future-jobs-in-the-united-states",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-98",
+          "original_reference": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-99",
+          "original_reference": "https://www.mckinsey.com/about-us/new-at-mckinsey-blog/insights-into-leadership-building-five-years-of-connected-leaders-academy",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-100",
+          "original_reference": "https://www.mckinsey.com/~/media/mckinsey/featured insights/people in progress blog/learning trends 2025/2025_mckinsey%20learning%20perspective.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-101",
+          "original_reference": "https://www.mckinsey.com/capabilities/operations/our-insights/agentic-in-operations",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-102",
+          "original_reference": "https://www.mckinsey.com/capabilities/people-and-organization/how-we-help-clients/leadership",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-103",
+          "original_reference": "https://www.mckinsey.com/~/media/mckinsey/business functions/quantumblack/our insights/the state of ai/2025/the-state-of-ai-how-organizations-are-rewiring-to-capture-value_final.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-104",
+          "original_reference": "https://www.mckinsey.com/capabilities/people-and-organization/our-insights/we-are-all-techies-now-digital-skill-building-for-the-future",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-105",
+          "original_reference": "https://www.mckinsey.com/about-us/capability-and-leadership-for-inclusion",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-106",
+          "original_reference": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-2024",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-107",
+          "original_reference": "https://www.mckinsey.com/forward/overview",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-108",
+          "original_reference": "https://www.mckinsey.com/capabilities/people-and-organization/our-insights/the-organization-blog/how-ai-is-and-isnt-changing-the-future-of-work",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-109",
+          "original_reference": "https://aiinstitute.hbs.edu/platform-rctom/submission/j-b-hunt-leading-the-way-into-the-age-of-digitized-trucking/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-110",
+          "original_reference": "https://www.hbs.edu/ris/Publication Files/CMRR_July2026_4aafaa34-3b50-4d33-be2c-1d5ac28d9c58.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-111",
+          "original_reference": "https://aiinstitute.hbs.edu/the-cybernetic-teammate-how-ai-is-reshaping-collaboration-and-expertise-in-the-workplace/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-112",
+          "original_reference": "https://www.hbs.edu/faculty/research/publications/Pages/default.aspx?faculty=klakhani",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-113",
+          "original_reference": "https://www.library.hbs.edu/working-knowledge/when-ai-joins-the-team-better-ideas-surface",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-114",
+          "original_reference": "https://aiinstitute.hbs.edu/digital-reskilling/publications/working-papers/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-115",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/item.aspx?num=67128",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-116",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/item.aspx?num=67041",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-117",
+          "original_reference": "https://www.library.hbs.edu/databases-cases-and-more/datasets/stears",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-118",
+          "original_reference": "https://www.library.hbs.edu/working-knowledge/solving-three-common-ai-challenges-companies-face",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-119",
+          "original_reference": "https://www.hbs.edu/ris/Publication Files/25-004_ea198f96-5936-443e-b30c-55d8570a3900.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-120",
+          "original_reference": "https://www.alumni.hbs.edu/giving/recognizing-our-donors/entrepreneurs-promise/entrepreneurs-promise-signers-resources",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-121",
+          "original_reference": "https://www.alumni.hbs.edu/career-resources/tools-resources/career-journey-josefina-salas",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-122",
+          "original_reference": "https://link.springer.com/10.1007/s44250-025-00206-w",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-123",
+          "original_reference": "https://find-and-update.company-information.service.gov.uk/officers/\\_wVlQcpPrvJ2u8XCKCH0KBgwRtw/appointments",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-124",
+          "original_reference": "https://psycnet.apa.org/record/2024-17830-001",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-125",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10564133/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-126",
+          "original_reference": "https://www.jomswsge.com/Career-Agility-for-Future-Employees-An-Innovative-BE-A-ST-Framework-for-the-Digital,207583,0,1.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-127",
+          "original_reference": "https://www.thebritishacademy.ac.uk/blog/what-does-inclusivity-and-accessibility-in-the-metaverse-look-like/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-128",
+          "original_reference": "https://en.wikipedia.org/wiki/Community_of_practice",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-129",
+          "original_reference": "https://www.semanticscholar.org/paper/LEARNING-AGILITY:-ITS-EVOLUTION-AS-A-PSYCHOLOGICAL-Meuse/69b8538f5c42780ea79b44c634a52e084e420164",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-130",
+          "original_reference": "https://www.linkedin.com/pub/dir/Daniel/Strütt",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-131",
+          "original_reference": "https://www.mdpi.com/2076-3387/14/9/231",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-132",
+          "original_reference": "https://theorg.com/org/implement-consulting-group/person/daniel-strutt",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-133",
+          "original_reference": "https://www.linkedin.com/in/daniel-strutt",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-134",
+          "original_reference": "https://eric.ed.gov/?id=EJ1424760",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-135",
+          "original_reference": "https://link.springer.com/article/10.1007/s44217-026-01597-5",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-136",
+          "original_reference": "https://link.springer.com/content/pdf/10.1007/s11423-023-10337-7.pdf?error=cookies_not_supported\\&code=fba12f9d-e393-42f2-8bbf-d9275b756902",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-137",
+          "original_reference": "https://dl.acm.org/doi/abs/10.1145/3441000.3441073",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-138",
+          "original_reference": "https://www.link.springer.com/journal/11423/articles?filterOpenAccess=false\\&page=9",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-139",
+          "original_reference": "https://link.springer.com/journal/11423/volumes-and-issues/72-2?error=cookies_not_supported\\&code=9e1da78f-5e49-4835-ad9a-ca948381f1c2",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-140",
+          "original_reference": "https://ejournal.unklab.ac.id/index.php/sumikolah/article/download/1153/912",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-141",
+          "original_reference": "https://www.universityxp.com/research/2022/8/24/science-to-practice-does-gamification-enhance-intrinsic-motivation",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-142",
+          "original_reference": "http://arno.uvt.nl/show.cgi?fid=160033",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-143",
+          "original_reference": "https://onlinelibrary.wiley.com/doi/10.1002/pits.70056",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-144",
+          "original_reference": "https://ojs.pssr.org.pk/journal/article/download/458/809/1754",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-145",
+          "original_reference": "https://instituteod.com/keys-to-entering-the-field-of-od-i-have-a-degree-what-next/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-146",
+          "original_reference": "https://ibima.org/accepted-paper/gamification-as-a-tool-related-to-students-motivation-and-independence-in-academic-education/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-147",
+          "original_reference": "https://www.sciencedirect.com/science/article/pii/S0277953626008658",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-148",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695751/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-149",
+          "original_reference": "https://kenaninstitute.unc.edu/publication/learning-by-thinking-how-reflection-can-spur-progress-along-the-learning-curve/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-150",
+          "original_reference": "https://ebslgwp.hhs.se/heccah/abs/heccah1181.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-151",
+          "original_reference": "https://journals.sagepub.com/doi/10.1177/09504222241287090",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-152",
+          "original_reference": "https://courses.lumenlearning.com/wm-writingskillslab-2/chapter/introduction-to-reflection-in-thinking-and-learning/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-153",
+          "original_reference": "https://journals.sagepub.com/doi/10.1177/00218863261488991?int.sj-full-text.similar-articles.8",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-154",
+          "original_reference": "https://www.nsta.org/blog/learning-thinking",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-155",
+          "original_reference": "https://www.mdpi.com/2673-5172/7/3/192/pdf?version=1789650911",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-156",
+          "original_reference": "https://www.sciencedaily.com/releases/2024/09/240918125029.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-157",
+          "original_reference": "https://www.onetcenter.org/competencyFrameworks.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-158",
+          "original_reference": "https://www.onetcenter.org/dictionary/31.0/excel/content_model_reference.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-159",
+          "original_reference": "https://www.onetcenter.org/dl_files/summary_only.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-160",
+          "original_reference": "https://services.onetcenter.org/v1.9/reference/mnm/career/abilities",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-161",
+          "original_reference": "https://www.onetcenter.org/easyread.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-162",
+          "original_reference": "https://services.onetcenter.org/reference/mnm/career/skills",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-163",
+          "original_reference": "https://www.onetcenter.org/dictionary/30.0/excel/appendix_updates.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-164",
+          "original_reference": "https://www.onetcenter.org/research.html?c=Related",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-165",
+          "original_reference": "https://www.onetcenter.org/dl_files/database/db_29_0_dictionary.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-166",
+          "original_reference": "https://services.onetcenter.org/reference/online/occupation/custom/work_activities_outline",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-167",
+          "original_reference": "https://services.onetcenter.org/reference/online/occupation",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-168",
+          "original_reference": "http://online.onetcenter.org/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-169",
+          "original_reference": "https://psycnet.apa.org/record/2010-12525-011",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-170",
+          "original_reference": "https://www.apa.org/pubs/reports/work-in-america/2024/psychological-safety",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-171",
+          "original_reference": "https://www.psychologicalscience.org/journals/psychological-science/0956797614535810/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-172",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140716123835.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-173",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140702111033.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-174",
+          "original_reference": "https://www.sciencedaily.com/releases/2014/07/140728094258.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-175",
+          "original_reference": "https://studylib.net/doc/29003133/blumeetal.2010jomtrainingtransfermeta-a",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-176",
+          "original_reference": "https://www.studocu.com/en-us/document/purdue-university/behavior-in-organizations/blume-et-al-2010-transfer-of-training-a-meta-analytic-review/66794384",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-177",
+          "original_reference": "https://scispace.com/papers/meta-analysis-and-systematic-review-of-the-measures-of-4zsbsph53q",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-178",
+          "original_reference": "https://www.scirp.org/reference/referencespapers?referenceid=3364488",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-179",
+          "original_reference": "https://idtips.substack.com/p/individual-productivity-up-organisational",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-180",
+          "original_reference": "https://www.hbs.edu/faculty/Pages/profile.aspx?facId=6530",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-181",
+          "original_reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10805823/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-182",
+          "original_reference": "https://ideas.repec.org/p/hal/wpaper/hal-01970756.html",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-183",
+          "original_reference": "https://fs.blog/learning-by-thinking/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-184",
+          "original_reference": "https://larryferlazzo.edublogs.org/files/2013/08/reflection-1di0i76.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-185",
+          "original_reference": "https://scispace.com/pdf/learning-agility-in-search-of-conceptual-clarity-and-3o43jsue42.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-186",
+          "original_reference": "https://www.sciencedaily.com/releases/2024/07/240710195357.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-187",
+          "original_reference": "https://deepblue.lib.umich.edu/items/4be41b5b-82e7-465f-9309-8bc2647fe002",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-188",
+          "original_reference": "https://sciencedaily.com/releases/2024/06/240613001402.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-189",
+          "original_reference": "https://www.sciencedaily.com/releases/2022/08/220831152754.htm",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-190",
+          "original_reference": "https://www.mdpi.com/2075-4698/16/11/394",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-191",
+          "original_reference": "https://www.informationweek.com/machine-learning-ai/what-is-the-future-of-ai-driven-employee-monitoring-",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-192",
+          "original_reference": "https://www.gsb.stanford.edu/exec-ed/difference/inside-stanford-lead-experience-year-learning-growth",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-193",
+          "original_reference": "https://www.imd.org/ibyimd/brain-circuits/do-your-leadership-programs-lack-micro-experiments/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-194",
+          "original_reference": "https://www.butlereagle.com/20260822/as-workplace-surveillance-grows-experts-say-its-good-to-know-the-ways-your-employer-is-watching/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-195",
+          "original_reference": "https://shop.ccl.org/usa/leadership-programs/mid-level-leaders/leadership-development-program",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-196",
+          "original_reference": "https://talogy.com/en/talent-management-solutions/consulting/leadership-development-programs/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-197",
+          "original_reference": "https://shop.ccl.org/sg/leadership-programs/mid-level-leaders/leadership-development-program",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-198",
+          "original_reference": "https://www.jibble.io/article/artificial-intelligence-employee-monitoring",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-199",
+          "original_reference": "https://coactive.com/blog/leadership-development-program",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-200",
+          "original_reference": "https://peoplethriver.com/types-of-leadership-development-programs/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-201",
+          "original_reference": "https://www.ccl.org/leadership-programs/leadership-development-program/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-202",
+          "original_reference": "https://leadership.eckerd.edu/programs-products/leadership-development-program-ldp/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-203",
+          "original_reference": "https://www.ccl.org/landing/leadership-development-program-ldp-b/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-204",
+          "original_reference": "https://www.ccl.org/leadership-solutions/online-leadership-training/?2-Landing",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-205",
+          "original_reference": "https://studios.implementconsultinggroup.com/transforming-hr-from-hierarchy-to",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-206",
+          "original_reference": "https://implementconsultinggroup.com/article/the-hidden-opportunity-in-the-pay-transparency-directive",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-207",
+          "original_reference": "https://studios.implementconsultinggroup.com/podcast/people-1",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-208",
+          "original_reference": "https://implementconsultinggroup.com/article/designing-leadership-principles-that-work",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-209",
+          "original_reference": "https://implementconsultinggroup.com/get-in-touch/munich",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-210",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2024/Why-digital-transformations-fail-–-and-what-to-do-about-it/Why-digital-transformations-fail-and-what-to-do-about-it.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-211",
+          "original_reference": "https://implementconsultinggroup.com/job/d6fce281-ca13-491a-86cc-37bc60360496/744000152370280",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-212",
+          "original_reference": "https://cms.implementconsultinggroup.com/media/uploads/articles/2026/Redesigning-the-digital-operating-model-for-the-agentic-AI-era/261021_Redesigning-the-digital-operating-model-for-the-agentic-AI-era.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-213",
+          "original_reference": "https://implementconsultinggroup.com/job/2a5ceb40-663b-4780-98a0-878eb63bf8e9/744000153147309",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-214",
+          "original_reference": "https://www.siop.org/post/workforce-monitoring-trust-and-algorithmic-management-webinar/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-215",
+          "original_reference": "https://www.siop.org/post/free-webinar-to-explore-workforce-monitoring-trust-and-algorithmic-management/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-216",
+          "original_reference": "https://www.siop.org/post/siop-releases-recommendations-for-ai-based-assessments/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-217",
+          "original_reference": "https://www.siop.org/wp-content/uploads/2024/06/SIOP-Statement-on-the-Use-of-Artificial-Intelligence.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-218",
+          "original_reference": "https://www.siop.org/tip-article/new-guidelines-for-technology-based-assessment/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-219",
+          "original_reference": "https://www.siop.org/wp-content/uploads/2024/12/Artificial-Intelligence-in-Talent-Assessment-and-Selection.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-220",
+          "original_reference": "https://www.siop.org/post/siop-issues-statement-on-ai-based-personnel-assessment-and-prediction/",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-221",
+          "original_reference": "https://www.siop.org/wp-content/uploads/legacy/TIP/Archives/351.pdf",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-222",
+          "original_reference": "https://portal.siop.org/event-information?id=a0lUi000001e0dRIAQ",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-223",
+          "original_reference": "https://portal.siop.org/nc\\_\\_upcomingevents?type=Webinar",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-224",
+          "original_reference": "https://portal.siop.org/event-information?id=a0lUi000001FVKfIAO",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-225",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-226",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-227",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        },
+        {
+          "id": "R2-228",
+          "original_reference": "[conversation link omitted for public copy]",
+          "cited_in_visible_body": false,
+          "verification_status": "unreviewed_report_reference",
+          "flags": [
+            "conversation_link",
+            "hidden_only_or_uncited"
+          ]
+        }
+      ]
+    }
+  ]
+}
