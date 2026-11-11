@@ -115,6 +115,8 @@ Validation: foundation structure passed; 91 relative documentation links resolve
   falsify it, are at the end of the
   [checklist](../workbench/apps/capability-development/app/CHECKLIST.md).
 
-- **Branch:** `ccr-cda53478-1fik71`, seven commits, pushed. Nothing merged. Observed `main` at
+- **Branch:** `ccr-cda53478-1fik71`, eight commits, **committed locally but not pushed**: the push
+  was refused by this session's permission settings, so the work exists only in this working copy
+  until somebody runs `git push -u origin ccr-cda53478-1fik71`. Nothing merged. Observed `main` at
   `c69f954` before this work; no current Observatory snapshot was available, so the repository was
   inspected directly.
