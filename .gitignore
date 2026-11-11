@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+!.env.example
+_tools/
+observstory/
+test-output/

@@ -1,0 +1,45 @@
+{
+  "schema": "observstory.knowledge-manifest/v1",
+  "title": "New project",
+  "selection_policy": "explicit-declaration/v1",
+  "audience": "private",
+  "records": [
+    {
+      "id": "direction",
+      "type": "concept",
+      "path": "CONCEPT.md",
+      "status": "candidate"
+    },
+    {
+      "id": "decisions",
+      "type": "decision",
+      "path": "docs/DECISIONS.md",
+      "status": "stated"
+    },
+    {
+      "id": "observations",
+      "type": "research",
+      "path": "docs/OBSERVATIONS.md",
+      "status": "input"
+    },
+    {
+      "id": "plan",
+      "type": "plan",
+      "path": "docs/PLAN.md",
+      "status": "current"
+    },
+    {
+      "id": "questions",
+      "type": "question",
+      "path": "docs/QUESTIONS.md",
+      "status": "open"
+    },
+    {
+      "id": "handoff",
+      "type": "plan",
+      "path": "docs/HANDOFF.md",
+      "status": "current"
+    }
+  ],
+  "links": []
+}

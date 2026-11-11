@@ -1,0 +1,62 @@
+name: Observatory
+on:
+  push:
+    branches: ['**']
+  pull_request_target:
+    types: [opened, synchronize, reopened, closed, ready_for_review, converted_to_draft, edited]
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+  create:
+  delete:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: observatory-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Never check out PR head code in this pull_request_target job.
+      - name: Check out canonical project knowledge
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out pinned producer
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: blackmath88/observstory
+          ref: 674279138a8e5ed334653fb80eefb1bc3a6c52b8
+          path: _tools/observstory
+          persist-credentials: false
+      - name: Validate foundation and producer contracts
+        env:
+          OBSERVSTORY_SOURCE: _tools/observstory
+        run: |
+          python3 scripts/check.py
+          python3 -m unittest discover -s tests -v
+      - name: Build canonical knowledge and repository-wide activity
+        env:
+          OBSERVSTORY_TOKEN: ${{ github.token }}
+          OBSERVSTORY_REPOSITORY: ${{ github.repository }}
+          OBSERVSTORY_API_URL: ${{ github.api_url }}
+          OBSERVSTORY_EVENT: ${{ github.event_name }}
+          OBSERVSTORY_RUN_ID: ${{ github.run_id }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python3 scripts/build_observatory.py --producer _tools/observstory
+      - name: Preserve the workspace as a repository artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: observstory
+          path: observstory/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,30 @@
+{
+  "schema": "observstory.workspace/v1",
+  "records": [
+    {
+      "id": "discovery",
+      "title": "Understand the problem",
+      "kind": "workstream",
+      "status": "proposed",
+      "context": "Seed workstream; replace with actual project context.",
+      "members": [
+        "direction",
+        "observations"
+      ]
+    },
+    {
+      "id": "delivery",
+      "title": "Build and verify a useful slice",
+      "kind": "workstream",
+      "status": "proposed",
+      "members": [
+        "plan"
+      ],
+      "resume": {
+        "stopping_point": "Project scaffold only.",
+        "next_action": "Define one acceptance check in docs/PLAN.md."
+      }
+    }
+  ],
+  "relations": []
+}

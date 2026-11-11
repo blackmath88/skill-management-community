@@ -1,0 +1,29 @@
+name: Foundation checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: blackmath88/observstory
+          ref: 674279138a8e5ed334653fb80eefb1bc3a6c52b8
+          path: _tools/observstory
+          persist-credentials: false
+      - name: Check structure and real producer contracts
+        env:
+          OBSERVSTORY_SOURCE: _tools/observstory
+        run: |
+          python3 scripts/check.py
+          python3 -m unittest discover -s tests -v

@@ -1,0 +1,7 @@
+{
+  "schema": "knowledge-lab.project/v1",
+  "project_id": "new-project",
+  "title": "New project",
+  "event_ids": [],
+  "note": "Template seed; run scripts/init_project.py. Registration and connectors are separate."
+}

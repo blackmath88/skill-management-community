@@ -1,0 +1,9 @@
+{
+  "title": "Project Observatory",
+  "ignore": [
+    "_tools/",
+    "observstory/",
+    "test-output/",
+    "*.snap"
+  ]
+}
