@@ -30,3 +30,91 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 - Checks: repository instructions, structure, branch and relevant documents inspected via connector. No local checkout, test execution, link checker, Docker run or Linuc connectivity experiment performed. Prior validation entries above do not apply to this new documentation.
 - Selection: no knowledge manifest or automatic ingestion changed. No real contacts, addresses, private connection details or traces imported.
 - Next: approve documentation, select an implementation repository, then start the agent with the supplied prompt. Linuc connectivity and any live testing remain separate operator-authorised work.
+
+
+## Capability development application — implemented and verified — 2026-11-11
+
+- **Learned:** the concept, architecture and plan in `workbench/apps/capability-development/` were
+  specific enough to build from directly. Two places needed a judgement rather than a reading, and
+  both are recorded as decisions: where the application lives, and what a rehearsal is worth. The
+  predecessor's code at `blackmath88/leader-me` was better than its documents suggested — its
+  storage conflict handling, its validation reader and its save-queue semantics were carried over
+  largely as written, because rewriting them would have been a regression risk for no benefit.
+
+- **Changed:** built the application at
+  [`workbench/apps/capability-development/app/`](../workbench/apps/capability-development/app/).
+  About 11,600 lines of source and 4,900 of tests across domain, application, storage, content, AI
+  and one presentation. Two content packs; a four-branch leadership campaign where only one branch
+  is personal practice; a collaboration handover campaign whose mechanism is a shared routine; a
+  deterministic local AI stand-in; export, import, and conversion of Leader Me exports. Added
+  [README](../workbench/apps/capability-development/app/README.md),
+  [DECISIONS](../workbench/apps/capability-development/app/DECISIONS.md) (15 entries),
+  [PROVENANCE](../workbench/apps/capability-development/app/PROVENANCE.md) and
+  [CHECKLIST](../workbench/apps/capability-development/app/CHECKLIST.md). Marked the superseded
+  sections of CONCEPT, ARCHITECTURE and PLAN, and updated the app index.
+
+- **Authority:** the owner's implementation mandate named the location, the scope and the working
+  style, and authorised project-local dependencies, local commits on a dedicated branch, and
+  ordinary reversible product and engineering decisions. Nothing was merged, deployed, published
+  or paid for. No credentials were added and no external service was touched. Leader Me was cloned
+  read-only outside this repository and was not modified.
+
+- **Decisions that supersede earlier documents:** A1, the application is a separately runnable
+  derivative here rather than an in-place evolution in the Leader Me repository — ARCHITECTURE §§1
+  and 3 and PLAN §1 are superseded. A2, Vite and React rather than keeping the predecessor's
+  server framework, because every record stays in the browser. The other thirteen are new ground:
+  the versioned counting convention, appearance retention, the AI boundary, the citation
+  verification state, and the storage validation contract added after review.
+
+- **Evidence — what was actually run, on the current tree, from a clean `node_modules`:**
+  `npm ci` 217 packages; `npm run typecheck` clean; `npm run lint` clean; `npm run test`
+  **327 passed, 20 files, 0 failed, 0 skipped**; `npm run build` succeeded, 468 kB JS (136 kB
+  gzipped); `npm run test:browser` **79 of 79 checks** across three journeys against the production
+  build in Chromium with real IndexedDB. The repository's own checks still pass unchanged:
+  `python3 tests/test_foundation.py` 4 passed and 3 skipped for the pinned Observstory producer,
+  `python3 scripts/check.py` OK. 176 relative documentation links resolve.
+
+- **Independent review:** two reviewers with no part in writing the code. The first examined domain
+  integrity and privacy against the concept's promises; 17 findings, 2 high, 13 material ones
+  fixed and the rest recorded as decisions A13 and A14. The second attacked engineering
+  correctness with runnable probes; 11 findings, 2 high, every one proven and all fixed. Both
+  high-severity findings in the second review were reachable by ordinary use, and one of them —
+  three clicks making a namespace permanently unopenable with no export and no delete left on
+  screen — was the worst defect in the build. Both reviews are summarised finding by finding in
+  the [checklist](../workbench/apps/capability-development/app/CHECKLIST.md), including what each
+  reviewer attacked and could not break.
+
+- **Checks the reviews showed were missing, now present:** a property test asserting that whatever
+  any command produces is something storage will accept, over every command and generated
+  sequences of eight; and a jsdom test navigating between two records asserting the forms reset,
+  verified to fail against the unfixed code. The reviewer's point stands as a lesson: 311 green
+  tests coexisted with three serious defects because nothing saved a command's output and read it
+  back, and nothing drove the interface.
+
+- **Limitations that are true of this build, not caveats for form:** nobody has used it and no
+  pilot has run, so no effectiveness claim is made and the counting convention's weights are
+  untested. **Every citation is unverified** — no publisher host is reachable from the build
+  environment, so all five methods' attributions are recorded as written down rather than checked,
+  and the interface says so. **Neither repository has a licence**, so reuse rests on the owner's
+  instruction rather than a grant. The data-minimisation check is one regex on one field and does
+  not read free text. Campaign history is re-rendered under installed content, with a warning when
+  the version differs. One visual presentation; the four worlds are not built.
+
+- **Selection:** no knowledge manifest entry, no Observatory configuration and no workflow was
+  changed. The new documents are not automatically selected knowledge, per START-HERE.md. One
+  observation for the owner: `observstory.config.json`'s ignore list does not mention
+  `node_modules/` or `dist/`. Both are git-ignored so a checkout never contains them, but a local
+  Observatory run in a working tree would walk 217 packages. Not changed, because the producer is
+  not available here and an unverifiable configuration change is worse than a flagged one.
+
+- **Next useful action:** look at the running app — `cd workbench/apps/capability-development/app
+  && npm ci && npm run dev` — and walk the leadership campaign far enough to reach the choosing
+  step, which is where the product's central claim either holds or does not. Then decide the two
+  things only the owner can: whether to license both repositories, and whether this app or Leader
+  Me is the successor. The three product assumptions worth testing first, each with what would
+  falsify it, are at the end of the
+  [checklist](../workbench/apps/capability-development/app/CHECKLIST.md).
+
+- **Branch:** `ccr-cda53478-1fik71`, seven commits, pushed. Nothing merged. Observed `main` at
+  `c69f954` before this work; no current Observatory snapshot was available, so the repository was
+  inspected directly.
