@@ -1,60 +1,30 @@
 # Skill Management Community
 
-Knowledge and working notes for organisational development, skills and capability development, centred on the Implement Zürich community.
+An independent practitioner notebook for organisational development, capability development and the Implement Zürich community.
 
-Start with the **[knowledge foundation](docs/knowledge/oe-skills/README.md)**: research synthesis, taxonomy and leadership, community context, practice questions and source qualifications.
+| Space | Start here | Purpose |
+| --- | --- | --- |
+| Community | [Community information](community/README.md) | People, sessions, questions and follow-ups |
+| Domain knowledge & research | [Knowledge](knowledge/README.md) | Concepts, evidence, thematic synthesis and uncertainties |
+| My workbench | [Workbench](workbench/README.md) | Frameworks, reusable tools, app references and experiments |
 
-Research claims, participant notes and proposed experiments remain distinct. This is an independent practitioner notebook, not an official Implement or PostFinance publication. Leader Me is a related application, not the owner of this knowledge base.
+## Currently exploring
 
-This repository is public. Private peer cases, assessments, invitation tokens and photo links do not belong here. Source copies omit Perplexity conversation links.
+- Taxonomy granularity: useful distinctions for which decisions?
+- Leadership sponsorship: what changes time, authority and opportunities to practise?
+- Future-skills radar: connect external signals to local work and a target capability picture.
+- AI: distinguish supported performance, learning, knowledge access and collective reflection.
 
-## Working foundation
+## Follow one thread
 
-The inherited template provides a shared picture of the work and a small, explicit knowledge base.
+[Community idea](community/sessions/2026-11-11-skills-based-organisation.md) → [radar knowledge note](knowledge/topics/future-skills-and-trend-radars.md) → [worksheet](workbench/tools/trend-radar-worksheet.md) → [proposed experiment](workbench/experiments/trend-radar-pilot.md).
 
-**Use this template → Create a new repository**, then clone it and run:
+Record source, date, status, relevant links and next question. Research claims, participant observations and proposals are distinct. A polished artefact is not evidence of a proven method.
 
-```bash
-python3 scripts/init_project.py --repository YOUR-OWNER/YOUR-REPO --title "Your project"
-python3 scripts/check.py
-git add .
-git commit -m "Describe the project foundation"
-git push
-```
+This repository is public. Keep confidential cases, personal assessments, private reflections and photo-access links elsewhere. It is not an official Implement or PostFinance publication.
 
-Fill in [CONCEPT.md](CONCEPT.md), [the plan](docs/PLAN.md) and [the next handoff](docs/HANDOFF.md). Start humans and agents at [START-HERE.md](START-HERE.md).
+## Supporting infrastructure
 
-## Included from day one
+[Start here for agents](START-HERE.md) · [Decisions](docs/DECISIONS.md) · [Plan](docs/PLAN.md) · [Handoff](docs/HANDOFF.md) · [Observatory setup](docs/SETUP.md) · [Security boundaries](SECURITY.md).
 
-| Part | What you get |
-| --- | --- |
-| Observatory | Workstreams, board, timeline, activity and evidence, using the pinned upstream Observstory implementation |
-| Knowledge | Explicit selection of concepts, decisions, research, plan, questions and handoff with Git provenance |
-| Working practice | Short AGENTS.md, issue/PR templates and bounded handoffs |
-| Checks | Local structural checks, producer contract tests and artifact validation |
-| Optional memory | An onboarding guide for the existing Knowledge Lab service; no model/API account required |
-
-On pushes, PR changes, issue changes and branch creation/deletion, the **Observatory** workflow reads the default branch's selected knowledge and observes repository-wide activity within the upstream collector's configured limits. Download its `observstory` artifact from Actions and serve it:
-
-```bash
-python3 -m http.server --directory observstory 8000
-```
-
-Open http://localhost:8000/. The workspace needs HTTP; do not open it with `file://`.
-`map.html` is the classic map and `knowledge.html` shows selected documents.
-A fresh artifact timestamp does not imply complete collection: inspect its diagnostics and degraded coverage.
-
-## Deliberate defaults
-
-- Repository artifacts only. No Pages deployment, recurring schedule, model call or central ingestion.
-- Knowledge audience starts as `private`. This is metadata, **not an access-control mechanism**; the repository's actual visibility controls access to committed files and artifacts.
-- Workflow tokens are read-only; credentials are not persisted in checkouts.
-- The template is framework-neutral. Add your application's own build, tests and licence.
-- The template pins upstream code. New repositories do not automatically inherit future template changes.
-
-See [setup and publication](docs/SETUP.md), [optional connected memory](docs/CONNECTED-MEMORY.md), [upstream review](docs/TEMPLATE-PROVENANCE.md) and [security boundaries](SECURITY.md).
-
-## Work on the template itself
-
-`python3 scripts/check.py` checks the current working files without dependencies.
-The CI contract suite also uses the pinned Observstory checkout to build knowledge from a disposable Git repository, check missing-source failures, preserve commit identity and reject unselected content.
+The inherited Observatory and explicit knowledge selection remain supporting infrastructure. No new deployment, central ingestion or scheduled service is enabled.

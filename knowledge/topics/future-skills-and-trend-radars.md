@@ -21,7 +21,7 @@ The useful bridge is from an external signal to a concrete change in work, then 
 
 ## Connection to taxonomy and leadership
 
-Use the radar to test whether taxonomy categories help an actual decision. Maintain a small common vocabulary while allowing local examples. Leadership sponsorship becomes concrete when leaders select relevant scenarios, make trade-offs and enable time and authority to respond. See [taxonomy and leadership](TAXONOMY-AND-LEADERSHIP.md).
+Use the radar to test whether taxonomy categories help an actual decision. Maintain a small common vocabulary while allowing local examples. Leadership sponsorship becomes concrete when leaders select relevant scenarios, make trade-offs and enable time and authority to respond. See [taxonomy and leadership](skill-taxonomies.md).
 
 ## Small experiment to consider
 
@@ -35,3 +35,4 @@ Questions for the next discussion:
 - What evidence would make us revise or retire a target capability?
 
 Boundary: the external radar can be shareable while the internal capability picture contains sensitive strategy or personnel information. Keep company-specific mappings outside this public repository unless explicitly cleared for publication.
+

@@ -1,12 +1,9 @@
 # Plan
 
-Status: initial planning scaffold.
+Current scope: establish Community, Knowledge and Workbench.
 
-| Outcome | Next action | Owner | Blocker | Evidence / issue | Due |
-| --- | --- | --- | --- | --- | --- |
-| Define the project | Complete CONCEPT.md | Unassigned | None recorded | Pending | Unscheduled |
-| Validate a useful slice | Define one acceptance check | Unassigned | Direction not agreed | Pending | Unscheduled |
+- Structure and radar example: prepared in PR #1.
+- Next: review content, clarify community follow-ups and select a small experiment if desired.
+- Research: validate priority claims before external reuse.
 
-Use GitHub issues for active tasks; keep this document for direction, milestones and dependencies.
-For a hackathon, record the event timezone, demo time, freeze and rehearsal here. Do not invent dates.
-Optional workspace planned dates support day/month/year precision, not an hour-by-hour event clock.
+No experiment, outreach, installation or monitoring scheduled. [Open research questions](../knowledge/research/open-questions.md).

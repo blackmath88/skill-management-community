@@ -8,3 +8,6 @@
 
 Knowledge selection lives in .observstory/knowledge.json. A new document is not automatically selected.
 No connector, server or central memory registration is implied by the presence of these files.
+
+
+Human navigation: [Community](community/README.md), [Knowledge](knowledge/README.md), [Workbench](workbench/README.md).

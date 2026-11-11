@@ -1,10 +1,11 @@
 # Handoff
 
-Date: 11 November 2026.
+11 November 2026.
 
-- User corrected the destination of the OE skills/community knowledge foundation to this repository.
-- Imported the nine knowledge files from the earlier documentation work; adapted ownership and cross-repository links. Leader Me remains a related application.
-- This destination is public. Removed Perplexity conversation URLs from reports and catalogue; retained original-source digests with explicit redaction qualification. No invitation tokens, private photo links or personal journals added.
-- Research/public-source checks recorded in EVIDENCE.md are inherited from the earlier curation, not newly re-run by this migration.
-- Next: review the knowledge foundation; clarify taxonomy use cases and speaker attribution without guessing. Experiments and outreach remain proposals.
-- Validation: relative documentation links and catalogue JSON checked during migration. No application behaviour changed.
+- Reorganised PR #1 into community/, knowledge/ and workbench/ under the owner-approved structure. Direct repository inspection used; no current Observatory snapshot was supplied.
+- Split people, session notes and follow-ups; retained source qualifications and original-source hashes. Added R3 AI research as a redacted public copy with an explicitly report-derived synthesis.
+- Connected radar session idea, knowledge, worksheet and proposed pilot. No experiments run or apps installed.
+- Existing scripts/workflows unchanged. Three curated index files added to explicit knowledge selection; full reports remain unselected.
+- Next: review the PR and choose a concrete practice question. Source verification recorded earlier is inherited, not newly repeated.
+
+Validation: foundation structure passed; 91 relative documentation links resolved; existing unit suite passed 4 tests and skipped 3 producer-dependent checks because the pinned Observstory checkout was not available locally. Catalogue and knowledge manifest JSON parsed. CI retains the pinned-producer checks.

@@ -6,10 +6,10 @@ Curated 11 November 2026. Source statements, owner notes and editorial proposals
 
 | ID | Source | Role and treatment |
 | --- | --- | --- |
-| R1 | `Fähigkeiten entwickeln – und ihre Nutzung ermöglic.md` (uploaded filename; decomposed Unicode) | Domain theory, strategy, methods and practical OE briefing. Public copy (conversation links removed) in [domain briefing](sources/2026-11-11-domain-briefing.md) |
-| R2 | `skill research 1.md` | Skills concepts, evidence, Implement and Leader Me implications. Public copy (conversation links removed) in [skills research](sources/2026-11-11-skills-research.md) |
+| R1 | `Fähigkeiten entwickeln – und ihre Nutzung ermöglic.md` (uploaded filename; decomposed Unicode) | Domain theory, strategy, methods and practical OE briefing. Public copy (conversation links removed) in [domain briefing](reports/2026-11-11-domain-briefing.md) |
+| R2 | `skill research 1.md` | Skills concepts, evidence, Implement and Leader Me implications. Public copy (conversation links removed) in [skills research](reports/2026-11-11-skills-research.md) |
 
-Both were supplied by the owner as research following Perplexity prompts. They are research outputs, not peer-reviewed publications. Claims of verification inside them describe the report author's work. Original filenames, original-source SHA-256 digests (not checksums of the redacted public copies), footnote maps and citation-use flags are in [catalogue.json](sources/catalogue.json).
+Both were supplied by the owner as research following Perplexity prompts. They are research outputs, not peer-reviewed publications. Claims of verification inside them describe the report author's work. Original filenames, original-source SHA-256 digests (not checksums of the redacted public copies), footnote maps and citation-use flags are in [catalogue.json](reports/catalogue.json).
 
 New curated documentation is English; German source text is retained except for explicitly removed conversation links. Corrections and qualifications belong here, not as silent edits to the source. This public migration removes Perplexity conversation URLs from both reports and catalogue; unchanged originals remain in the original private research branch.
 
@@ -67,3 +67,10 @@ Use the remaining theory and methods as explicitly sourced working lenses. Do no
 ## Maintenance record format
 
 For every promoted claim: ID; exact claim; source URL / report section; source type; publication and access dates; inspected scope; population and setting; limitations; status; linked question or decision. When evidence changes, supersede the interpretation while retaining its provenance.
+
+
+## R3 — AI and capability development
+
+Received 11 November 2026. Source: `KI für Capability Development: Was bereits entsteh.md`. [Public copy](reports/2026-11-11-ai-capability-development.md). Original-source SHA-256: `e9f0b829f9211981a8a9f21a501325f728009c5153acf83b044b4e509947c965`.
+
+This intake is report-derived. No listed repository was installed or independently evaluated, and study claims were not reverified. Conversation URL removed and Nature error query parameters stripped for the public copy. Hidden reference tails are research leads, not additional verified evidence. The R1/R2 catalogue does not include R3.

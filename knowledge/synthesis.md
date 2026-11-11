@@ -1,6 +1,6 @@
 # Research synthesis: develop capability and enable its use
 
-Status: editorial synthesis of [R1 and R2](README.md), with selective checks in [EVIDENCE.md](EVIDENCE.md). This is not a systematic review. Reference notation `R1 §3` means section 3 of the domain briefing; `R2 fn29` means footnote 29 of the skills report.
+Status: editorial synthesis of [R1 and R2](README.md), with selective checks in [EVIDENCE.md](research/source-register.md). This is not a systematic review. Reference notation `R1 §3` means section 3 of the domain briefing; `R2 fn29` means footnote 29 of the skills report.
 
 ## What the two reports contribute
 
@@ -38,7 +38,7 @@ The following are report-derived conceptual lenses, not a unified validated inte
 | Psychological safety / self-determination | What happens after dissent, and is development meaningful and influenceable? | Pleasant meetings do not establish safety or real agency |
 | Systems and complexity perspectives | What feedback, delays and competing interests shape the result? | “Complex” must not replace precise diagnosis |
 
-Reading anchors and primary-source leads: R1 §2 and footnotes 3, 5–7, 10–17; see [catalogue](sources/catalogue.json). Full primary-source verification remains open.
+Reading anchors and primary-source leads: R1 §2 and footnotes 3, 5–7, 10–17; see [catalogue](research/reports/catalogue.json). Full primary-source verification remains open.
 
 ## Evidence: what we can use cautiously
 
@@ -51,7 +51,7 @@ Reading anchors and primary-source leads: R1 §2 and footnotes 3, 5–7, 10–17
 | Gamification and character | Potentially useful for motivation or remembering practice | Education findings do not validate an OE avatar, XP rules or workplace mastery |
 | Skill inference | Treat inferred skills as contestable claims with provenance | A journal, self-report or AI-produced work sample cannot establish stable competence on its own |
 
-Checked AI examples: Wiles et al. (2026) studied 487 consultants and found better assisted task performance without evidence of improved subsequent unaided technical answers. Brynjolfsson, Li and Raymond (2025) studied 5,172 support agents during staggered AI introduction; their abstract reports productivity gains and evidence of learning. Different tasks and designs prohibit a blanket “AI teaches” or “AI prevents learning” conclusion. [V4–V5](EVIDENCE.md)
+Checked AI examples: Wiles et al. (2026) studied 487 consultants and found better assisted task performance without evidence of improved subsequent unaided technical answers. Brynjolfsson, Li and Raymond (2025) studied 5,172 support agents during staggered AI introduction; their abstract reports productivity gains and evidence of learning. Different tasks and designs prohibit a blanket “AI teaches” or “AI prevents learning” conclusion. [V4–V5](research/source-register.md)
 
 ## Strategic choices
 
@@ -71,3 +71,4 @@ Editorial recommendation for a university: a modest common language, explicit de
 Preserve practice history while allowing interpretations to change. Record missing opportunity separately from failed performance; preserve counterevidence and disagreement. Distinguish exposure, understanding, attempt, observed quality, transfer and outcome without assuming a causal ladder. Map any future OE capability content against an existing professional framework before adding categories.
 
 The reports do not validate the complete Leader Me learning loop. The existing milestones remain product conventions. No research finding here settles XP, assessment choice, sharing architecture or AI coaching implementation.
+

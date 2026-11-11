@@ -1,6 +1,6 @@
 # Taxonomy granularity and leadership sponsorship
 
-Origin: the owner's notes from the PostFinance input on 11 November 2026. The notes identify taxonomy as a central challenge, often too broad or too specific, and leadership / C-level buy-in as a lever. These are participant paraphrases, not verified quotations or a complete account of PostFinance's programme. Speaker identity and examples remain unknown. See [community record](COMMUNITY.md).
+Origin: the owner's notes from the PostFinance input on 11 November 2026. The notes identify taxonomy as a central challenge, often too broad or too specific, and leadership / C-level buy-in as a lever. These are participant paraphrases, not verified quotations or a complete account of PostFinance's programme. Speaker identity and examples remain unknown. See [community record](../../community/README.md).
 
 ## Taxonomy: specific enough for which decision?
 
@@ -44,7 +44,7 @@ Expected useful result: identify which distinctions actually change the decision
 | Follow-through | Reviews examine application and obstacles as well as participation |
 | Trust | Development data has an agreed purpose and contestable interpretations |
 
-Hypothesis: senior sponsorship helps when it changes these conditions. It is neither proof of implementation nor sufficient by itself; middle managers and professional peers affect daily practice. Compare this hypothesis with R1 §§4–6 and Implement's published systemic leadership position [V3](EVIDENCE.md).
+Hypothesis: senior sponsorship helps when it changes these conditions. It is neither proof of implementation nor sufficient by itself; middle managers and professional peers affect daily practice. Compare this hypothesis with R1 §§4–6 and Implement's published systemic leadership position [V3](../research/source-register.md).
 
 ## Questions to bring back
 
@@ -57,3 +57,4 @@ Hypothesis: senior sponsorship helps when it changes these conditions. It is nei
 - What is intentionally left outside the taxonomy?
 
 The permission boundary matters: making expertise discoverable does not automatically authorise staffing, evaluation or access to the underlying development notes.
+
