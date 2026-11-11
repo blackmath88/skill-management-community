@@ -643,3 +643,33 @@ describe('a screen left open while the campaign moved on', () => {
     expect(planned.data.campaigns[0]?.path[0]?.activityIds).toContain(planned.value.id)
   })
 })
+
+describe('record identifiers', () => {
+  it('refuses to create a record rather than reusing an id that is already taken', () => {
+    // If the id factory ever repeated, appending the record would produce two records answering
+    // to the same reference. The command would report success and the damage would only surface
+    // later as a validation failure on save, with no way to see what caused it.
+    const always = (): string => 'always-the-same'
+    const collidingDeps = { ...deps, newId: always }
+    const first = expectOk(createDirection(emptyUserData(at(0)), { text: 'An aspiration.' }, collidingDeps))
+    expect(first.value.id).toBe('always-the-same')
+    const second = expectFail(createDirection(first.data, { text: 'A different one.' }, collidingDeps))
+    expect(second.kind).toBe('validation')
+    expect(second.errors[0]).toMatch(/unique identifier/i)
+    // Nothing was added.
+    expect(first.data.directions).toHaveLength(1)
+  })
+
+  it('checks every collection, not only the one being written to', () => {
+    const data = reviewedRealAttempt()
+    const takenBySituation = { ...deps, newId: () => 'sit-1' }
+    const outcome = expectFail(
+      planActivity(
+        data,
+        { situationId: 'sit-1', route: 'personal-practice', kind: 'real-attempt', title: 'A title', plan: plan(), capabilityIds: [], methodIds: [] },
+        takenBySituation,
+      ),
+    )
+    expect(outcome.errors[0]).toMatch(/unique identifier/i)
+  })
+})

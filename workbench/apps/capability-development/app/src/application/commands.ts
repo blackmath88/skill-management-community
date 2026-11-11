@@ -20,6 +20,7 @@ import {
   canTransitionDirection,
   canTransitionHypothesis,
 } from '~/domain/transitions'
+import { COLLECTION_KEYS } from '~/domain/types'
 import type {
   ActivityKind,
   ActivityPlan,
@@ -60,6 +61,35 @@ import { fail, ok, type CommandOutcome } from './results'
 
 const MAX_TEXT = 20_000
 
+/** Every record id currently in use, across every collection. */
+function allIds(data: UserData): Set<Id> {
+  const ids = new Set<Id>()
+  for (const key of COLLECTION_KEYS) for (const record of data[key]) ids.add(record.id)
+  return ids
+}
+
+/**
+ * A new id that is not already in use.
+ *
+ * The real factory is `crypto.randomUUID`, which will not repeat. The check is here because a
+ * repeat would otherwise create a SECOND record carrying an existing id: the command would
+ * report success, two records would answer to the same reference, and the damage would only
+ * surface later as a validation failure on save or import, by which point the cause is invisible.
+ * Failing here costs two lines and keeps the uniqueness the whole domain assumes.
+ */
+function freshId(data: UserData, deps: CommandDeps): Id | null {
+  const taken = allIds(data)
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const candidate = deps.newId()
+    if (!taken.has(candidate)) return candidate
+  }
+  return null
+}
+
+const DUPLICATE_ID_ERROR =
+  'Could not create a unique identifier for this record, so nothing was saved. Reload and try again.'
+
+
 function text(value: string, field: string, errors: string[], opts: { required?: boolean; max?: number } = {}): string {
   const trimmed = typeof value === 'string' ? value : ''
   if (opts.required && trimmed.trim() === '') errors.push(`${field} is required.`)
@@ -93,9 +123,11 @@ export function createDirection(
     errors.push(`There is no capability "${input.focusCapabilityId}" in the installed content.`)
   }
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const direction: DevelopmentDirection = {
-    id: deps.newId(),
+    id,
     text: value,
     ...(input.focusCapabilityId !== undefined ? { focusCapabilityId: input.focusCapabilityId } : {}),
     state: 'active',
@@ -166,9 +198,11 @@ export function recordSituation(data: UserData, input: RecordSituationInput, dep
   const context = text(input.context, 'The setting', errors, { max: 200 })
   const desiredOutcome = text(input.desiredOutcome, 'What you hope for', errors)
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const situation: Situation = {
-    id: deps.newId(),
+    id,
     title,
     description,
     context,
@@ -235,9 +269,11 @@ export function startCampaign(data: UserData, input: StartCampaignInput, deps: C
   if (data.campaigns.some((c) => c.state === 'active' && c.situationId === input.situationId && c.definitionId === input.definitionId)) {
     return fail('validation', 'This campaign is already running on that situation.')
   }
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const campaign: Campaign = {
-    id: deps.newId(),
+    id,
     situationId: input.situationId,
     ...(input.directionId !== undefined ? { directionId: input.directionId } : {}),
     definitionId: definition.id,
@@ -305,8 +341,10 @@ export function advanceCampaign(
     const errors: string[] = []
     const value = text(input.hypothesisText ?? choice.seedHypothesis.text, 'The explanation', errors, { required: true })
     if (errors.length > 0) return fail('validation', ...errors)
+    const seedId = freshId(next, deps)
+    if (seedId === null) return fail('validation', DUPLICATE_ID_ERROR)
     seededHypothesis = {
-      id: deps.newId(),
+      id: seedId,
       situationId: campaign.situationId,
       campaignId: campaign.id,
       category: choice.seedHypothesis.category as HypothesisCategory,
@@ -407,9 +445,11 @@ export function addWorkingHypothesis(data: UserData, input: AddHypothesisInput, 
   const errors: string[] = []
   const value = text(input.text, 'The explanation', errors, { required: true })
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const hypothesis: WorkingHypothesis = {
-    id: deps.newId(),
+    id,
     situationId: input.situationId,
     ...(input.campaignId !== undefined ? { campaignId: input.campaignId } : {}),
     category: input.category,
@@ -493,8 +533,10 @@ export function planActivity(data: UserData, input: PlanActivityInput, deps: Com
 
   const now = deps.clock.now()
   const readiness = planReadiness(input.kind, input.plan)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const activity: PracticeActivity = {
-    id: deps.newId(),
+    id,
     situationId: input.situationId,
     ...(input.campaignId !== undefined ? { campaignId: input.campaignId } : {}),
     ...(input.directionId !== undefined ? { directionId: input.directionId } : {}),
@@ -616,9 +658,11 @@ export function recordAttempt(data: UserData, input: RecordAttemptInput, deps: C
   const errors: string[] = []
   const note = text(input.note, 'What happened', errors)
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const attempt: Attempt = {
-    id: deps.newId(),
+    id,
     activityId: activity.id,
     outcome: input.outcome,
     note,
@@ -658,9 +702,11 @@ export function saveReview(data: UserData, input: SaveReviewInput, deps: Command
   const alternative = text(input.alternativeExplanation, 'A competing explanation', errors)
   const adjustment = text(input.nextAdjustment, 'The next adjustment', errors)
   if (errors.length > 0) return fail('validation', ...errors)
+  const reviewId = existing?.id ?? freshId(data, deps)
+  if (reviewId === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const review: Review = {
-    id: existing?.id ?? deps.newId(),
+    id: reviewId,
     activityId: activity.id,
     observation,
     interpretation,
@@ -729,9 +775,11 @@ export function recordEvidence(data: UserData, input: RecordEvidenceInput, deps:
     }
   }
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const item: EvidenceItem = {
-    id: deps.newId(),
+    id,
     ...(input.activityId !== undefined ? { activityId: input.activityId } : {}),
     ...(input.attemptId !== undefined ? { attemptId: input.attemptId } : {}),
     ...(input.reviewId !== undefined ? { reviewId: input.reviewId } : {}),
@@ -780,9 +828,11 @@ export function confirmPerk(
     }
   }
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const perk: Perk = {
-    id: deps.newId(),
+    id,
     description,
     evidenceActivityIds: [...new Set(input.evidenceActivityIds)],
     ...(input.possibleOveruse !== undefined && input.possibleOveruse.trim() !== '' ? { possibleOveruse: input.possibleOveruse } : {}),
@@ -843,9 +893,11 @@ export function createSharePackage(data: UserData, input: CreateSharePackageInpu
   }
   for (const [i, part] of parts.entries()) if (part !== undefined) text(part, `Part ${i + 1}`, errors)
   if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
   const now = deps.clock.now()
   const pkg: SharePackage = {
-    id: deps.newId(),
+    id,
     title,
     ...(input.anonymisedCase !== undefined && input.anonymisedCase.trim() !== '' ? { anonymisedCase: input.anonymisedCase } : {}),
     ...(input.reusablePractice !== undefined && input.reusablePractice.trim() !== '' ? { reusablePractice: input.reusablePractice } : {}),
