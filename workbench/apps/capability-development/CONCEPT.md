@@ -1,6 +1,14 @@
 # Skilling Me Softly — product concept
 
-Date: 11 November 2026. Status: idea / proposed product direction. Documentation only; no implementation or effectiveness claim. Working name supplied by the owner: Skilling Me Softly.
+Date: 11 November 2026. Status: **the product direction below is implemented** at
+[`app/`](app/) — see [its README](app/README.md). No effectiveness claim: nobody has used it and
+no pilot has run. The behavioural model, mechanics, progression semantics, AI role and privacy
+rules in this document are the specification the code is built to, and the
+[implementation decisions](app/DECISIONS.md) record where a judgement had to be made. Working name
+supplied by the owner: Skilling Me Softly.
+
+Section 1's statement that implementation belongs in the separate Leader Me repository is
+superseded by [decision A1](app/DECISIONS.md).
 
 [Visual directions](VISUAL-DIRECTIONS.md) · [Architecture](ARCHITECTURE.md) · [Delivery plan](PLAN.md) · [Evidence and prior art](PRIOR-ART.md) · [App index](../README.md)
 

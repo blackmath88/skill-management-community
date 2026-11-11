@@ -1,6 +1,14 @@
 # Capability development application — delivery plan and implementation mandate
 
-Date: 11 November 2026. Status: proposed plan. No implementation, installations, paid services or deployment authorised by this document.
+Date: 11 November 2026. Status: **this plan has been executed**, with the departures recorded in
+[`app/DECISIONS.md`](app/DECISIONS.md). Stages 0 to 5 are implemented and verified; stage 6, the
+formative pilot, is not scheduled or authorised. Section 1's instruction to implement in the
+application repository is superseded by decision A1: the application is at [`app/`](app/) in this
+repository. [`app/CHECKLIST.md`](app/CHECKLIST.md) states what is implemented, verified, deferred
+and blocked, item by item.
+
+This document still describes no authorisation for installations beyond the app's own
+project-local dependencies, paid services or deployment, and none was taken.
 
 [Concept](CONCEPT.md) · [Architecture](ARCHITECTURE.md) · [Prior art](PRIOR-ART.md)
 

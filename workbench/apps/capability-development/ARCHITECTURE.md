@@ -1,10 +1,31 @@
 # Capability development application — architecture
 
-Date: 11 November 2026. Status: proposed; not implemented.
+Date: 11 November 2026. Status: **partly superseded and partly implemented.** The boundaries in
+sections 2 and 4 to 12 were implemented. Sections 1 and 3 are superseded: see the notice below.
 
-[Concept](CONCEPT.md) · [Plan](PLAN.md) · [Prior art](PRIOR-ART.md)
+[Concept](CONCEPT.md) · [Plan](PLAN.md) · [Prior art](PRIOR-ART.md) · [The implementation](app/README.md)
 
-## 1. Decision
+> ## Superseded: this is no longer an in-place evolution of Leader Me
+>
+> **Sections 1 and 3 below assume one application package evolved inside the Leader Me
+> repository. That is not what was built.** The application is a separately runnable derivative at
+> [`app/`](app/) in this repository, derived from `blackmath88/leader-me` at commit `55114f3b`.
+> Useful implementation and design were retained rather than rebuilt or copied wholesale.
+>
+> The reasoning, what it costs and what would reverse it are in
+> [`app/DECISIONS.md` A1 and A2](app/DECISIONS.md). What was carried over, what was not, and the
+> licence position are in [`app/PROVENANCE.md`](app/PROVENANCE.md). The original repository was
+> not modified.
+>
+> Two further decisions depart from this document. Section 1's "keep the existing framework and
+> lockfile" is superseded by A2: the app uses Vite and React with no server framework, because
+> every record stays in the browser. Section 11's candidate list is unchanged in intent;
+> `fast-check` was adopted, the rest were not.
+>
+> Read sections 2 and 4 to 12 as the design that was implemented, and
+> [`app/CHECKLIST.md`](app/CHECKLIST.md) for what is implemented, verified, deferred and blocked.
+
+## 1. Decision (superseded — see the notice above)
 
 Evolve Leader Me as one application package with a headless development core. Keep the existing framework and lockfile until compatibility checks establish a reason to change. No replacement scaffold, microservices, event-sourcing platform or generic plugin system.
 
@@ -23,7 +44,7 @@ Presentation → application commands/queries → pure domain transitions → re
 | AI | Provider communication and validated proposals | Canonical writes or rewards |
 | Presentation | Interaction and selected read models | Duplicated domain rules |
 
-## 3. Proportionate repository direction
+## 3. Proportionate repository direction (superseded — see the notice above)
 
 Retain src/domain, storage, avatar, content, state, routes and components. Introduce application commands, queries and ports when the first use cases need them. Add ai contracts and evaluation only with the relevant slice. Split domain files by responsibility as they grow; do not create empty framework folders.
 
