@@ -16,7 +16,7 @@ Three perspectives govern decisions together: senior engineering protects integr
 
 **The honest CV for yourself.**
 
-Skilling Me Softly makes your development visible to you. Build a non-human character through challenges from actual working life. Try something, get support, notice what happened and discover what carries into the next situation. Over time, build an inspectable history of what you practised, what you can point to, where you need help and how your practice changes.
+Skilling Me Softly makes your development visible to you. Build a non-human companion that is yours from day one, and let selected experiences from actual working life become part of its history. Try something, get support, notice what happened and discover what carries into the next situation. Over time, build an inspectable history of what you practised, what you can point to, where you need help and how your practice changes.
 
 The owner's thesis: make skills and personal growth visible to oneself. The testable product hypothesis is that meaningful practice plus an honest visible history can improve self-understanding, calibrated confidence and choice of next action. It is not established by the existence of a working app.
 
@@ -65,7 +65,7 @@ Pausing, declining or escalating can be legitimate. Do not assign responsibility
 | Experience | Eligible documented practice | Not competence or mastery |
 | Journal | Observations, uncertainty and adaptation | Private by default |
 
-The modular non-human companion is central to the next product experience, not a decorative emblem. Preserve LeaderMe's geometric assembly direction and investigate a renderer that can deliver it well. See [Companion](COMPANION.md). Different visual worlds can express the same identity and records; they cannot change learning or privacy rules. A character-free accessible view remains available. Prototype one compelling character before building all four skins.
+The modular non-human companion is central to the next product experience, not a decorative emblem. Preserve LeaderMe's geometric assembly direction and investigate a renderer that can deliver it well. See [Companion](COMPANION.md) and [research decisions](RESEARCH-DECISIONS.md). Different visual worlds can express the same identity and records; they cannot change learning or privacy rules. A character-free accessible view remains available. Prototype one compelling character before building all four skins.
 
 ## 6. Motivation and learning hypotheses
 
@@ -81,7 +81,7 @@ Maintain three separate projections:
 2. Capability evidence: explored, rehearsed, tried, repeated, applied elsewhere and feedback available.
 3. Presentation: optional visual development or a non-gameful equivalent.
 
-Retain existing milestones and their historical meaning. Broadening is practice breadth, not mastery. Prototype XP as an explicit versioned convention; numerical weights remain proposed until tested. No points for opening the app, conversation volume, long prose, duplicate saves or claiming success. No multiplication by adding skill tags. Changed and unsuccessful attempts can qualify. No global competence score, competitive ranking or streak penalty.
+Retain existing milestones and their historical meaning. Broadening is practice breadth, not mastery. XP remains a possible later, explicitly versioned convention; defer XP and cosmetic unlocks in the next companion prototype. Numerical weights remain proposed until tested. No points for opening the app, conversation volume, long prose, duplicate saves or claiming success. No multiplication by adding skill tags. Changed and unsuccessful attempts can qualify. No global competence score, competitive ranking or streak penalty.
 
 An evidence-linked view must recompute after deletion. Cosmetic ownership and evidence are separate: propose preserving previously chosen appearance while removing unsupported evidence claims; decide and test this policy explicitly before implementation. Cosmetic choices must never certify competence.
 

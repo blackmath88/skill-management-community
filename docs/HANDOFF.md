@@ -51,3 +51,13 @@ Observed successful deployment: https://github.com/blackmath88/skill-management-
 ## Honest CV and non-human companion — 12 November 2026
 
 Owner selected Skilling Me Softly as the centrepiece: visible personal development, an honest CV for oneself, and a modular non-human buddy/alter ego drawing on LeaderMe. Updated CONCEPT, added COMPANION and PERPLEXITY-SPARRING, and linked visual directions. Corrected concept-level implementation location to the actual deployed build branch. Kept detailed mechanics, renderer choice and learning effects as hypotheses. WebGPU is a research candidate, not a selected dependency; primary WebGPU and Three.js documentation were checked. No app code or deployment changed. Next: use the research prompt to challenge prior art, evidence and rendering choices, then commission one bounded companion prototype.
+
+## Companion research integration and visual references — 12 November 2026
+
+- Owner requested the repo update and research into modular visual examples.
+- Integrated the supplied Perplexity report as a selected [decision synthesis](../workbench/apps/capability-development/RESEARCH-DECISIONS.md), not an independently verified literature review.
+- Updated concept, companion and visual directions: identity from day one, curated memories, visible evolution through chosen arrangement, no XP/unlocks in this slice, companion framing first, Zdog-first hypothesis with conditional engine escalation.
+- Added [visual references and construction grammar](../workbench/apps/capability-development/VISUAL-REFERENCES.md): Zdog, a Zdog editor precedent, DiceBear Bottts/Shapes, Pudgy Pals, Cubebot and EPFL Roombots. Separated useful principles, reported capabilities, licence limits and proposed original design.
+- Direct repository inspection used; no current Observatory snapshot was available in the inspected tree. Preserved existing work and knowledge selection.
+- Checks: relative documentation links checked against the base tree plus changed files. Documentation-only; no application code, dependency install, build, runtime demo test, deployment or pilot performed.
+- Next: discuss the Nordic kinetic sculpture, pixel workshop and precision instrument directions; produce a visual proof before implementing the companion interaction.

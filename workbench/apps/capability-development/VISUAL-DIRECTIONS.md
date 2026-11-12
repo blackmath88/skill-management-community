@@ -38,17 +38,17 @@ Use one fictional activity: verify an AI-generated claim in a briefing.
 
 Always retain an explanation of the underlying record. “Test record” is not formal certification; a badge is not verified competence. Theme changes never alter eligibility, privacy, saved evidence or history.
 
-Proposed identity experiment: retain a recognisable face and silhouette across a pixel sprite, geometric sculpture, line illustration and industrial assembly. Switching style should not erase chosen identity or earned cosmetic history. Exact compatibility and retention rules remain open.
+Proposed identity experiment: retain a recognisable face and silhouette across a pixel sprite, geometric sculpture, line illustration and industrial assembly. Switching style should not erase chosen identity or user-curated memories. Identity is available from day one; the companion prototype has no earned appearance. Exact compatibility and retention rules remain open.
 
 ## Proposed next design deliverable
 
-Four comparable art-direction boards, each showing:
+Longer-term exploration: four comparable art-direction boards, each showing:
 - Home with the next useful action.
 - The same practice activity.
 - Review with observation, interpretation and next move.
 - Character, typography, palette, controls, empty/error/save states and mobile layout.
 
-Develop Pixel Workshop and Nordic Studio first as contrasting prototypes. Banking and industrial directions need contextual feedback; avoid assuming visual stereotypes are user needs.
+Immediate sequence after the research review: first show three compositions of one Nordic/Assemblage family, then translate the same identity into pixel and precision styles. See [visual references](VISUAL-REFERENCES.md). Banking and industrial directions need contextual feedback; avoid assuming visual stereotypes are user needs.
 
 Use equivalent content and records across variants. Compare clarity, willingness to use, perceived judgement, distinction between XP and evidence, and ease of finding the next action. Enjoyment alone is insufficient.
 
@@ -60,4 +60,4 @@ Themes are reviewed assets and configuration, not arbitrary executable third-par
 
 ## Direction clarified — 12 November 2026
 
-The owner selected a modular non-human buddy/alter ego as the product centre. All visual worlds should preserve a recognisable chosen identity and inspectable history; no human avatar, personality diagnosis or punishment for absence. The character-free presentation is an accessibility/choice alternative, not a reason to reduce the main experience to a dashboard. Rendering technology is unselected; compare a crafted 2.5D implementation with one richer option before choosing WebGPU or a 3D engine.
+The owner selected a modular non-human buddy/alter ego as the product centre. All visual worlds should preserve a recognisable chosen identity and inspectable history; no human avatar, personality diagnosis or punishment for absence. The character-free presentation is an accessibility/choice alternative, not a reason to reduce the main experience to a dashboard. Start from the existing Zdog direction; investigate a richer renderer only if the visual proof exposes a concrete limitation. The research review and [adopted prototype boundaries](RESEARCH-DECISIONS.md) supersede earlier suggestions to build two engines or earned cosmetics in the first slice.
