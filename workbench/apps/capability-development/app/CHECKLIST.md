@@ -48,7 +48,7 @@ baseline before changing anything.
 | Unit / property / integration | `npm run test` | 384 passed, 22 files, 0 failed, 0 skipped |
 | Production build | `npm run build` | succeeded, 528 kB JS (156 kB gzipped) + a 819 kB (222 kB gzipped) on-demand renderer chunk |
 | Browser journeys | `npm run test:browser` | 79 of 79 checks passed, three journeys |
-| Assemblage in the browser | `npm run test:browser:assemblage` | 26 of 26 checks passed |
+| Assemblage in the browser | `npm run test:browser:assemblage` | 32 of 32 checks passed |
 | Independent review (domain integrity and privacy) | a reviewer with no part in writing the code, against CONCEPT §§4,5,7,9,10 and ARCHITECTURE §§6,10 | **17 findings, 2 high. All 13 material ones fixed**; the rest recorded as decisions A13 and A14. 13 claims checked and confirmed with their enforcement point |
 | Independent review (engineering correctness) | a second reviewer attacking concurrency, revisions, import, projections and UI state, with runnable probes | **11 findings, 2 high, every one proven with a probe. All fixed**, and the two guards it identified as the suite's blind spot were added |
 

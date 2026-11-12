@@ -35,6 +35,16 @@ constructs a WebGPU backend or, with `forceWebGL: true`, a WebGL 2 one.
 
 Both were found by running the browser checks, not by reading.
 
+**The fallback is always attempted, so "is WebGPU there" is the wrong question to ask first.**
+WebGPURenderer falls back to a WebGL 2 backend whenever WebGPU cannot answer — and if the browser
+has no WebGL 2 context either, that fallback throws from inside its own initialisation, as an
+unhandled rejection that `await init()` cannot catch. A check that simulated such a browser (no
+`navigator.gpu`, `getContext('webgl*')` returning null) found two uncaught errors in the console
+while the fallback otherwise worked perfectly. Both backends are now pre-checked before anything
+is constructed: WebGL 2 by probing a 1×1 context and releasing it, WebGPU by the truthiness of
+`navigator.gpu` — not `'gpu' in navigator`, because a browser can expose the property with an
+undefined value — and, where there is no WebGL 2 to fall into, by asking for an adapter.
+
 **The documented WebGL 2 fallback is silent, and will let you lie about it.** With `navigator.gpu`
 present but `requestAdapter()` returning null — which is the state of this container's Chromium,
 and of plenty of real machines — `WebGPURenderer.init()` resolves successfully having built a
@@ -125,6 +135,8 @@ secure origin but exposes no adapter.
 - Shadow maps initialise on the WebGL 2 backend (`shadows=on`), including pieces casting onto each
   other, which a planar ground approximation does not do.
 - Mount/unmount: three rounds of leaving and returning to the screen, with no uncaught errors.
+- A browser with neither WebGPU nor WebGL: the renderer refuses, the static drawing carries the
+  composition, pieces can still be selected, turned and orbited, and the console stays clean.
 
 **Not measured, and not claimed:** frame time, battery, memory, and anything at all about a real
 GPU. A software rasteriser's timings would say nothing useful about a phone. The WebGPU *backend*

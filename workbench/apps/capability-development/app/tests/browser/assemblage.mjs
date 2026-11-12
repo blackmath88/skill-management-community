@@ -246,6 +246,52 @@ try {
   await page.waitForTimeout(2000)
   const scrolledTo = await page.evaluate(() => window.__rafCalls)
   check('nothing is drawn while the viewport is scrolled out of sight', scrolledTo - scrolledFrom === 0)
+
+  // ---------------------------------------------------------------- E. a browser with no GPU
+  //
+  // Not a hypothetical: WebGL can be disabled, and some hardened profiles and headless
+  // configurations give no context at all. Three's WebGL backend throws from inside its own
+  // initialisation in that case, as an unhandled rejection that `await init()` cannot catch, so
+  // this check is about the console being clean as much as about the fallback working.
+  console.log('\nE. A browser with neither WebGPU nor WebGL')
+  const blind = await browser.newContext({ viewport: { width: 1100, height: 900 } })
+  await blind.addInitScript(() => {
+    try {
+      Object.defineProperty(navigator, 'gpu', { get: () => undefined, configurable: true })
+    } catch {
+      // Some engines will not let it be redefined; the WebGL half of the check still applies.
+    }
+    const original = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (type, ...rest) {
+      if (typeof type === 'string' && type.includes('webgl')) return null
+      return original.call(this, type, ...rest)
+    }
+  })
+  const blindPage = await blind.newPage()
+  const blindErrors = []
+  blindPage.on('pageerror', (error) => blindErrors.push(error.message))
+  await blindPage.goto(`${base}/#/assemblage`)
+  await blindPage.waitForSelector('.assemblage-svg', { timeout: 20000 })
+  await blindPage.getByRole('radio', { name: 'Choose automatically', exact: true }).check()
+  await blindPage.waitForTimeout(3500)
+  check(
+    'with no GPU path at all, the renderer reports failure rather than hanging',
+    ((await blindPage.getByTestId('assemblage-backend').textContent()) ?? '').includes('state=failed'),
+  )
+  check('the composition is still drawn', (await blindPage.locator('.assemblage-svg path').count()) > 60)
+  check('every piece is still listed', (await blindPage.locator('.assemblage-list > li').count()) === 6)
+  await blindPage.getByRole('button', { name: 'Signature form', exact: true }).click()
+  await blindPage.getByRole('button', { name: 'Turn it on' }).click()
+  await blindPage.waitForTimeout(600)
+  check(
+    'pieces can still be turned with no renderer',
+    ((await blindPage.locator('.assemblage-list > li.is-selected .meta').textContent()) ?? '').includes('Turned'),
+  )
+  await blindPage.getByRole('button', { name: 'Turn the view right' }).click()
+  await blindPage.waitForTimeout(500)
+  check('the view can still be orbited with no renderer', (await blindPage.locator('.assemblage-svg path').count()) > 60)
+  check('and it does it without throwing anything into the console', blindErrors.length === 0, blindErrors.join(' | '))
+  await blind.close()
 } finally {
   await browser.close()
   server.close()

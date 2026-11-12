@@ -13,6 +13,7 @@ GPU: WebGL 2 is ANGLE over SwiftShader.
 | `screen-top.png` | The whole screen: viewport, camera controls, tray |
 | `narrow-screen.png` | 390 px wide; measured horizontal overflow 0 px |
 | `palette-*.png` | The other three palettes |
+| `no-gpu-fallback.png` | A simulated browser with neither WebGPU nor WebGL: the static drawing, with every control still working |
 
 The WebGPU backend is not pictured because no machine available had a WebGPU adapter. See
 [../../ASSEMBLAGE-NOTES.md](../../ASSEMBLAGE-NOTES.md) §8.

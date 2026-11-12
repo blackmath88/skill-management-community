@@ -49,7 +49,7 @@ export type Backend = 'webgpu' | 'webgl2'
 
 export interface RendererFailure {
   /** Which attempt failed, so the interface can say which path was tried. */
-  stage: 'no-canvas' | 'no-webgpu-api' | 'init' | 'first-render'
+  stage: 'no-canvas' | 'no-webgpu-api' | 'no-webgl2' | 'init' | 'first-render'
   backend: Backend
   message: string
 }
@@ -111,6 +111,34 @@ const SETTLE_MS = 520
 /** The elevated three-quarter view, shared with the static drawing so the two cannot drift. */
 const BASE_YAW = VIEW_YAW
 
+/**
+ * Whether a WebGL 2 context can be had at all, asked before the renderer is constructed.
+ *
+ * Not belt-and-braces. With `getContext('webgl2')` returning null — a browser with WebGL
+ * disabled, a hardened profile, some headless configurations — three's WebGL backend throws
+ * inside its own initialisation, and the throw surfaces as an unhandled rejection rather than
+ * something `await renderer.init()` can catch. A test that simulated exactly that browser found
+ * two uncaught errors in the console, with the fallback otherwise working perfectly. Asking first
+ * turns that into an ordinary, reported refusal.
+ *
+ * The probe context is released immediately: contexts are a limited resource and leaking one to
+ * answer a yes/no question would be a poor trade.
+ */
+function webgl2Available(): boolean {
+  if (typeof document === 'undefined') return false
+  try {
+    const probe = document.createElement('canvas')
+    probe.width = 1
+    probe.height = 1
+    const gl = probe.getContext('webgl2')
+    if (!gl) return false
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
+    return true
+  } catch {
+    return false
+  }
+}
+
 function geometryFrom(mesh: MeshData): BufferGeometry {
   const geometry = new BufferGeometry()
   geometry.setAttribute('position', new Float32BufferAttribute(mesh.positions.slice(), 3))
@@ -133,11 +161,40 @@ export async function createAssemblageRenderer(options: RendererOptions): Promis
   if (!canvas) {
     throw new RendererInitError({ stage: 'no-canvas', backend, message: 'There is no canvas to draw on.' })
   }
-  if (backend === 'webgpu' && typeof navigator !== 'undefined' && !('gpu' in navigator)) {
+  /**
+   * Refuse before constructing anything that is going to fail.
+   *
+   * WebGPURenderer always falls back to a WebGL 2 backend when WebGPU cannot answer, and that
+   * fallback throws *asynchronously* if there is no WebGL 2 context either — as an unhandled
+   * rejection, not as something `await init()` can catch. So the question to ask first is not
+   * "is WebGPU there" but "can anything here draw at all".
+   *
+   * The `navigator.gpu` check tests the value, not the key: a browser can expose the property
+   * and have it be undefined, which `'gpu' in navigator` reports as present.
+   */
+  const gpu = typeof navigator === 'undefined' ? undefined : (navigator as { gpu?: GPU }).gpu
+  const canWebgl2 = webgl2Available()
+  if (backend === 'webgpu') {
+    if (!gpu) {
+      throw new RendererInitError({ stage: 'no-webgpu-api', backend, message: 'This browser does not expose WebGPU.' })
+    }
+    if (!canWebgl2) {
+      // No WebGL 2 to fall back into, so an adapter has to answer for this to be worth starting.
+      const adapter = await gpu.requestAdapter().catch(() => null)
+      if (!adapter) {
+        throw new RendererInitError({
+          stage: 'no-webgpu-api',
+          backend,
+          message: 'No WebGPU adapter answered, and this browser has no WebGL 2 to fall back to.',
+        })
+      }
+    }
+  }
+  if (backend === 'webgl2' && !canWebgl2) {
     throw new RendererInitError({
-      stage: 'no-webgpu-api',
+      stage: 'no-webgl2',
       backend,
-      message: 'This browser does not expose WebGPU.',
+      message: 'This browser gave no WebGL 2 context. The static drawing is used instead.',
     })
   }
 
