@@ -31,3 +31,15 @@ For future entries: purpose, method supported, canonical repository, inspected v
 This public workbench holds the community-facing synthesis and design proposals. [Skilling Me Softly in LeaderMe](https://github.com/blackmath88/leader-me/tree/main/docs/skilling-me-softly) holds the supplied source plans and rebuild review; that repository is private and requires access. Implementation stays in the application repository unless a successor is explicitly chosen. No fork has been created.
 
 The plans remain proposals. Campaign selection, delivery order and final visual direction are open; do not treat different examples across repositories as approved competing specifications. Confirm one bounded implementation brief in the application repository before building.
+
+## Skills in the Wild — campaign and practice
+
+**Fähigkeiten entwickeln. Spielräume schaffen. Im Alltag erproben.**
+
+A wilderness-themed campaign that introduces skills across an organisation and supports application, feedback and repeated practice. AI Skills in the Wild is the proposed first edition; Skillcember is one possible seasonal format.
+
+- [Campaign and application concept](skills-in-the-wild/CONCEPT.md)
+- [AI edition: six scenarios and one worked mission](skills-in-the-wild/AI-SKILLS-IN-THE-WILD.md)
+- [Guerrilla adoption comparison and first-build handoff](skills-in-the-wild/BUILD-HANDOFF.md)
+
+Status: concept only. Recommended implementation path: separate app scaffold with a selective, attributed port from [Guerrilla Office Tactics](https://github.com/blackmath88/guerrilla-office-tactics). No fork, app repository, implementation or deployment created. The execution brief requires an assigned app repository and code-reuse/licence clarification.
