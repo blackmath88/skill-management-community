@@ -10,6 +10,7 @@ GPU: WebGL 2 is ANGLE over SwiftShader.
 | `static-drawing.png` | The same composition as SVG — the first paint, and the fallback |
 | `selected-piece.png` | The foundation selected (accent outline) with a linked-loop marker on it |
 | `marker-record.png` | The record a marker leads to, shown in the page rather than the canvas |
+| `piece-list.png` | The DOM piece list, which carries the same selection the picture does |
 | `screen-top.png` | The whole screen: viewport, camera controls, tray |
 | `narrow-screen.png` | 390 px wide; measured horizontal overflow 0 px |
 | `palette-*.png` | The other three palettes |
