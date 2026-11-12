@@ -41,3 +41,9 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 - Checks: new concept documents' relative links resolved against the current repository tree plus new files. Documentation-only; no app build or tests executed. Prior test results above are historical.
 - Boundaries: no private cases imported, no knowledge-manifest changes, agent launch, fork, runtime implementation, deployment or pilot.
 - Next: assign a separate app repository and commission the bounded first-build brief; review one complete mission before expanding.
+
+## Hosted app preview — 12 November 2026
+
+Owner requested GitHub Pages deployment. The app is live at https://blackmath88.github.io/skill-management-community/ from preview branch ccr-cda53478-1fik71; no application merge occurred. The deployment workflow is owned by main and preserves the main-only Pages environment rule. The separate preview verification workflow triggers deployment of the exact successful source commit; build jobs have read-only permissions and only the deploy job has Pages/OIDC write permissions.
+
+Observed successful deployment: https://github.com/blackmath88/skill-management-community/actions/runs/43178075887 (app source 3930a088f3a8e7020011d5673bf9242c171c880c). Fresh CI passed typecheck, lint, 327 tests and production build. Browser smoke check confirmed home, campaign hash navigation and refresh; no application-origin console errors observed. Full browser journeys were not rerun. npm ci reported 10 moderate advisories, not yet triaged. The prototype remains unsuitable for sensitive data; browser-local storage is not an encrypted backup and GitHub Pages paths share an origin.

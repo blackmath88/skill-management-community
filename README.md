@@ -28,3 +28,9 @@ This repository is public. Keep confidential cases, personal assessments, privat
 [Start here for agents](START-HERE.md) · [Decisions](docs/DECISIONS.md) · [Plan](docs/PLAN.md) · [Handoff](docs/HANDOFF.md) · [Observatory setup](docs/SETUP.md) · [Security boundaries](SECURITY.md).
 
 The inherited Observatory and explicit knowledge selection remain supporting infrastructure. No new deployment, central ingestion or scheduled service is enabled.
+
+## Skilling Me Softly preview
+
+[Open the public app preview](https://blackmath88.github.io/skill-management-community/) · [Build source](https://github.com/blackmath88/skill-management-community/tree/ccr-cda53478-1fik71/workbench/apps/capability-development/app).
+
+The app is an unmerged prototype on a dedicated branch. GitHub Actions runs typecheck, lint, tests and build before Pages deployment. Use fictional/non-sensitive material; entries remain in the browser and the AI sparring partner is scripted.
