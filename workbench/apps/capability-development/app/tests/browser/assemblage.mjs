@@ -247,6 +247,53 @@ try {
   const scrolledTo = await page.evaluate(() => window.__rafCalls)
   check('nothing is drawn while the viewport is scrolled out of sight', scrolledTo - scrolledFrom === 0)
 
+  // ---------------------------------------------------------------- D2. keyboard only
+  //
+  // The claim this screen makes is that the canvas is never the only way to do anything. That is
+  // worth driving rather than asserting, so this does a whole placement without the mouse: tab to
+  // a control, operate it with the keyboard, and check the composition changed.
+  console.log('\nD2. Placing a piece with the keyboard alone')
+  await page.goto(`${base}/#/assemblage`)
+  await page.waitForSelector('.assemblage-list > li', { timeout: 20000 })
+
+  const removeButton = page.getByRole('button', { name: 'Take it off display' })
+  await page.getByRole('button', { name: 'Wedge', exact: true }).focus()
+  await page.keyboard.press('Enter')
+  await removeButton.waitFor({ state: 'visible', timeout: 5000 })
+  await removeButton.focus()
+  await page.keyboard.press('Enter')
+  await page.waitForTimeout(700)
+  const afterRemoval = await page.locator('.assemblage-list > li').count()
+  check('a piece can be taken off display from the keyboard', afterRemoval === 5, `${afterRemoval} pieces`)
+
+  const tray = page.getByLabel('A piece from the tray')
+  await tray.focus()
+  check('the tray select takes keyboard focus', await tray.evaluate((el) => el === document.activeElement))
+  await tray.selectOption('wedge')
+  await page.waitForTimeout(400)
+  const where = page.getByLabel('Where it goes')
+  await where.focus()
+  await where.selectOption({ index: 0 })
+  const placeButton = page.getByRole('button', { name: 'Place it here' })
+  await placeButton.focus()
+  check('the place button takes keyboard focus', await placeButton.evaluate((el) => el === document.activeElement))
+  await page.keyboard.press('Enter')
+  await page.waitForTimeout(800)
+  const afterPlacement = await page.locator('.assemblage-list > li').count()
+  check('and places the piece, with no pointer used at all', afterPlacement === 6, `${afterPlacement} pieces`)
+
+  const undoButton = page.getByRole('button', { name: 'Undo the last change' })
+  await undoButton.focus()
+  await page.keyboard.press('Enter')
+  await page.waitForTimeout(700)
+  check('undo works from the keyboard too', (await page.locator('.assemblage-list > li').count()) === 5)
+
+  // Put it back, so the later checks start from a complete composition.
+  await tray.selectOption('wedge')
+  await page.waitForTimeout(300)
+  await page.getByRole('button', { name: 'Place it here' }).click()
+  await page.waitForTimeout(700)
+
   // ---------------------------------------------------------------- E. a browser with no GPU
   //
   // Not a hypothetical: WebGL can be disabled, and some hardened profiles and headless
