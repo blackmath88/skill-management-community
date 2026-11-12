@@ -2,7 +2,8 @@
 
 The owner requested a hosted preview on 12 November 2026.
 
-Workflow path in both branches: `.github/workflows/skilling-pages.yml`.
+Verification workflow: `.github/workflows/verify-skilling-preview.yml`.
+Deployment workflow on main: `.github/workflows/skilling-pages.yml`.
 The preview branch runs **Verify Skilling Me Softly preview** with read-only permissions. After a successful push run, the **Deploy Skilling Me Softly to Pages** workflow on main checks the source repository and branch, checks out that exact commit, rebuilds/verifies it, then deploys from an isolated job. Manual runs and changes to the main workflow use its explicit pinned preview commit. No preview code executes in the Pages-write job.
 Preview source: `ccr-cda53478-1fik71`; this is intentionally an unmerged build preview.
 Pushes changing app files or this workflow run clean install, typecheck, lint, unit tests and the production build before deployment. Only `app/dist/` is uploaded. Browser journey checks are separate and are not claimed by this workflow.
