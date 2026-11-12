@@ -42,12 +42,13 @@ baseline before changing anything.
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Clean install | `npm ci` | succeeded, 217 packages |
+| Clean install | `npm ci` | succeeded, 217 packages (before `three` was added) |
 | Type checking | `npm run typecheck` | clean |
 | Linting | `npm run lint` | clean |
-| Unit / property / integration | `npm run test` | 295 passed, 17 files, 0 failed, 0 skipped |
-| Production build | `npm run build` | succeeded, 456 kB JS (133 kB gzipped) |
+| Unit / property / integration | `npm run test` | 384 passed, 22 files, 0 failed, 0 skipped |
+| Production build | `npm run build` | succeeded, 528 kB JS (156 kB gzipped) + a 819 kB (222 kB gzipped) on-demand renderer chunk |
 | Browser journeys | `npm run test:browser` | 79 of 79 checks passed, three journeys |
+| Assemblage in the browser | `npm run test:browser:assemblage` | 26 of 26 checks passed |
 | Independent review (domain integrity and privacy) | a reviewer with no part in writing the code, against CONCEPT §§4,5,7,9,10 and ARCHITECTURE §§6,10 | **17 findings, 2 high. All 13 material ones fixed**; the rest recorded as decisions A13 and A14. 13 claims checked and confirmed with their enforcement point |
 | Independent review (engineering correctness) | a second reviewer attacking concurrency, revisions, import, projections and UI state, with runnable probes | **11 findings, 2 high, every one proven with a probe. All fixed**, and the two guards it identified as the suite's blind spot were added |
 
@@ -146,13 +147,40 @@ Recorded because each one is a class of mistake worth watching for again.
 | --- | --- |
 | ⬜ A live AI provider | The mandate forbids paid inference and credentials. DECISIONS A5 lists what it would need first |
 | ⬜ The four visual worlds | Choosing one is design work that has not happened; `../VISUAL-DIRECTIONS.md` describes it. Doing it now would prejudge the decision |
-| ⬜ The zdog 3-D character | `../CONCEPT.md` §5 keeps avatar redesign off the critical path. Replaced by a CSS emblem; PROVENANCE explains |
+| ⬜ The zdog 3-D character | `../CONCEPT.md` §5 keeps avatar redesign off the critical path. The Settings emblem stays CSS; the assemblage replaces the character question with a composition rather than a figure — PROVENANCE and the assemblage build plan |
+| ⬜ Free dragging in the assemblage | The build plan calls it an optional enhancement over the same placement commands. Click-to-place with keyboard parity is built; dragging would have to go through the same commands, not around them |
+| ⬜ A second contact frame on most pieces | Only the signature form has two resting frames. More would multiply the curated combination table; one upright piece was enough to prove the mechanism |
 | ⬜ A second presentation client | The boundary exists and is tested, but no second client is built. `../PLAN.md` §8 wants one at pilot stage |
 | ⬜ Share-package delivery | Deliberate: a package is text the person copies out. Delivery infrastructure is a separate decision about who sees what |
 | ⬜ xAPI export, SSO, multi-tenant server, marketplace, content editor | `../PLAN.md` §12 defers all of these |
 | ⬜ A screen-reader pass and a contrast audit | Needs a real assistive technology and a person; the basics are in place and tested |
 | ⬜ Promptfoo, fast-check model-based tests, XState | `fast-check` is adopted for property tests. The others need a reason; `../PRIOR-ART.md` §4 sets the gate |
 | ⬜ A formative pilot | `../PLAN.md` §8 proposes one; it is not scheduled or authorised |
+
+## The assemblage, and what it is and is not
+
+Built against [the assemblage build plan](https://github.com/blackmath88/skill-management-community/blob/main/workbench/apps/capability-development/ASSEMBLAGE-BUILDPLAN.md), which is on this repository's `main` branch
+rather than on this one. The five gates in §7 were worked in order, and each
+one changed something.
+
+| Gate | What it produced | What it caught |
+| --- | --- | --- |
+| 1. Discovery and renderer gate | The app was found on this repository's `ccr-cda53478-1fik71` branch, not in the workbench; baseline recorded at 327 tests green before any change | This container's Chromium has **no WebGPU adapter**. WebGL 2 is ANGLE over SwiftShader |
+| 2. Visual proof | Six pieces, four palettes, the day-one composition, the static drawing | The first composition had the column **genuinely interpenetrating** two shelf pieces; the wedge was a pyramid, not a ramp; the signature form's opening did not read lying flat |
+| 3. Assembly | Semantic schema, contact-frame placement, validation, bounded turns, undo, tray | 56 unit tests. Two of them were wrong about the product, not the code, and were rewritten |
+| 4. History and accessibility | Three marker designs, a real marker-to-record route through existing evidence, DOM parity for every canvas action | Radio hints inside their labels made three options share the accessible name "static drawing"; markers anchored to a piece's centre were invisible under whatever stood on it |
+| 5. Persistence and hardening | Composition-only export/import, repeated mount/unmount, idle checks | `Renderer.render()` restarts an internal rAF loop every call: **180 frames in 3 idle seconds**. Now 0 |
+
+What is implemented and tested: the six-piece composition, assisted placement with keyboard
+parity, bounded rotation, undo, removal, four palettes, three marker designs, one real
+marker-to-evidence route, save and reload, composition-only export and import, marker unlinking on
+evidence deletion, motion-off, reduced-motion, the static fallback, and the forced WebGL 2 path.
+
+What is **not** verified: the WebGPU backend has never executed, because no machine here has an
+adapter — only its refusal is tested. No frame-time, memory or battery figure is offered, because
+the only GPU available was a software rasteriser. No real mobile device was used.
+
+What is proposed and not built: free dragging, further contact frames, any second visual world.
 
 ## Blocked
 

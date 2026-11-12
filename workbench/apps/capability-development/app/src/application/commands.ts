@@ -27,6 +27,7 @@ import type {
   ActivityState,
   AiProposal,
   Appearance,
+  AppearanceAssemblage,
   AssistanceLevel,
   Attempt,
   AttemptOutcome,
@@ -823,23 +824,50 @@ export function recordEvidence(data: UserData, input: RecordEvidenceInput, deps:
 }
 
 /**
- * Deleting evidence removes it and unlinks it everywhere. Every projection recomputes from
- * records, so a stage or a total that depended on this item disappears with it. The appearance
- * the user chose is deliberately untouched: see domain/experience.ts.
+ * Deleting evidence removes it and unlinks it everywhere.
+ *
+ * Every projection recomputes from records, so a stage or a total that depended on this item
+ * disappears with it. The chosen appearance is deliberately kept — deleting a record is not a
+ * reason to take somebody's sculpture apart — but an assemblage marker that pointed at the
+ * deleted record has its link dropped here, not left dangling. The marker stays as a decoration
+ * the person chose, and the interface says the record behind it is gone. Keeping the identifier
+ * would let a later screen offer a record it cannot show; swapping in a different one would be a
+ * quiet lie about whose experience it was.
  */
 export function deleteEvidence(
   data: UserData,
   ids: readonly Id[],
   deps?: CommandDeps,
-): CommandOutcome<{ removed: number; reopened: number }> {
+): CommandOutcome<{ removed: number; reopened: number; markersUnlinked: number }> {
   const present = ids.filter((id) => data.evidence.some((e) => e.id === id))
   if (present.length === 0) return fail('not-found', 'Those evidence items no longer exist.')
-  const next = deleteEvidenceCascade(data, new Set(present), deps?.clock.now())
+  const next = unlinkAssemblageMarkers(deleteEvidenceCascade(data, new Set(present), deps?.clock.now()), new Set(present))
   // Compared by id, not by position. The cascade maps in place today, so an index comparison
   // would work, but it would break silently the first time anything there filtered.
   const before = new Map(data.hypotheses.map((h) => [h.id, h.status]))
   const reopened = next.hypotheses.filter((h) => h.status === 'open' && before.get(h.id) !== 'open').length
-  return ok(next, { removed: present.length, reopened })
+  const markersBefore = (data.profile.appearance?.assemblage?.pieces ?? []).flatMap((p) => p.markers)
+  const markersUnlinked = markersBefore.filter((m) => m.evidenceId !== null && present.includes(m.evidenceId)).length
+  return ok(next, { removed: present.length, reopened, markersUnlinked })
+}
+
+/** Drops the evidence link from markers pointing at records that have just gone. */
+function unlinkAssemblageMarkers(data: UserData, removed: ReadonlySet<Id>): UserData {
+  const assemblage = data.profile.appearance?.assemblage
+  if (!assemblage) return data
+  let changed = false
+  const pieces = assemblage.pieces.map((piece) => ({
+    ...piece,
+    markers: piece.markers.map((marker) => {
+      if (marker.evidenceId === null || !removed.has(marker.evidenceId)) return marker
+      changed = true
+      return { ...marker, evidenceId: null }
+    }),
+  }))
+  if (!changed) return data
+  const appearance = data.profile.appearance
+  if (!appearance) return data
+  return { ...data, profile: { ...data.profile, appearance: { ...appearance, assemblage: { ...assemblage, pieces } } } }
 }
 
 /** Remove one explanation under test. Its history goes with it; nothing else is affected. */
@@ -895,13 +923,46 @@ export function deletePerk(data: UserData, id: Id): CommandOutcome {
 
 // ------------------------------------------------------------------ Appearance and profile
 
+/**
+ * Saves the assemblage composition.
+ *
+ * The composition arrives already validated against the catalogue by ~/assemblage: this command
+ * owns the record, not the geometry, and duplicating the placement rules here would be a second
+ * copy of them to drift. What it does own is the rule that the appearance is cosmetic — saving
+ * one records no practice, credits nothing and touches no evidence.
+ */
+export function saveAssemblage(
+  data: UserData,
+  assemblage: AppearanceAssemblage,
+  deps: CommandDeps,
+): CommandOutcome<AppearanceAssemblage> {
+  if (assemblage.version !== 1) return fail('validation', 'That assemblage format cannot be saved by this build.')
+  const previous = data.profile.appearance
+  const appearance: Appearance = {
+    version: 1,
+    mode: previous?.mode ?? 'character',
+    emblem: previous?.emblem ?? '◆',
+    palette: previous?.palette ?? 'slate',
+    accessories: previous?.accessories ?? [],
+    assemblage,
+  }
+  return ok(
+    { ...data, profile: { ...data.profile, appearance, updatedAt: deps.clock.now() } },
+    assemblage,
+  )
+}
+
 export function saveAppearance(data: UserData, appearance: Appearance, deps: CommandDeps): CommandOutcome<Appearance> {
   const errors: string[] = []
   text(appearance.emblem, 'The emblem', errors, { required: true, max: 64 })
   text(appearance.palette, 'The palette', errors, { required: true, max: 64 })
   if (errors.length > 0) return fail('validation', ...errors)
-  const next = { ...data, profile: { ...data.profile, appearance: { ...appearance }, updatedAt: deps.clock.now() } }
-  return ok(next, appearance)
+  // Keep whatever assemblage is already saved unless this call carries one. The emblem controls
+  // and the assemblage are separate screens, and saving one must not quietly reset the other.
+  const kept = appearance.assemblage ?? data.profile.appearance?.assemblage
+  const merged: Appearance = { ...appearance, ...(kept ? { assemblage: kept } : {}) }
+  const next = { ...data, profile: { ...data.profile, appearance: merged, updatedAt: deps.clock.now() } }
+  return ok(next, merged)
 }
 
 export function saveDisplayName(data: UserData, displayName: string, deps: CommandDeps): CommandOutcome<string> {

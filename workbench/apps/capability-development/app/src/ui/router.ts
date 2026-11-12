@@ -17,6 +17,7 @@ export type Route =
   | { name: 'progress' }
   | { name: 'records' }
   | { name: 'content' }
+  | { name: 'assemblage' }
   | { name: 'settings' }
   | { name: 'unknown'; path: string }
 
@@ -40,6 +41,8 @@ export function parseRoute(hash: string): Route {
       return { name: 'records' }
     case 'content':
       return { name: 'content' }
+    case 'assemblage':
+      return { name: 'assemblage' }
     case 'settings':
       return { name: 'settings' }
     default:
@@ -67,6 +70,8 @@ export function href(route: Route): string {
       return '#/records'
     case 'content':
       return '#/content'
+    case 'assemblage':
+      return '#/assemblage'
     case 'settings':
       return '#/settings'
     case 'unknown':

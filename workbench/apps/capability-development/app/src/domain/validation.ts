@@ -30,6 +30,9 @@ import {
   type AiProposalState,
   type AiProvenance,
   type Appearance,
+  type AppearanceAssemblage,
+  type AppearanceMarker,
+  type AppearancePiece,
   type AssistanceLevel,
   type Attempt,
   type AttemptOutcome,
@@ -162,13 +165,37 @@ class Reader {
     return v
   }
 
-  int(o: Obj, key: string, path: string, opts: { min?: number } = {}): number {
+  int(o: Obj, key: string, path: string, opts: { min?: number; max?: number } = {}): number {
     const v = o[key]
     if (typeof v !== 'number' || !Number.isInteger(v)) {
       this.fail(`${path}.${key}`, 'must be an integer')
       return opts.min ?? 0
     }
     if (opts.min !== undefined && v < opts.min) this.fail(`${path}.${key}`, `must be at least ${opts.min}`)
+    if (opts.max !== undefined && v > opts.max) this.fail(`${path}.${key}`, `must be at most ${opts.max}`)
+    return v
+  }
+
+  /** A finite number in a bounded range. NaN and Infinity are refused, not clamped. */
+  num(o: Obj, key: string, path: string, opts: { min: number; max: number }): number {
+    const v = o[key]
+    if (typeof v !== 'number' || !Number.isFinite(v)) {
+      this.fail(`${path}.${key}`, 'must be a finite number')
+      return 0
+    }
+    if (v < opts.min || v > opts.max) {
+      this.fail(`${path}.${key}`, `must be between ${opts.min} and ${opts.max}`)
+      return 0
+    }
+    return v
+  }
+
+  bool(o: Obj, key: string, path: string): boolean {
+    const v = o[key]
+    if (typeof v !== 'boolean') {
+      this.fail(`${path}.${key}`, 'must be true or false')
+      return false
+    }
     return v
   }
 
@@ -224,6 +251,94 @@ class Reader {
 
 // ------------------------------------------------------------------ Readers per record
 
+/** Caps on the assemblage, so an import cannot arrive with ten thousand placed pieces. */
+const MAX_PLACED_PIECES = 24
+const MAX_MARKERS = 3
+
+function readAppearanceMarker(r: Reader, v: unknown, path: string): AppearanceMarker | null {
+  const o = r.obj(v, path)
+  if (!o) return null
+  const evidenceId = o.evidenceId === null ? null : r.optStr(o, 'evidenceId', path, { max: 200 }) ?? null
+  return {
+    id: r.str(o, 'id', path, { nonEmpty: true, max: 200 }),
+    designId: r.str(o, 'designId', path, { nonEmpty: true, max: 64 }),
+    evidenceId,
+    hidden: r.bool(o, 'hidden', path),
+  }
+}
+
+function readAppearancePiece(r: Reader, v: unknown, path: string): AppearancePiece | null {
+  const o = r.obj(v, path)
+  if (!o) return null
+  const markers = r.arr(o, 'markers', path)
+  if (markers.length > MAX_MARKERS) r.fail(`${path}.markers`, `holds more than ${MAX_MARKERS} markers`)
+  return {
+    instanceId: r.str(o, 'instanceId', path, { nonEmpty: true, max: 200 }),
+    pieceId: r.str(o, 'pieceId', path, { nonEmpty: true, max: 64 }),
+    parentInstanceId: o.parentInstanceId === null ? null : r.optStr(o, 'parentInstanceId', path, { max: 200 }) ?? null,
+    receiverFrameId: o.receiverFrameId === null ? null : r.optStr(o, 'receiverFrameId', path, { max: 64 }) ?? null,
+    restingFrameId: r.str(o, 'restingFrameId', path, { nonEmpty: true, max: 64 }),
+    orientationIndex: r.int(o, 'orientationIndex', path, { min: 0, max: 64 }),
+    groundX: r.num(o, 'groundX', path, { min: -50, max: 50 }),
+    groundZ: r.num(o, 'groundZ', path, { min: -50, max: 50 }),
+    markers: markers.slice(0, MAX_MARKERS).flatMap((m, i) => {
+      const marker = readAppearanceMarker(r, m, `${path}.markers[${i}]`)
+      return marker ? [marker] : []
+    }),
+  }
+}
+
+/**
+ * Reads a saved assemblage.
+ *
+ * Shape only. Whether the pieces form a composition that can actually be built — roots, cycles,
+ * occupied contacts, overlaps — is checked by ~/assemblage/placement, which owns those rules and
+ * owns the catalogue they are about. A composition that passes here and fails there is shown as
+ * a reported problem with the controls still working, not as a lost record set.
+ */
+function readAppearanceAssemblage(r: Reader, v: unknown, path: string): AppearanceAssemblage | undefined {
+  const o = r.obj(v, path)
+  if (!o) return undefined
+  const version = r.int(o, 'version', path, { min: 1 })
+  if (version !== 1) {
+    r.fail(`${path}.version`, 'must be assemblage version 1')
+    return undefined
+  }
+  const pieces = r.arr(o, 'pieces', path)
+  if (pieces.length > MAX_PLACED_PIECES) {
+    r.fail(`${path}.pieces`, `holds more than ${MAX_PLACED_PIECES} placed pieces`)
+    return undefined
+  }
+  return {
+    version: 1,
+    catalogueVersion: r.int(o, 'catalogueVersion', path, { min: 0, max: 10_000 }),
+    paletteId: r.str(o, 'paletteId', path, { nonEmpty: true, max: 64 }),
+    pieces: pieces.flatMap((p, i) => {
+      const piece = readAppearancePiece(r, p, `${path}.pieces[${i}]`)
+      return piece ? [piece] : []
+    }),
+  }
+}
+
+/**
+ * Validates an assemblage that arrived from outside — an imported file, say.
+ *
+ * Exported so an appearance-only import can be checked by the same reader that checks one
+ * arriving inside a full record set. Two readers for one shape would be two places to forget a
+ * cap.
+ */
+export function validateAppearanceAssemblage(
+  v: unknown,
+): { ok: true; data: AppearanceAssemblage } | { ok: false; errors: string[] } {
+  const errors: string[] = []
+  const reader = new Reader(errors)
+  const data = readAppearanceAssemblage(reader, v, 'assemblage')
+  if (!data || errors.length > 0) {
+    return { ok: false, errors: errors.length > 0 ? errors : ['The composition could not be read.'] }
+  }
+  return { ok: true, data }
+}
+
 function readAppearance(r: Reader, v: unknown, path: string): Appearance | undefined {
   const o = r.obj(v, path)
   if (!o) return undefined
@@ -232,13 +347,18 @@ function readAppearance(r: Reader, v: unknown, path: string): Appearance | undef
     r.fail(`${path}.version`, 'must be appearance version 1')
     return undefined
   }
-  return {
+  const appearance: Appearance = {
     version: 1,
     mode: r.oneOf(o, 'mode', PRESENTATION_MODES, path),
     emblem: r.str(o, 'emblem', path, { max: 64 }),
     palette: r.str(o, 'palette', path, { max: 64 }),
     accessories: r.strArr(o, 'accessories', path),
   }
+  if (o.assemblage !== undefined) {
+    const assemblage = readAppearanceAssemblage(r, o.assemblage, `${path}.assemblage`)
+    if (assemblage) appearance.assemblage = assemblage
+  }
+  return appearance
 }
 
 function readProfile(r: Reader, v: unknown): Profile {

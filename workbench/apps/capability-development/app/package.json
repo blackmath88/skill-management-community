@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Skilling Me Softly — a local-first capability-development application. Separately runnable derivative of blackmath88/leader-me; see PROVENANCE.md.",
-  "engines": { "node": ">=22.12" },
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -14,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:browser": "node tests/browser/journey.mjs",
+    "test:browser:assemblage": "node tests/browser/assemblage.mjs",
     "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
   },
   "dependencies": {
@@ -25,6 +28,7 @@
     "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "@types/three": "^0.187.0",
     "@vitejs/plugin-react": "6.1.2",
     "eslint": "10.13.0",
     "eslint-plugin-react-hooks": "7.1.1",
@@ -32,6 +36,7 @@
     "fast-check": "4.10.2",
     "globals": "17.13.0",
     "jsdom": "29.1.1",
+    "three": "^0.187.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
     "vite": "8.3.5",

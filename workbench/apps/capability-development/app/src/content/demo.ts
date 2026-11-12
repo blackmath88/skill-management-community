@@ -283,6 +283,18 @@ export function createDemoUserData(): UserData {
       updatedAt: T(27),
     },
     {
+      id: 'demo-evidence-assisted',
+      activityId: 'demo-activity-real',
+      attemptId: 'demo-attempt-real',
+      kind: 'self-observation',
+      text: 'I asked a colleague to sit in and tell me afterwards whether the question had landed. I would not have asked it without knowing somebody else was listening for it.',
+      source: 'user',
+      visibility: 'private',
+      capabilityIds: ['clarify-ownership'],
+      recordedAt: T(27),
+      updatedAt: T(27),
+    },
+    {
       id: 'demo-evidence-other-account',
       activityId: 'demo-activity-real',
       kind: 'other-account',

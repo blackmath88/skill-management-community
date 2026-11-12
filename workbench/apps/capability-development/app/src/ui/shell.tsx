@@ -10,6 +10,7 @@ import { ActivityPage } from './pages/Activity'
 import { ProgressPage } from './pages/Progress'
 import { RecordsPage } from './pages/Records'
 import { ContentPage } from './pages/Content'
+import { AssemblagePage } from './pages/Assemblage'
 import { SettingsPage } from './pages/Settings'
 
 const NAV: { route: Route; label: string }[] = [
@@ -19,6 +20,7 @@ const NAV: { route: Route; label: string }[] = [
   { route: { name: 'progress' }, label: 'What your records show' },
   { route: { name: 'records' }, label: 'All records' },
   { route: { name: 'content' }, label: 'Methods' },
+  { route: { name: 'assemblage' }, label: 'Your assemblage' },
   { route: { name: 'settings' }, label: 'Settings' },
 ]
 
@@ -53,6 +55,8 @@ function Page({ route }: { route: Route }) {
       return <RecordsPage />
     case 'content':
       return <ContentPage />
+    case 'assemblage':
+      return <AssemblagePage />
     case 'settings':
       return <SettingsPage />
     case 'unknown':

@@ -25,7 +25,10 @@ export default tseslint.config(
     },
   },
   {
+    // Browser-driving scripts. They run in Node, but the functions they hand to `page.evaluate`
+    // and `addInitScript` are serialised and run in the page, so `window` and `document` are real
+    // there — they are not stray globals.
     files: ['tests/**/*.mjs'],
-    languageOptions: { globals: { ...globals.node } },
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 )

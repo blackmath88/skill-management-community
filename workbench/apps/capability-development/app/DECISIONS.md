@@ -90,6 +90,68 @@ shown verbatim wherever appearance is set or displayed, and no appearance unlock
 
 ---
 
+## A4b — The assemblage is a direct Three.js adapter, and reports the backend it actually got (agreed)
+
+**Decision.** The assemblage viewport is about 120 lines of direct Three.js in
+`src/assemblage/renderer.ts`, importing everything from `three/webgpu` so one module graph serves
+both backends. React Three Fiber and Drei are not dependencies. The renderer asks the renderer
+which backend started, rather than assuming the one it requested, and a request for WebGPU
+specifically fails rather than silently becoming WebGL 2.
+
+**Reason.** R3F 9.8.2 declares `react >=19 <19.4` and `three >=0.156`, so with React 19.3.1 and
+three 0.187.0 the combination is compatible — it was not rejected on versions, and saying so
+matters because that would have been a convenient and wrong reason. It was rejected on proportion:
+two more dependencies in an app whose runtime is React and React DOM, to buy helpers whose WebGPU
+behaviour [the assemblage build plan](https://github.com/blackmath88/skill-management-community/blob/main/workbench/apps/capability-development/ASSEMBLAGE-BUILDPLAN.md) §3 explicitly says not to
+assume.
+
+The honest-backend half was not a design idea. `WebGPURenderer.init()` resolves successfully with
+a WebGL 2 backend when `navigator.gpu` exists but offers no adapter, and an early version of this
+code told the interface it had WebGPU. The build plan warns in as many words against claiming the
+fallback recovered something it did not.
+
+**What makes it safe.** `tests/browser/assemblage.mjs` drives all four renderer settings against
+the production build and asserts what each reports. The static SVG drawing is a complete
+presentation on its own, so every GPU path is optional.
+
+---
+
+## A4c — A composition is cosmetic, and never grows with the records (agreed)
+
+**Decision.** All six pieces, four palettes and three marker designs are available on the first
+visit. Nothing in the application may add a piece, enlarge one, strengthen one or place a marker
+because records exist. The composition is stored inside `profile.appearance` and derives nothing
+from the record set. Markers are placed by hand, at most three per piece.
+
+**Reason.** This is A4 applied to a richer appearance. [The companion brief](https://github.com/blackmath88/skill-management-community/blob/main/workbench/apps/capability-development/COMPANION.md) is
+explicit that the companion is complete and worthy on day one and that growth must not imply the
+starting person was deficient; a sculpture that grew with somebody's activity log would say the
+opposite every time they opened it.
+
+**What makes it safe.** `derivePresentationModel` and `buildView` take no count as an input, body
+colours are keyed by which piece it is rather than by anything recorded, and the placement rules
+live in pure functions with no access to the record set. `APPEARANCE_DISCLAIMER` is shown on the
+screen.
+
+---
+
+## A4d — A marker loses its link when its record is deleted, and stays as decoration (agreed)
+
+**Decision.** `deleteEvidence` drops the `evidenceId` of any assemblage marker pointing at a
+deleted record and leaves the marker in place. The interface says the record is gone. Hiding a
+marker never deletes anything; removing a marker never touches a record.
+
+**Reason.** A4 keeps the appearance when evidence goes, and the build plan asks for the other half
+to be explicit: the *association* must go, with retention offered as an unlinked decoration.
+Keeping the identifier would let a later screen offer a record it cannot show. Substituting a
+different record would be a quiet lie about whose experience it was. Dismantling the sculpture
+would punish somebody for deleting their own record.
+
+**What makes it safe.** A command test pins the behaviour, including that a marker pointing
+elsewhere is untouched and that nothing is substituted.
+
+---
+
 ## A5 — A deterministic local stand-in is the only AI provider in this build (agreed)
 
 **Decision.** `src/ai/fake-provider.ts` returns fixed question templates selected by the shape of

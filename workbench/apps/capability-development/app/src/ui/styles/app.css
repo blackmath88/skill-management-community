@@ -206,3 +206,68 @@ dl.pairs dd { margin: 0; }
 }
 .emblem--journey { border-radius: 50%; }
 .emblem--evidence { border-style: dashed; }
+
+/* ---------- Assemblage
+ *
+ * The viewport is a fixed-aspect block that shrinks on narrow screens rather than scrolling
+ * sideways, and every control around it is an ordinary button or list item at full touch size.
+ * Nothing here uses colour as the only carrier: a selected piece is marked with a word in the
+ * list as well as an outline in the picture.
+ */
+.assemblage-panel { padding: 0; overflow: hidden; }
+.assemblage-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 15rem;
+  background: var(--surface-sunken);
+  display: block;
+}
+.assemblage-canvas,
+.assemblage-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* The canvas is layered under the SVG and only becomes visible once a frame has been drawn, so
+   there is never a flash of empty black between the static drawing and the first GPU frame. */
+.assemblage-canvas { opacity: 0; }
+.assemblage-canvas.is-live { opacity: 1; }
+.assemblage-svg { touch-action: manipulation; }
+.assemblage-svg path { cursor: pointer; }
+
+.assemblage-camera { padding: var(--s3) var(--s4); border-top: 1px solid var(--rule); }
+.assemblage-camera .meta { margin: 0; }
+.assemblage-panel > .save-status,
+.assemblage-panel > .save-status--failed { padding: 0 var(--s4) var(--s3); }
+
+.assemblage-list > li.is-selected { border-left: 6px solid var(--accent); padding-left: var(--s3); }
+.assemblage-list__name { font-weight: 650; font-size: 1rem; }
+.assemblage-markers { list-style: none; margin: var(--s2) 0 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--rule); }
+.assemblage-markers li { margin-bottom: var(--s1); }
+
+.assemblage-evidence {
+  margin: 0 0 var(--s3);
+  padding: var(--s3);
+  border-left: 4px solid var(--rule-strong);
+  background: var(--surface-sunken);
+}
+
+.assemblage-swatches { display: inline-flex; gap: 2px; margin-left: var(--s2); vertical-align: middle; }
+.assemblage-swatches span { width: 1rem; height: 1rem; border: 1px solid var(--rule); display: inline-block; }
+
+.assemblage-add-marker { margin-top: var(--s4); padding-top: var(--s3); border-top: 1px solid var(--rule); }
+
+@media (max-width: 34rem) {
+  .assemblage-viewport { aspect-ratio: 4 / 3; }
+  .assemblage-camera { flex-direction: column; align-items: stretch; }
+  .assemblage-camera button { width: 100%; }
+}
+/* A hint that belongs to a choice but must stay out of its accessible name. */
+.choice-hint { margin: 0 0 var(--s2) 1.6rem; }
+/* A file input styled as a button: the input itself stays focusable inside the label. */
+.assemblage-file { display: inline-flex; align-items: center; cursor: pointer; padding: 0.45rem 0.9rem; border: 1px solid var(--ink); border-radius: var(--radius); font-weight: 650; font-size: 1rem; margin: 0; }
+.assemblage-file input { width: 0.1px; height: 0.1px; opacity: 0; position: absolute; }
+.assemblage-file:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }

@@ -716,4 +716,54 @@ describe('removing a single record of any kind', () => {
     expect(outcome.value.reopened).toBe(1)
     expect(outcome.data.hypotheses[0]?.status).toBe('open')
   })
+
+  it('unlinks an assemblage marker from a deleted record, and keeps the marker', () => {
+    // The retention rule, as a command rather than as a promise in a document: the sculpture
+    // somebody arranged is not dismantled because a record went, and the marker does not keep an
+    // identifier pointing at something that is no longer there.
+    const base = reviewedRealAttempt()
+    const data: UserData = {
+      ...base,
+      profile: {
+        ...base.profile,
+        appearance: {
+          version: 1,
+          mode: 'character',
+          emblem: '◆',
+          palette: 'slate',
+          accessories: [],
+          assemblage: {
+            version: 1,
+            catalogueVersion: 1,
+            paletteId: 'chalk-terracotta',
+            pieces: [
+              {
+                instanceId: 'base',
+                pieceId: 'foundation',
+                parentInstanceId: null,
+                receiverFrameId: null,
+                restingFrameId: 'base',
+                orientationIndex: 0,
+                groundX: 0,
+                groundZ: 0,
+                markers: [
+                  { id: 'm-gone', designId: 'linked-loop', evidenceId: 'ev-1', hidden: false },
+                  { id: 'm-stays', designId: 'turned-route', evidenceId: 'ev-other', hidden: false },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    }
+    const outcome = expectOk(deleteEvidence(data, ['ev-1'], deps))
+    const markers = outcome.data.profile.appearance?.assemblage?.pieces[0]?.markers ?? []
+    expect(outcome.value.markersUnlinked).toBe(1)
+    expect(markers).toHaveLength(2)
+    expect(markers[0]?.evidenceId).toBeNull()
+    // A marker pointing somewhere else is untouched, and nothing was substituted for the one that
+    // lost its record.
+    expect(markers[1]?.evidenceId).toBe('ev-other')
+    expect(outcome.data.profile.appearance?.assemblage?.pieces).toHaveLength(1)
+  })
 })

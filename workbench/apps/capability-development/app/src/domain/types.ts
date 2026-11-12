@@ -462,6 +462,55 @@ export interface SharePackage {
 export type PresentationMode = 'character' | 'journey' | 'evidence'
 
 /**
+ * A history marker placed on an assemblage piece.
+ *
+ * `evidenceId` points at an EvidenceItem. `null` means the marker was deliberately kept as
+ * decoration after the record behind it was deleted — see `unlinkMissingEvidence`. The domain
+ * stores the identifier; it does not resolve it, and a renderer never sees it.
+ */
+export interface AppearanceMarker {
+  id: Id
+  /** Catalogue identifier of the marker design. Opaque to the domain. */
+  designId: string
+  evidenceId: Id | null
+  /** Hidden markers keep their evidence link. Hiding is not deleting. */
+  hidden: boolean
+}
+
+/** One piece of the assemblage, identified by catalogue id and placed against a contact frame. */
+export interface AppearancePiece {
+  instanceId: Id
+  pieceId: string
+  /** null when the piece stands on the ground. */
+  parentInstanceId: Id | null
+  receiverFrameId: string | null
+  restingFrameId: string
+  /** Index into the catalogue's bounded orientation list for that piece. */
+  orientationIndex: number
+  groundX: number
+  groundZ: number
+  markers: AppearanceMarker[]
+}
+
+/**
+ * The saved assemblage composition.
+ *
+ * Catalogue identifiers are plain strings here on purpose: the domain owns records and must not
+ * depend on which shapes a presentation happens to draw. ~/assemblage narrows them to its own
+ * catalogue and validates the result, and a composition referring to a catalogue this build does
+ * not have is reported rather than redrawn as something else.
+ *
+ * `catalogueVersion` is independent of `version`: the shapes can change without the saved format
+ * changing, and the other way round.
+ */
+export interface AppearanceAssemblage {
+  version: 1
+  catalogueVersion: number
+  paletteId: string
+  pieces: AppearancePiece[]
+}
+
+/**
  * Cosmetic choices only. Appearance never certifies competence and is never derived from
  * evidence; see experience.ts for the retention policy that keeps the two apart.
  */
@@ -472,6 +521,15 @@ export interface Appearance {
   emblem: string
   palette: string
   accessories: string[]
+  /**
+   * The assemblage, when the person has one.
+   *
+   * Optional, and absent in every record set written before the assemblage existed: those open
+   * with the catalogue's day-one composition, which is complete in itself. An optional field
+   * needs no appearance-version bump, because a build that does not know it drops it on read and
+   * everything else about the appearance still means exactly what it meant.
+   */
+  assemblage?: AppearanceAssemblage
 }
 
 export interface Profile {

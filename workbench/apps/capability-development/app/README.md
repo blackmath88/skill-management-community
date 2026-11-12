@@ -47,6 +47,7 @@ npm run lint            # eslint
 npm run test            # vitest: unit, property, application, storage, content and AI tests
 npm run verify          # typecheck + lint + test + build
 npm run test:browser    # the two end-to-end journeys, against the production build
+npm run test:browser:assemblage   # the assemblage: renderer gate, assembly, markers, idle cost
 ```
 
 `npm run test:browser` needs a build first (`npm run build`) and needs Playwright with its
@@ -60,16 +61,17 @@ and exits non-zero rather than reporting a pass it did not run.
 | --- | --- | --- |
 | Type checking | `npm run typecheck` | clean, no errors |
 | Linting | `npm run lint` | clean, no errors |
-| Unit, property, integration | `npm run test` | **327 passed**, 20 files, 0 failed, 0 skipped |
-| Production build | `npm run build` | succeeded; 456 kB JS (133 kB gzipped), 8.8 kB CSS |
+| Unit, property, integration | `npm run test` | **384 passed**, 22 files, 0 failed, 0 skipped |
+| Production build | `npm run build` | succeeded; 528 kB JS (156 kB gzipped) plus a 819 kB (222 kB gzipped) renderer chunk loaded on demand, 10.7 kB CSS |
 | Browser journeys | `npm run test:browser` | **79 of 79 checks passed**, three journeys |
-| Clean install | `npm ci` | succeeded from the lockfile, 217 packages |
+| Assemblage in the browser | `npm run test:browser:assemblage` | **26 of 26 checks passed** |
+| Clean install | `npm ci` | succeeded from the lockfile, 217 packages before `three` was added |
 
 Test counts by area: domain 124 (including six property-based invariants over generated record
 sets), application 74 — among them a guard asserting that whatever any command produces is
 something storage will accept, for every command and for generated sequences of up to eight —
-storage 45, content 38, AI boundary 42, interface navigation 5, a second-domain walk-through, plus
-the browser journeys. Two independent reviewers examined the code for domain integrity and
+storage 45, content 38, AI boundary 42, interface navigation 5, a second-domain walk-through, the
+assemblage's geometry, placement and portability 56, plus the browser journeys. Two independent reviewers examined the code for domain integrity and
 privacy, and for engineering correctness; what they found and what was done about each is in
 [CHECKLIST.md](CHECKLIST.md).
 
@@ -103,6 +105,37 @@ preview lists the metadata as well as the content.
 
 It also checks accessibility basics: a skip link, a declared language, one level-1 heading, a
 focusable main region, and a keyboard-operable records/demo switch.
+
+## Your assemblage
+
+The **Your assemblage** screen is a composition you arrange yourself: six original faceted pieces
+on a plain ground, four palettes, and three kinds of marker that lead back into your own records.
+
+It is complete on your first visit. Every piece, palette and marker design is available
+immediately. Nothing here is unlocked, levelled up or earned, and recording more practice adds no
+piece, no size and no ornament. A sculpture that grew with somebody's record count would be
+telling them their worth is their activity log.
+
+Three things it will not do. It will not infer a mood, a personality or a level of competence from
+geometry. It will not accumulate ornament on its own — a marker exists because you put it there.
+And it does nothing at all while you are away: coming back after a month finds it exactly as you
+left it, with no decay, no streak and nothing to catch up on.
+
+The canvas is never the only way to do anything. Choosing a piece, choosing where it goes, turning
+it, placing it, removing it, undoing, reading a marker and resetting the view are all ordinary
+labelled controls, and the piece list under the picture carries the same selection the picture
+does. The page paints the composition as SVG first and asks a GPU renderer to take over
+afterwards; if that never happens the screen still works completely.
+
+A marker points at one evidence record. Selecting it opens that record in the page — not in the
+canvas, which is never given anything you wrote. Deleting the record drops the marker's link and
+keeps the marker, as decoration you chose, and says so; nothing is substituted for what went.
+
+The composition can be exported on its own, separately from your records, so carrying a sculpture
+to another browser does not mean handing over a journal.
+
+[Implementation notes, what was measured and what was not](ASSEMBLAGE-NOTES.md) ·
+[asset rights](ASSET-RIGHTS.md) · [pictures](docs/assemblage)
 
 ## How it is put together
 
@@ -191,9 +224,21 @@ These are things that are genuinely true of this build, not caveats for form's s
   built in, so the titles, authors and attributed claims behind all five methods were recorded as
   written down, not as checked. The Methods page shows this. They must be checked before this
   content is used anywhere outside this repository.
-- **One visual presentation.** The four worlds in `../VISUAL-DIRECTIONS.md` are not built, and the
-  character is a CSS emblem rather than the predecessor's 3-D figure. That was deliberate; see
-  [PROVENANCE.md](PROVENANCE.md).
+- **One visual presentation.** The four worlds in `../VISUAL-DIRECTIONS.md` are not built. There
+  are now two presentations of appearance: the CSS emblem on the Settings page, and the assemblage
+  on its own screen. Neither is the predecessor's character; see [PROVENANCE.md](PROVENANCE.md).
+- **The WebGPU backend has never actually run.** No machine available during this work has a
+  WebGPU adapter. What is verified is that the WebGPU path refuses honestly rather than reporting a
+  backend it did not get, that the WebGL 2 backend starts and draws with shadows, and that the
+  static drawing survives both. Choosing "WebGPU only" in a browser that has an adapter is the
+  check that has not been run. See [ASSEMBLAGE-NOTES.md](ASSEMBLAGE-NOTES.md) §8.
+- **No performance figure for real hardware.** The browser checks ran on a software rasteriser
+  (ANGLE over SwiftShader) with no GPU. Idle cost was measured and is zero; frame time, memory and
+  battery were not measured and no number is offered for them. No real phone or tablet was
+  available: narrow-screen layout was checked by viewport size only.
+- **Undo on the assemblage lasts one visit.** It is held in memory, not written to storage, so a
+  reload clears it. Everything it would have undone is saved, and the composition can always be
+  rearranged by hand.
 - **The data-minimisation check is narrow.** Validation refuses something that looks like an email
   address or a phone number in an evidence *attribution* — one structured field. It does not stop a
   name in that field, and it does not look at free text at all: notes, reviews, descriptions and
