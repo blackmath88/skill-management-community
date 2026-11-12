@@ -5,7 +5,7 @@ on:
     branches: [ccr-cda53478-1fik71]
     paths:
       - 'workbench/apps/capability-development/app/**'
-      - '.github/workflows/skilling-pages.yml'
+      - '.github/workflows/verify-skilling-preview.yml'
   workflow_dispatch:
 
 permissions:
