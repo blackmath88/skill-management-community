@@ -45,7 +45,7 @@ baseline before changing anything.
 | Clean install | `npm ci` | succeeded, 217 packages (before `three` was added) |
 | Type checking | `npm run typecheck` | clean |
 | Linting | `npm run lint` | clean |
-| Unit / property / integration | `npm run test` | 384 passed, 22 files, 0 failed, 0 skipped |
+| Unit / property / integration | `npm run test` | 394 passed, 23 files, 0 failed, 0 skipped |
 | Production build | `npm run build` | succeeded, 528 kB JS (156 kB gzipped) + a 819 kB (222 kB gzipped) on-demand renderer chunk |
 | Browser journeys | `npm run test:browser` | 79 of 79 checks passed, three journeys |
 | Assemblage in the browser | `npm run test:browser:assemblage` | 37 of 37 checks passed |

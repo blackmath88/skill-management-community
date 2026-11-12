@@ -61,7 +61,7 @@ and exits non-zero rather than reporting a pass it did not run.
 | --- | --- | --- |
 | Type checking | `npm run typecheck` | clean, no errors |
 | Linting | `npm run lint` | clean, no errors |
-| Unit, property, integration | `npm run test` | **384 passed**, 22 files, 0 failed, 0 skipped |
+| Unit, property, integration | `npm run test` | **394 passed**, 23 files, 0 failed, 0 skipped |
 | Production build | `npm run build` | succeeded; 528 kB JS (156 kB gzipped) plus a 819 kB (222 kB gzipped) renderer chunk loaded on demand, 10.7 kB CSS |
 | Browser journeys | `npm run test:browser` | **79 of 79 checks passed**, three journeys |
 | Assemblage in the browser | `npm run test:browser:assemblage` | **37 of 37 checks passed** |

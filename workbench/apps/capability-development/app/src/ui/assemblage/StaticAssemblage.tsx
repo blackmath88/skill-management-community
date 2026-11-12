@@ -9,7 +9,7 @@
  * in the canvas, so "the renderer failed" never means "you cannot use this screen".
  */
 import { useMemo, type CSSProperties } from 'react'
-import { facePath, project } from '~/assemblage/project'
+import { convexHull, facePath, project } from '~/assemblage/project'
 import type { AssemblageView } from '~/assemblage/view'
 
 export interface StaticAssemblageProps {
@@ -41,6 +41,17 @@ export function StaticAssemblage({
   // A hairline of the face's own colour, to close the seam antialiasing leaves between adjacent
   // triangles. Scaled to the viewBox so it stays one sub-pixel at any size.
   const seam = viewBox.width / 2600
+
+  // The selected piece is marked with the outline of its projected shape, not with a stroke on
+  // every face: see convexHull in ~/assemblage/project.
+  const selectionOutline = useMemo(() => {
+    if (!selectedInstanceId) return null
+    const points = projection.faces
+      .filter((face) => face.instanceId === selectedInstanceId && face.kind === 'piece')
+      .flatMap((face) => face.points)
+    if (points.length < 3) return null
+    return convexHull(points)
+  }, [projection, selectedInstanceId])
 
   const style: CSSProperties = { background: view.groundColour }
 
@@ -83,21 +94,16 @@ export function StaticAssemblage({
           {...(face.markerId ? { 'data-marker': face.markerId } : {})}
         />
       ))}
-      {selectedInstanceId
-        ? projection.faces
-            .filter((face) => face.instanceId === selectedInstanceId && face.kind === 'piece')
-            .map((face, index) => (
-              <path
-                key={`selected-${index}`}
-                d={facePath(face)}
-                fill="none"
-                stroke={view.accentColour}
-                strokeWidth={viewBox.width / 260}
-                strokeLinejoin="round"
-                pointerEvents="none"
-              />
-            ))
-        : null}
+      {selectionOutline ? (
+        <path
+          d={`${selectionOutline.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(4)} ${p[1].toFixed(4)}`).join('')}Z`}
+          fill="none"
+          stroke={view.accentColour}
+          strokeWidth={viewBox.width / 220}
+          strokeLinejoin="round"
+          pointerEvents="none"
+        />
+      ) : null}
     </svg>
   )
 }

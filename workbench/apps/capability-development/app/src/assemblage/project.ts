@@ -320,3 +320,38 @@ export function facePath(face: ProjectedFace): string {
     face.points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(4)} ${p[1].toFixed(4)}`).join('') + 'Z'
   )
 }
+
+/**
+ * The outline of a set of projected points: a convex hull, by Andrew's monotone chain.
+ *
+ * Used to mark the selected piece in the static drawing. Stroking each projected face instead —
+ * which is what a first version did — outlines every triangle and turns the selected piece into a
+ * wireframe. The GPU path gets a clean silhouette for free, by drawing the back faces of a
+ * slightly larger copy; this is the flat equivalent.
+ *
+ * A hull, not a true silhouette: for the signature form it traces the outer boundary and ignores
+ * the opening. That is the right amount of marking for "this one is selected", and the piece list
+ * says which piece it is in words, which is what carries the meaning.
+ */
+export function convexHull(points: readonly (readonly [number, number])[]): (readonly [number, number])[] {
+  if (points.length < 3) return [...points]
+  const sorted = [...points].sort((a, b) => (a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]))
+  const cross2 = (
+    o: readonly [number, number],
+    a: readonly [number, number],
+    b: readonly [number, number],
+  ) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+  const half = (input: readonly (readonly [number, number])[]) => {
+    const out: (readonly [number, number])[] = []
+    for (const p of input) {
+      while (out.length >= 2 && cross2(out[out.length - 2] as never, out[out.length - 1] as never, p) <= 0) {
+        out.pop()
+      }
+      out.push(p)
+    }
+    out.pop()
+    return out
+  }
+  return [...half(sorted), ...half([...sorted].reverse())]
+}
