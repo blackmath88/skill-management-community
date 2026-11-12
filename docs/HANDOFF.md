@@ -118,3 +118,7 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 - **Branch:** `ccr-cda53478-1fik71`, pushed to origin. Nothing merged, and no pull request opened.
   Observed `main` at `c69f954` before this work; no current Observatory snapshot was available, so
   the repository was inspected directly.
+
+## GitHub Pages preview setup — 12 November 2026
+
+Owner requested deployment for review. Added a branch-scoped Pages workflow that runs npm ci and npm run verify before uploading only app/dist. Added app/DEPLOYMENT.md with source branch, expected URL, privacy boundaries and later promotion instructions. GitHub Pages was observed configured for GitHub Actions. This adds preview deployment, not a merge or effectiveness claim. See Actions for live build/deployment results.

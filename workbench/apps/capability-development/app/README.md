@@ -16,6 +16,10 @@ piloted, and nothing in it has been shown to improve anybody's practice. See
 - [Concept](../CONCEPT.md) · [Architecture](../ARCHITECTURE.md) · [Plan](../PLAN.md) · [Prior art](../PRIOR-ART.md) · [Visual directions](../VISUAL-DIRECTIONS.md)
 - [Decisions taken while building this](DECISIONS.md) · [Provenance and adaptation](PROVENANCE.md) · [Implementation checklist](CHECKLIST.md)
 
+## Hosted preview
+
+[Deployment setup and preview URL](DEPLOYMENT.md). GitHub Actions verifies and publishes the build branch; consult the workflow result for current deployment status. The preview is public and intended for fictional/non-sensitive testing.
+
 ## Setup and run
 
 Requires Node 22.12 or newer. Every command runs from this directory (`app/`).
