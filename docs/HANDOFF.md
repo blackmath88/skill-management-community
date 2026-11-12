@@ -30,3 +30,14 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 - Checks: repository instructions, structure, branch and relevant documents inspected via connector. No local checkout, test execution, link checker, Docker run or Linuc connectivity experiment performed. Prior validation entries above do not apply to this new documentation.
 - Selection: no knowledge manifest or automatic ingestion changed. No real contacts, addresses, private connection details or traces imported.
 - Next: approve documentation, select an implementation repository, then start the agent with the supplied prompt. Linuc connectivity and any live testing remain separate operator-authorised work.
+
+## Skills in the Wild — 12 November 2026
+
+- Learned: current main contains the three-space structure and existing app proposals. Direct GitHub inspection used; no current Observatory artifact reviewed. App code belongs in a separate repository.
+- Changed: added [campaign concept](../workbench/apps/skills-in-the-wild/CONCEPT.md), [AI edition/scenarios](../workbench/apps/skills-in-the-wild/AI-SKILLS-IN-THE-WILD.md) and [adoption/build handoff](../workbench/apps/skills-in-the-wild/BUILD-HANDOFF.md); linked from app index.
+- Agreed by owner in discussion: Skills in the Wild name/tagline, wilderness theme, campaign introduction plus practical transfer and customised skill scenarios.
+- Proposed: separate static app scaffold with selective Guerrilla reuse; first complete synthetic AI mission. No full fork or app implementation decision claimed.
+- Evidence: discussion and current repository sources; Guerrilla inspected at 87ce5a542e9fa3ee9454cf87e9bb73fa861dd060. No root licence found in inspected tree; clarify reuse/licensing before porting. No effectiveness claims validated.
+- Checks: new concept documents' relative links resolved against the current repository tree plus new files. Documentation-only; no app build or tests executed. Prior test results above are historical.
+- Boundaries: no private cases imported, no knowledge-manifest changes, agent launch, fork, runtime implementation, deployment or pilot.
+- Next: assign a separate app repository and commission the bounded first-build brief; review one complete mission before expanding.
