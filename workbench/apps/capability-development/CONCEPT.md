@@ -1,20 +1,28 @@
 # Skilling Me Softly — product concept
 
-Date: 11 November 2026. Status: idea / proposed product direction. Documentation only; no implementation or effectiveness claim. Working name supplied by the owner: Skilling Me Softly.
+Updated: 12 November 2026. Status: owner-selected positioning and companion direction; detailed mechanics remain hypotheses. A functional preview exists on the build branch; the richer character described here is not yet implemented. No effectiveness claim.
 
-[Visual directions](VISUAL-DIRECTIONS.md) · [Architecture](ARCHITECTURE.md) · [Delivery plan](PLAN.md) · [Evidence and prior art](PRIOR-ART.md) · [App index](../README.md)
+[Companion](COMPANION.md) · [Research sparring prompt](PERPLEXITY-SPARRING.md) · [Visual directions](VISUAL-DIRECTIONS.md) · [Architecture](ARCHITECTURE.md) · [Delivery plan](PLAN.md) · [Evidence and prior art](PRIOR-ART.md) · [App index](../README.md)
 
 ## 1. Purpose and scope
 
 Develop the existing Leader Me concept into a personal, gameful capability-development application. People choose a meaningful direction, work on real situations, rehearse, act, seek feedback and adapt. The system also helps distinguish personal learning needs from constraints in shared practice, resources, incentives or authority.
 
-This notebook holds the concept and plan. Application implementation belongs in the separate Leader Me repository, subject to a new implementation mandate. This is not the community's official platform. No personal journals, participant information or confidential organisational cases belong in this public documentation.
+This notebook holds the concept and plan. A separately runnable derivative now exists in this repository on branch `ccr-cda53478-1fik71`, under `workbench/apps/capability-development/app/`, with a [hosted preview](https://blackmath88.github.io/skill-management-community/). LeaderMe is the predecessor and a character-design reference. Earlier plans assigning implementation exclusively to LeaderMe are historical; this concept update does not move or merge the app. This is not the community's official platform. No personal journals, participant information or confidential organisational cases belong in this public documentation.
 
 Three perspectives govern decisions together: senior engineering protects integrity and maintainability; design thinking tests usefulness and desirability; organisational development protects agency and attends to relationships, context and power.
 
 ## 2. Product promise
 
-Develop your practice through real challenges—and understand what you, other people and the surrounding conditions contribute.
+**The honest CV for yourself.**
+
+Skilling Me Softly makes your development visible to you. Build a non-human character through challenges from actual working life. Try something, get support, notice what happened and discover what carries into the next situation. Over time, build an inspectable history of what you practised, what you can point to, where you need help and how your practice changes.
+
+The owner's thesis: make skills and personal growth visible to oneself. The testable product hypothesis is that meaningful practice plus an honest visible history can improve self-understanding, calibrated confidence and choice of next action. It is not established by the existence of a working app.
+
+A conventional CV persuades others. This private record permits “with help”, “only rehearsed”, “contradictory feedback”, “not recently tried” and “blocked by conditions”. It is neither a credential nor an exhaustive or objective account of a person. Recording more does not mean growing more. Selective sharing is optional; there is no default employer view.
+
+The character is the emotional centre, with evidence available behind its history. A fictional example: three attempts at explaining complex information, substantial help on the first, a colleague's successful explanation-back on the second, adaptation for another audience on the third. The next question is performance under time pressure—not “communication 80%”.
 
 The application is not an LMS, employee assessment, personality diagnosis, generic chatbot or universal future-skills catalogue. Leadership remains the first domain; collaboration provides a second domain to test reuse.
 
@@ -57,7 +65,7 @@ Pausing, declining or escalating can be legitimate. Do not assign responsibility
 | Experience | Eligible documented practice | Not competence or mastery |
 | Journal | Observations, uncertainty and adaptation | Private by default |
 
-Support different company presentation styles without changing these meanings. A character experience and a professional workspace can represent the same records. Do not build multiple skins now. Preserve existing visual assets; do not make avatar redesign the critical path.
+The modular non-human companion is central to the next product experience, not a decorative emblem. Preserve LeaderMe's geometric assembly direction and investigate a renderer that can deliver it well. See [Companion](COMPANION.md). Different visual worlds can express the same identity and records; they cannot change learning or privacy rules. A character-free accessible view remains available. Prototype one compelling character before building all four skins.
 
 ## 6. Motivation and learning hypotheses
 
@@ -112,3 +120,21 @@ A four-to-six-week formative pilot is proposed, not scheduled or authorised. Inc
 ## 12. Non-goals and open decisions
 
 No universal taxonomy, competency ranking, LMS replacement, marketplace, manager dashboard, central ingestion, paid AI or deployment in this documentation task. Open decisions: exact XP policy, cosmetic retention, minimum evidence capture, content lifecycle, provider and hosting, rights for source materials, and whether organisational integration is needed at all.
+
+## 13. Research fit and the wider work
+
+The existing [prior-art and evidence review](PRIOR-ART.md) supplies research leads and qualifications; the table below is a design synthesis, not a new literature review.
+
+| Research thread | Product implication | What remains to test |
+| --- | --- | --- |
+| Learning and transfer | Distinguish understanding, rehearsal and real application | Whether the loop improves later application |
+| Work design and conditions | Record opportunity, resources, support and authority | Whether it helps identify a useful organisational next move |
+| Behavioural planning | Include a concrete cue and fallback | Whether plans become attempts |
+| Agency and motivation | Offer choice, useful feedback and optional connection | Whether users experience ownership rather than obligation |
+| Gamification and avatar identification | Explore meaningful character ownership | Whether a non-human companion adds value beyond novelty |
+| AI and expertise | Record assistance and try some new cases independently | Whether capability grows beyond supported output |
+| Reflection and feedback | Separate observation, interpretation and other perspectives | Whether reviews improve judgement without excessive burden |
+
+Community supplies perspectives, cases and methods. The future-skills radar offers possible directions. Skills in the Wild and Skillcember create collective occasions to practise. Skilling Me Softly carries the learner-owned history across those occasions; no automatic data integration or participant profiling is implied.
+
+The first formative test should ask whether people can describe their development accurately, point to examples, name the support and conditions involved, and choose a worthwhile next challenge. Compare character and non-character presentations with equivalent content. A small pilot cannot establish long-term effectiveness.

@@ -3,7 +3,7 @@
 Date: 11 November 2026.
 Status: exploration brief. The owner requested different looks and feels, including pixel art, Scandinavian/Implement-inspired, banking and industrial settings. The specific designs below are proposals; no theme or board has been built or selected.
 
-[Concept](CONCEPT.md) · [Architecture](ARCHITECTURE.md) · [Plan](PLAN.md)
+[Companion identity and rendering brief](COMPANION.md) · [Concept](CONCEPT.md) · [Architecture](ARCHITECTURE.md) · [Plan](PLAN.md)
 
 ## Independent choices
 
@@ -57,3 +57,7 @@ Use equivalent content and records across variants. Compare clarity, willingness
 Keep text readable; pixel styling belongs primarily in illustration. All variants need keyboard operation, visible focus, adequate contrast, non-colour state cues, reduced motion and a calm static option. Essential actions must remain available without the character.
 
 Themes are reviewed assets and configuration, not arbitrary executable third-party plugins. Renderers receive only the necessary presentation model, never the journal. A branded appearance must not imply employer access, endorsement or assessment authority.
+
+## Direction clarified — 12 November 2026
+
+The owner selected a modular non-human buddy/alter ego as the product centre. All visual worlds should preserve a recognisable chosen identity and inspectable history; no human avatar, personality diagnosis or punishment for absence. The character-free presentation is an accessibility/choice alternative, not a reason to reduce the main experience to a dashboard. Rendering technology is unselected; compare a crafted 2.5D implementation with one richer option before choosing WebGPU or a 3D engine.
