@@ -1,8 +1,10 @@
 /**
  * The personal mobile: curated compositions and palettes.
  *
- * One visual grammar — bent wire, thread and five hanging shapes — in a small number of authored
- * arrangements. Pure data: no React, no storage, no records. A composition is complete as drawn
+ * One visual grammar — bent wire, thread and five hanging sheet-metal shapes — in a small number
+ * of authored arrangements. Each is described as the object it would be (what hangs from what,
+ * on how much thread), and ./scene.ts turns that into a picture. Pure data: no React, no storage,
+ * no records. A composition is complete as drawn
  * on the first visit; nothing here grows, unlocks or reacts to what a person has done.
  *
  * Every composition has exactly SLOT_COUNT shapes, so a memory hung on "the third shape" still
@@ -14,83 +16,131 @@ export type ShapeKind = 'disc' | 'ring' | 'leaf' | 'crescent' | 'bar' | 'drop'
 
 export interface MobileShape {
   kind: ShapeKind
-  cx: number
-  cy: number
-  /** Half-height of the shape, in viewBox units. */
+  /** Half-height of the shape, in scene units. */
   r: number
-  /** Rotation in degrees. */
+  /** Rotation within its own sheet, in degrees. */
   rot: number
-  /** Which of the palette's three tones fills it. */
+  /** Which of the palette's three tones it is painted in. */
   tone: 0 | 1 | 2
-  /** Where its thread meets the wire: the point it sways from. */
-  pivot: [number, number]
   /** A word for the shape, used in labels: "the large disc". */
   name: string
 }
+
+/** Something hanging on a thread of a given length. */
+export interface Hang {
+  thread: number
+  node: MobileNode
+}
+
+/**
+ * The structure of a mobile, as it would be built by hand.
+ *
+ * An arm is a bowed wire that turns freely around the thread it hangs from; things hang from its
+ * two ends and, optionally, from its middle. A hoop is a horizontal ring carried by three lines.
+ * `turn` is the resting angle in radians — the pose drawn when nothing moves — chosen by eye so
+ * each arrangement reads as three-dimensional and no shape rests edge-on.
+ */
+export type MobileNode =
+  | { kind: 'shape'; slot: number; turn: number }
+  | { kind: 'arm'; left: number; right: number; drop: number; turn: number; ends: [Hang | null, Hang | null]; centre?: Hang }
+  | { kind: 'hoop'; radius: number; drop: number; turn: number; hangs: { at: number; hang: Hang }[] }
 
 export interface MobileComposition {
   id: string
   title: string
   description: string
-  /** SVG path data for the wire, drawn as strokes. */
-  wires: string[]
+  /** Where the top thread meets the ceiling, in scene units from the left of the view. */
+  hookX: number
+  root: Hang
   shapes: MobileShape[]
 }
 
-export const VIEW_BOX = '0 0 320 300'
+export const VIEW_BOX = '-30 -6 380 288'
+
+const shape = (slot: number, thread: number, turn: number): Hang => ({ thread, node: { kind: 'shape', slot, turn } })
 
 export const COMPOSITIONS: readonly MobileComposition[] = [
   {
     id: 'arc',
     title: 'Arc',
     description: 'One long bow with two smaller ones beneath it and a weight at the centre.',
-    wires: [
-      'M160 6 V39',
-      'M52 70 Q160 8 268 58',
-      'M52 70 L63 104',
-      'M34 124 Q62 84 96 118',
-      'M268 58 L261 98',
-      'M222 118 Q262 78 296 108',
-    ],
+    hookX: 160,
+    root: {
+      thread: 30,
+      node: {
+        kind: 'arm', left: 112, right: 112, drop: 30, turn: 0.32,
+        centre: shape(2, 148, -0.35),
+        ends: [
+          { thread: 30, node: { kind: 'arm', left: 36, right: 36, drop: 18, turn: -0.75, ends: [shape(0, 34, 0.45), shape(1, 62, -0.6)] } },
+          { thread: 34, node: { kind: 'arm', left: 40, right: 40, drop: 18, turn: 0.85, ends: [shape(3, 38, -0.4), shape(4, 22, 0.55)] } },
+        ],
+      },
+    },
     shapes: [
-      { kind: 'disc', cx: 34, cy: 176, r: 20, rot: 0, tone: 0, pivot: [34, 124], name: 'the left disc' },
-      { kind: 'leaf', cx: 96, cy: 204, r: 24, rot: 14, tone: 1, pivot: [96, 118], name: 'the leaf' },
-      { kind: 'disc', cx: 160, cy: 244, r: 28, rot: 0, tone: 2, pivot: [160, 39], name: 'the large disc' },
-      { kind: 'ring', cx: 222, cy: 176, r: 19, rot: 0, tone: 1, pivot: [222, 118], name: 'the ring' },
-      { kind: 'crescent', cx: 296, cy: 152, r: 20, rot: -12, tone: 0, pivot: [296, 108], name: 'the crescent' },
+      { kind: 'disc', r: 20, rot: 0, tone: 0, name: 'the left disc' },
+      { kind: 'leaf', r: 24, rot: 14, tone: 1, name: 'the leaf' },
+      { kind: 'disc', r: 28, rot: 0, tone: 2, name: 'the large disc' },
+      { kind: 'ring', r: 19, rot: 0, tone: 1, name: 'the ring' },
+      { kind: 'crescent', r: 20, rot: -12, tone: 0, name: 'the crescent' },
     ],
   },
   {
     id: 'cascade',
     title: 'Cascade',
     description: 'Three bows stepping down from left to right, each hanging from the one before.',
-    wires: [
-      'M96 6 V34',
-      'M30 58 Q96 10 176 50',
-      'M176 50 L186 86',
-      'M124 106 Q186 66 250 100',
-      'M250 100 L256 136',
-      'M214 156 Q258 116 298 148',
-    ],
+    hookX: 160,
+    root: {
+      thread: 26,
+      node: {
+        kind: 'arm', left: 66, right: 70, drop: 24, turn: 0.28,
+        centre: shape(1, 44, 0.5),
+        ends: [
+          shape(0, 36, -0.5),
+          {
+            thread: 32,
+            node: {
+              kind: 'arm', left: 54, right: 54, drop: 22, turn: -0.45,
+              ends: [
+                shape(2, 46, 0.35),
+                { thread: 32, node: { kind: 'arm', left: 36, right: 36, drop: 18, turn: 0.8, ends: [shape(3, 46, -0.55), shape(4, 34, 0.4)] } },
+              ],
+            },
+          },
+        ],
+      },
+    },
     shapes: [
-      { kind: 'drop', cx: 30, cy: 116, r: 22, rot: 0, tone: 2, pivot: [30, 58], name: 'the drop' },
-      { kind: 'bar', cx: 96, cy: 122, r: 26, rot: 8, tone: 0, pivot: [96, 34], name: 'the bar' },
-      { kind: 'disc', cx: 124, cy: 176, r: 24, rot: 0, tone: 1, pivot: [124, 106], name: 'the middle disc' },
-      { kind: 'leaf', cx: 214, cy: 228, r: 26, rot: -16, tone: 0, pivot: [214, 156], name: 'the leaf' },
-      { kind: 'ring', cx: 298, cy: 208, r: 18, rot: 0, tone: 2, pivot: [298, 148], name: 'the ring' },
+      { kind: 'drop', r: 22, rot: 0, tone: 2, name: 'the drop' },
+      { kind: 'bar', r: 26, rot: 8, tone: 0, name: 'the bar' },
+      { kind: 'disc', r: 24, rot: 0, tone: 1, name: 'the middle disc' },
+      { kind: 'leaf', r: 26, rot: -16, tone: 0, name: 'the leaf' },
+      { kind: 'ring', r: 18, rot: 0, tone: 2, name: 'the ring' },
     ],
   },
   {
     id: 'hoop',
     title: 'Hoop',
     description: 'A single hoop with five shapes hanging at different lengths.',
-    wires: ['M160 4 V30', 'M160 30 m-104 44 a104 44 0 1 0 208 0 a104 44 0 1 0 -208 0'],
+    hookX: 160,
+    root: {
+      thread: 6,
+      node: {
+        kind: 'hoop', radius: 104, drop: 58, turn: 0.3,
+        hangs: [
+          { at: 0.2, hang: shape(0, 50, 0.5) },
+          { at: 1.45, hang: shape(1, 118, -0.4) },
+          { at: 2.7, hang: shape(2, 66, 0.6) },
+          { at: 3.95, hang: shape(3, 124, -0.5) },
+          { at: 5.2, hang: shape(4, 56, 0.35) },
+        ],
+      },
+    },
     shapes: [
-      { kind: 'crescent', cx: 62, cy: 150, r: 20, rot: 10, tone: 1, pivot: [62, 89], name: 'the crescent' },
-      { kind: 'disc', cx: 112, cy: 218, r: 22, rot: 0, tone: 0, pivot: [112, 113], name: 'the left disc' },
-      { kind: 'drop', cx: 160, cy: 168, r: 22, rot: 0, tone: 2, pivot: [160, 118], name: 'the drop' },
-      { kind: 'bar', cx: 208, cy: 236, r: 26, rot: -6, tone: 1, pivot: [208, 113], name: 'the bar' },
-      { kind: 'ring', cx: 258, cy: 160, r: 19, rot: 0, tone: 0, pivot: [258, 89], name: 'the ring' },
+      { kind: 'crescent', r: 20, rot: 10, tone: 1, name: 'the crescent' },
+      { kind: 'disc', r: 22, rot: 0, tone: 0, name: 'the left disc' },
+      { kind: 'drop', r: 22, rot: 0, tone: 2, name: 'the drop' },
+      { kind: 'bar', r: 26, rot: -6, tone: 1, name: 'the bar' },
+      { kind: 'ring', r: 19, rot: 0, tone: 0, name: 'the ring' },
     ],
   },
 ]

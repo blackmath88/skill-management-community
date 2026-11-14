@@ -31,6 +31,22 @@ npm run test:browser:redesign   # needs a resolvable Playwright + Chromium
 Before/after pairs at 1280 and 390 px are in `before/` and `after/`
 (`<label>-<screen>-<personal|demo>-<width>.png`).
 
+## The mobile in three dimensions
+
+![](mobile-3d.png)
+
+Each arrangement is described as the object it would be — what hangs from what, on how much
+thread (`src/mobile/catalogue.ts`). `src/mobile/scene.ts` turns that into a picture: arms and the
+hoop turn about their threads, each sheet turns about its own, everything is projected with
+perspective from slightly above, sorted back to front, and shaded as matte painted metal under a
+light from the upper left, with a soft shadow on the wall behind. The result is still plain SVG:
+no WebGL, no new dependency, nothing added to the 820 kB renderer chunk the assemblage needs.
+
+Left alone it drifts slowly. Drag it, or press the labelled **Turn it** button, to turn it; a
+push eases out. Under reduced motion it rests in its authored pose, a drag follows the hand
+without coasting, and the button steps it round. Balance is authored by eye, not simulated.
+The saved format is unchanged: arrangement, palette and memories mean what they meant.
+
 ## Where everything went
 
 | Earlier address | Now |
@@ -87,6 +103,9 @@ is total over routes and is unit-tested.
 - Arrangement and colour radios reflect the saved value, so they tick a moment after the
   click rather than on it.
 - A memory can only point at an attempted activity, one per shape, five shapes.
+- The mobile redraws in React on every animation frame while it is on screen; fine on the machines
+  tried here, not profiled on a slow phone. How far you turned it is not remembered between visits.
+- Sheets are flat and face-shaded; there is no thread physics, and threads do not swing.
 - Dark mode, a second language and the German UI were not attempted.
 - No screen-reader pass with real assistive technology; checks were keyboard, roles and
   labels in Chromium only.

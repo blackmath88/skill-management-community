@@ -321,13 +321,12 @@ details.more > .more__body > .panel:first-child { border-top: none; padding-top:
 
 /* ---------- The personal mobile */
 .mobile { margin: 0; }
-.mobile svg { display: block; width: 100%; height: auto; max-width: 24rem; margin: 0 auto; overflow: visible; }
+.mobile svg { display: block; width: 100%; height: auto; max-width: 27rem; margin: 0 auto; overflow: visible; }
 .mobile--small svg { max-width: 11rem; }
-.mobile__hang { animation: mobile-sway 11s ease-in-out infinite alternate; }
-.mobile__hang--1 { animation-duration: 13s; animation-delay: -4s; }
-.mobile__hang--2 { animation-duration: 9s; animation-delay: -7s; }
-.mobile__hang.is-clickable { cursor: pointer; }
-@keyframes mobile-sway { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+.mobile svg { cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.mobile svg:active { cursor: grabbing; }
+.mobile .is-clickable { cursor: pointer; }
+.mobile__controls { text-align: center; margin: 0; font-size: 0.85rem; }
 .memory-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
 .memory-list > li > button {
   width: 100%; text-align: left; justify-content: flex-start; background: transparent; color: var(--ink);

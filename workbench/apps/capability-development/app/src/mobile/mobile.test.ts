@@ -6,6 +6,7 @@ import type { AppearanceMobile, UserData } from '~/domain/types'
 import { NOW, registry, reviewedRealAttempt, testDeps, activity } from '~/test-helpers/fixtures'
 import { COMPOSITIONS, PALETTES, SLOT_COUNT, composition, mobilePalette, shapePath } from './catalogue'
 import { deriveMobileView } from './view'
+import { drawMobile, mix, sheetColours } from './scene'
 
 const deps = testDeps()
 const base = (): AppearanceMobile => ({ version: 1, compositionId: 'cascade', paletteId: 'moss-ink', memories: [] })
@@ -136,5 +137,42 @@ describe('export and import', () => {
     expect(tamper((m) => (m.compositionId = 7)).ok).toBe(false)
     expect(tamper((m) => (m.memories = Array.from({ length: 50 }, (_, i) => ({ slot: i, activityId: 'x' })))).ok).toBe(false)
     expect(tamper((m) => (m.memories = [{ slot: 1, activityId: 'a' }, { slot: 1, activityId: 'b' }])).ok).toBe(false)
+  })
+})
+
+describe('the three-dimensional drawing', () => {
+  it('draws every shape of every arrangement exactly once, with finite numbers', () => {
+    for (const c of COMPOSITIONS) {
+      for (const [time, turned] of [[0, 0], [37.5, 0], [0, 2.4], [900, -7]] as const) {
+        const parts = drawMobile(c, time, turned)
+        const slots = parts.flatMap((p) => (p.kind === 'shape' ? [p.slot] : [])).sort()
+        expect(slots, `${c.id} at ${time}/${turned}`).toEqual([0, 1, 2, 3, 4])
+        expect(JSON.stringify(parts)).not.toMatch(/NaN|null|Infinity/)
+      }
+    }
+  })
+  it('is the same picture every time for the resting pose, and a different one once turned', () => {
+    const c = COMPOSITIONS[0]!
+    expect(drawMobile(c)).toEqual(drawMobile(c, 0, 0))
+    expect(drawMobile(c, 0, 0.7)).not.toEqual(drawMobile(c))
+    expect(drawMobile(c, 12)).not.toEqual(drawMobile(c))
+  })
+  it('paints back to front', () => {
+    for (const c of COMPOSITIONS) {
+      const depths = drawMobile(c, 5, 1).map((p) => p.depth)
+      expect(depths).toEqual([...depths].sort((a, b) => a - b))
+    }
+  })
+  it('never narrows a sheet to nothing, and rests with no sheet edge-on', () => {
+    for (const c of COMPOSITIONS) {
+      for (let turned = 0; turned < 6.3; turned += 0.05) {
+        for (const p of drawMobile(c, 0, turned)) if (p.kind === 'shape') expect(p.squeeze).toBeGreaterThan(0)
+      }
+      for (const p of drawMobile(c)) if (p.kind === 'shape') expect(p.squeeze, `${c.id} slot ${p.slot}`).toBeGreaterThan(0.5)
+    }
+  })
+  it('mixes colours as #rrggbb', () => {
+    expect(mix('#000000', '#ffffff', 0.5)).toBe('#808080')
+    expect(sheetColours('#b4532a', { light: 1, reverse: false, haze: 0 }).top).toMatch(/^#[0-9a-f]{6}$/)
   })
 })
