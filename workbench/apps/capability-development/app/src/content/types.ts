@@ -46,6 +46,8 @@ export type CapabilityGroup =
   | 'relationships'
   | 'learning'
   | 'shared-routines'
+  | 'ai-practice'
+  | 'organisational-practice'
 
 export interface CapabilityGroupDefinition {
   id: CapabilityGroup

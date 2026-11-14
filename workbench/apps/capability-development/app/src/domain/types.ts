@@ -566,8 +566,60 @@ export interface Appearance {
   mobile?: AppearanceMobile
 }
 
+/**
+ * How a person places themselves on a skill, in their own judgement.
+ *
+ * A claim is a statement, not evidence. It is what lets nobody start from nothing, and it is kept
+ * apart from the record-derived evidence stages everywhere: a claimed skill never reads as a
+ * practised one.
+ */
+export type ClaimLevel = 'not-yet' | 'with-help' | 'can-do' | 'regularly'
+export const CLAIM_LEVELS: readonly ClaimLevel[] = ['not-yet', 'with-help', 'can-do', 'regularly']
+
+export interface SkillClaim {
+  capabilityId: Id
+  level: ClaimLevel
+  at: IsoUtc
+}
+
+/**
+ * A season: one branch the person is working on now, with a date to look back on it.
+ *
+ * The date is a point to review at, never a deadline. A season that runs past it is not late; it
+ * is simply due a look. Ending one records what the person made of it and loses nothing.
+ */
+export interface Season {
+  id: Id
+  /** Capability group the season is about. Opaque to the domain. */
+  branchId: string
+  /** The few skills in focus. Empty means the branch as a whole. */
+  capabilityIds: Id[]
+  startedOn: IsoDate
+  reviewOn: IsoDate
+  endedOn?: IsoDate
+  /** What the person made of the season when they closed it. */
+  closing?: string
+}
+
+/**
+ * The person's own map of where they are and where they are heading: self-placements, a chosen
+ * target, the season in progress and the branches queued after it. All of it is chosen by the
+ * person and all of it is optional; records and evidence do not depend on any of it.
+ */
+export interface Journey {
+  version: 1
+  /** A target constellation's identifier, or null for none. Opaque to the domain. */
+  targetId: string | null
+  claims: SkillClaim[]
+  /** In order. At most one has no `endedOn`: the active one. */
+  seasons: Season[]
+  /** Branches the person means to take up next, in order. */
+  queue: string[]
+}
+
 export interface Profile {
   displayName?: string
+  journey?: Journey
   /** Which content packs the user selected. Empty means every installed pack. */
   selectedPackIds: Id[]
   appearance?: Appearance

@@ -12,8 +12,9 @@
  */
 import { href } from '../router'
 import { useApp } from '../state'
-import { formatDate, formatDateTime, KindTag, RouteTag } from '../primitives'
+import { formatDate, formatDateTime, KindTag } from '../primitives'
 import { MobilePanel } from '../mobile/MobilePanel'
+import { TreeHome } from '../mobile/Tree'
 import { NEXT_MOVE_LABEL } from './labels'
 import type { NextAction } from '~/domain/summary'
 
@@ -68,15 +69,18 @@ function FirstVisit() {
       <div className="home__lead">
         <header>
           <p className="kicker">Welcome</p>
-          <h1>Prepare for a conversation you are not looking forward to.</h1>
+          <h1>You are not starting from nothing.</h1>
           <div className="lede">
             <p>
-              Pick one difficult team discussion that is actually coming up. Plan how you will open it, rehearse if
-              you like, then come back and note what happened.
+              Say where you already stand, choose what you are building towards, and your mobile is built from it.
+              Then pick one piece and practise it for real.
             </p>
           </div>
           <div className="row">
-            <a className="btn btn--primary btn--large" href={href({ name: 'prepare' })}>
+            <a className="btn btn--primary btn--large" href={href({ name: 'begin' })}>
+              Build your mobile
+            </a>
+            <a className="btn btn--quiet" href={href({ name: 'prepare' })}>
               Prepare a discussion
             </a>
             <button type="button" className="btn-quiet" onClick={() => switchNamespace('demo')}>
@@ -84,7 +88,7 @@ function FirstVisit() {
             </button>
           </div>
           <p className="hint">
-            About five minutes. Everything stays in this browser.{' '}
+            About three minutes. Everything stays in this browser.{' '}
             <a href={href({ name: 'new-situation' })}>Or start from any other situation.</a>
           </p>
         </header>
@@ -123,7 +127,7 @@ export function HomePage() {
   const { summary } = models
   const { data } = state
 
-  if (data.situations.length === 0 && data.activities.length === 0) return <FirstVisit />
+  if (data.situations.length === 0 && data.activities.length === 0 && (data.profile.journey?.claims.length ?? 0) === 0 && !data.profile.journey?.targetId) return <FirstVisit />
 
   // Lead with something that is actually waiting: a plan to finish, an attempt to record, a
   // reflection to write, a running journey. The summary's general suggestions (write a direction,
@@ -140,59 +144,42 @@ export function HomePage() {
 
   return (
     <div className="home">
-      <div className="home__lead">
-        <div className="stack">
-          <header>
-            <p className="kicker">{state.namespace === 'demo' ? 'Home · fictional demo' : 'Home'}</p>
-            <h1>{pending ? pending.label : continues ? 'Pick up where you left it.' : 'Nothing is waiting for you.'}</h1>
-          </header>
-          {pending ? (
-            <div className="next">
-              <p className="next__reason">
-                {pending.reason} {pending.route ? <RouteTag route={pending.route} /> : null}
-              </p>
-              <div className="row">
-                <a className="btn btn--primary btn--large" href={actionHref(pending)}>
-                  {actionVerb(pending)}
-                </a>
-                <a href={href({ name: 'prepare' })}>Prepare a new discussion</a>
-              </div>
-            </div>
-          ) : continues && reviewed ? (
-            <div className="next">
-              <p className="next__reason">
-                Last time you decided to {NEXT_MOVE_LABEL[latestReview.nextMove].toLowerCase()}. When the next occasion
-                is in sight, plan it — or leave it; nothing is overdue.
-              </p>
-              <div className="row">
-                <a className="btn btn--primary btn--large" href={href({ name: 'prepare', situationId: reviewed.situationId })}>
-                  Prepare the next attempt
-                </a>
-                <a href={href({ name: 'prepare' })}>Prepare a different discussion</a>
-              </div>
-            </div>
-          ) : (
-            <div className="next">
-              <p className="next__reason">
-                That is a fine place to be. When another conversation is coming up, you can prepare for it here.
-              </p>
-              <div className="row">
-                <a className="btn btn--primary btn--large" href={href({ name: 'prepare' })}>
-                  Prepare a discussion
-                </a>
-                <a href={href({ name: 'repertoire' })}>Look at your repertoire</a>
-              </div>
-            </div>
-          )}
-          {summary.activeDirection ? (
-            <p className="meta">
-              Your direction, in your words: “{summary.activeDirection.text}”{' '}
-              <a href={href({ name: 'settings' })}>Revise</a>
+      <TreeHome />
+
+      <section className="next-strip" aria-labelledby="next-heading">
+        <h2 id="next-heading" className="visually-hidden">
+          Next
+        </h2>
+        {pending ? (
+          <>
+            <p>
+              <strong>{pending.label}</strong> <span className="meta">{pending.reason}</span>
             </p>
-          ) : null}
-        </div>
-        <MobilePanel />
-      </div>
+            <a className="btn btn--primary" href={actionHref(pending)}>
+              {actionVerb(pending)}
+            </a>
+          </>
+        ) : continues && reviewed ? (
+          <>
+            <p>
+              <strong>Pick up where you left it.</strong>{' '}
+              <span className="meta">Last time you decided to {NEXT_MOVE_LABEL[latestReview.nextMove].toLowerCase()}.</span>
+            </p>
+            <a className="btn btn--primary" href={href({ name: 'prepare', situationId: reviewed.situationId })}>
+              Prepare the next attempt
+            </a>
+          </>
+        ) : (
+          <>
+            <p>
+              <strong>Nothing is waiting for you.</strong> <span className="meta">Choose a piece above, or prepare a conversation that is coming up.</span>
+            </p>
+            <a className="btn btn--quiet" href={href({ name: 'prepare' })}>
+              Prepare a discussion
+            </a>
+          </>
+        )}
+      </section>
 
       {latestReview && reviewed ? (
         <section aria-labelledby="last-heading">

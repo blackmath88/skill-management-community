@@ -33,6 +33,8 @@ import {
   type AppearanceAssemblage,
   type AppearanceMarker,
   type AppearanceMobile,
+  type Journey,
+  CLAIM_LEVELS,
   type AppearancePiece,
   type AssistanceLevel,
   type Attempt,
@@ -402,6 +404,57 @@ function readAppearance(r: Reader, v: unknown, path: string): Appearance | undef
   return appearance
 }
 
+/** Caps on the journey, so an import cannot arrive with unbounded lists. */
+const MAX_CLAIMS = 400
+const MAX_SEASONS = 200
+
+function readJourney(r: Reader, v: unknown, path: string): Journey | undefined {
+  const o = r.obj(v, path)
+  if (!o) return undefined
+  if (r.int(o, 'version', path, { min: 1 }) !== 1) {
+    r.fail(`${path}.version`, 'must be journey version 1')
+    return undefined
+  }
+  const claims = r.arr(o, 'claims', path)
+  const seasons = r.arr(o, 'seasons', path)
+  if (claims.length > MAX_CLAIMS || seasons.length > MAX_SEASONS) {
+    r.fail(path, 'holds more claims or seasons than this build accepts')
+    return undefined
+  }
+  const journey: Journey = {
+    version: 1,
+    targetId: o.targetId === null ? null : (r.optStr(o, 'targetId', path, { max: 64 }) ?? null),
+    claims: claims.flatMap((c, i) => {
+      const co = r.obj(c, `${path}.claims[${i}]`)
+      if (!co) return []
+      return [{
+        capabilityId: r.str(co, 'capabilityId', `${path}.claims[${i}]`, { nonEmpty: true, max: 200 }),
+        level: r.oneOf(co, 'level', CLAIM_LEVELS, `${path}.claims[${i}]`),
+        at: r.iso(co, 'at', `${path}.claims[${i}]`),
+      }]
+    }),
+    seasons: seasons.flatMap((x, i) => {
+      const so = r.obj(x, `${path}.seasons[${i}]`)
+      if (!so) return []
+      const at = `${path}.seasons[${i}]`
+      const endedOn = so.endedOn === undefined ? undefined : r.dateOrEmpty(so, 'endedOn', at)
+      const closing = r.optStr(so, 'closing', at, { max: 2000 })
+      return [{
+        id: r.str(so, 'id', at, { nonEmpty: true, max: 200 }),
+        branchId: r.str(so, 'branchId', at, { nonEmpty: true, max: 64 }),
+        capabilityIds: r.strArr(so, 'capabilityIds', at).slice(0, 12),
+        startedOn: r.dateOrEmpty(so, 'startedOn', at),
+        reviewOn: r.dateOrEmpty(so, 'reviewOn', at),
+        ...(endedOn !== undefined && endedOn !== '' ? { endedOn } : {}),
+        ...(closing !== undefined ? { closing } : {}),
+      }]
+    }),
+    queue: r.strArr(o, 'queue', path).slice(0, 40),
+  }
+  if (journey.seasons.filter((x) => x.endedOn === undefined).length > 1) r.fail(`${path}.seasons`, 'has more than one season in progress')
+  return journey
+}
+
 function readProfile(r: Reader, v: unknown): Profile {
   const path = 'profile'
   const o = r.obj(v, path) ?? {}
@@ -414,6 +467,10 @@ function readProfile(r: Reader, v: unknown): Profile {
   if (o.appearance !== undefined) {
     const appearance = readAppearance(r, o.appearance, `${path}.appearance`)
     if (appearance) profile.appearance = appearance
+  }
+  if (o.journey !== undefined) {
+    const journey = readJourney(r, o.journey, `${path}.journey`)
+    if (journey) profile.journey = journey
   }
   return profile
 }

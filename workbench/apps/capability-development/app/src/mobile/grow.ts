@@ -38,7 +38,7 @@ interface Item {
 
 export function growMobile(id: string, title: string, branches: readonly Branch[]): MobileComposition {
   const total = branches.reduce((sum, b) => sum + b.leaves.length, 0)
-  const r = Math.max(10, Math.min(17, 19 - total * 0.22))
+  const r = Math.max(11, Math.min(18, 22 - total * 0.24))
   const shapes: MobileShape[] = []
   let arms = 0
 
@@ -92,10 +92,10 @@ export function growMobile(id: string, title: string, branches: readonly Branch[
           hang: () => ({ thread: 12 + ((k * 2) % 3) * (r * 1.7), node: { kind: 'shape', slot, turn: spread(slot + 3, 0.6) } }),
         }
       })
-      if (leaves.length <= 3) return gather(leaves, 0.56, true)
+      if (leaves.length <= 3) return gather(leaves, 0.5, true)
       // A fuller branch hangs from a hoop: its sheets in a ring at staggered lengths, which keeps
       // a dozen skills readable where a dozen nested arms would not be.
-      const radius = Math.max(r * 1.9, r * 0.62 * leaves.length)
+      const radius = Math.max(r * 1.7, r * 0.5 * leaves.length)
       return {
         weight: leaves.length,
         width: (radius + r) * 2,
@@ -116,7 +116,7 @@ export function growMobile(id: string, title: string, branches: readonly Branch[
   if (boughs.length === 0) {
     return { id, title, description: 'Nothing to hang yet.', hookX: 160, root: { thread: 20, node: { kind: 'arm', left: 60, right: 60, drop: 16, turn: 0.3, ends: [null, null] } }, shapes: [], viewBox: '0 0 320 120' }
   }
-  const top = gather(boughs, 0.5, false)
+  const top = gather(boughs, 0.42, false)
   const composition: MobileComposition = {
     id,
     title,

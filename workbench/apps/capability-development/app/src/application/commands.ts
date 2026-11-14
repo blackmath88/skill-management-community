@@ -29,6 +29,9 @@ import type {
   Appearance,
   AppearanceAssemblage,
   AppearanceMobile,
+  ClaimLevel,
+  Journey,
+  Season,
   AssistanceLevel,
   Attempt,
   AttemptOutcome,
@@ -1116,4 +1119,93 @@ export function markProposalAccepted(data: UserData, id: Id, deps: CommandDeps):
   const now = deps.clock.now()
   const next: AiProposal = { ...existing, state: 'accepted', decidedAt: now, updatedAt: now }
   return ok({ ...data, proposals: upsertById(data.proposals, next) }, next)
+}
+
+// ------------------------------------------------------------------ Journey: placements, target, seasons
+
+const EMPTY_JOURNEY: Journey = { version: 1, targetId: null, claims: [], seasons: [], queue: [] }
+
+function withJourney(data: UserData, journey: Journey, deps: CommandDeps): UserData {
+  return { ...data, profile: { ...data.profile, journey, updatedAt: deps.clock.now() } }
+}
+
+/**
+ * Records where the person places themselves on some skills.
+ *
+ * A placement replaces the previous one for that skill. It is the person's own statement: it
+ * credits no practice experience, changes no evidence stage, and "not yet" is kept as a real
+ * answer, because knowing what you have not done is part of an honest picture.
+ */
+export function placeSkills(
+  data: UserData,
+  placements: readonly { capabilityId: Id; level: ClaimLevel }[],
+  deps: CommandDeps,
+): CommandOutcome<number> {
+  for (const p of placements) {
+    if (!deps.content.capability(p.capabilityId)) return fail('not-found', `There is no skill "${p.capabilityId}" in the installed content.`)
+  }
+  const journey = data.profile.journey ?? EMPTY_JOURNEY
+  const now = deps.clock.now()
+  const placed = new Map(journey.claims.map((c) => [c.capabilityId, c]))
+  for (const p of placements) placed.set(p.capabilityId, { capabilityId: p.capabilityId, level: p.level, at: now })
+  return ok(withJourney(data, { ...journey, claims: [...placed.values()] }, deps), placements.length)
+}
+
+/** Chooses what the person is building towards, or clears it. Switching loses nothing. */
+export function chooseTarget(data: UserData, targetId: string | null, deps: CommandDeps): CommandOutcome<string | null> {
+  if (targetId !== null && (targetId.trim() === '' || targetId.length > 64)) return fail('validation', 'That target cannot be saved.')
+  return ok(withJourney(data, { ...(data.profile.journey ?? EMPTY_JOURNEY), targetId }, deps), targetId)
+}
+
+/**
+ * Starts a season on one branch. Any season in progress is closed first, on the same day, so
+ * there is only ever one. The review date must not be in the past: it is a moment to look back
+ * at, and a season has to have somewhere to go.
+ */
+export function startSeason(
+  data: UserData,
+  input: { branchId: string; capabilityIds: Id[]; reviewOn: string },
+  deps: CommandDeps,
+): CommandOutcome<Season> {
+  const today = deps.clock.now().slice(0, 10)
+  const errors: string[] = []
+  if (input.branchId.trim() === '') errors.push('Choose a branch to work on.')
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.reviewOn)) errors.push('Choose a date to look back on it.')
+  else if (input.reviewOn < today) errors.push('The date to look back on it cannot be in the past.')
+  for (const id of input.capabilityIds) if (!deps.content.capability(id)) errors.push(`There is no skill "${id}" in the installed content.`)
+  if (errors.length > 0) return fail('validation', ...errors)
+  const id = freshId(data, deps)
+  if (id === null) return fail('validation', DUPLICATE_ID_ERROR)
+  const journey = data.profile.journey ?? EMPTY_JOURNEY
+  const season: Season = { id, branchId: input.branchId, capabilityIds: [...new Set(input.capabilityIds)].slice(0, 12), startedOn: today, reviewOn: input.reviewOn }
+  return ok(
+    withJourney(
+      data,
+      {
+        ...journey,
+        seasons: [...journey.seasons.map((s) => (s.endedOn === undefined ? { ...s, endedOn: today } : s)), season],
+        queue: journey.queue.filter((b) => b !== input.branchId),
+      },
+      deps,
+    ),
+    season,
+  )
+}
+
+/** Closes the season in progress, with whatever the person wants to note about it. */
+export function endSeason(data: UserData, input: { closing?: string }, deps: CommandDeps): CommandOutcome<Season> {
+  const journey = data.profile.journey ?? EMPTY_JOURNEY
+  const active = journey.seasons.find((s) => s.endedOn === undefined)
+  if (!active) return fail('not-found', 'There is no season in progress.')
+  const errors: string[] = []
+  const closing = text(input.closing ?? '', 'The note', errors, { max: 2000 })
+  if (errors.length > 0) return fail('validation', ...errors)
+  const ended: Season = { ...active, endedOn: deps.clock.now().slice(0, 10), ...(closing.trim() !== '' ? { closing } : {}) }
+  return ok(withJourney(data, { ...journey, seasons: journey.seasons.map((s) => (s.id === active.id ? ended : s)) }, deps), ended)
+}
+
+/** Sets the branches the person means to take up next, in order. */
+export function queueBranches(data: UserData, queue: readonly string[], deps: CommandDeps): CommandOutcome<string[]> {
+  const cleaned = [...new Set(queue.filter((b) => b.trim() !== ''))].slice(0, 40)
+  return ok(withJourney(data, { ...(data.profile.journey ?? EMPTY_JOURNEY), queue: cleaned }, deps), cleaned)
 }

@@ -17,8 +17,6 @@
 import type { Hang, MobileComposition } from './catalogue'
 
 const TILT = 0.2
-const SIN_T = Math.sin(TILT)
-const COS_T = Math.cos(TILT)
 /** Distance from the camera to the plane the mobile hangs in. Smaller is a stronger perspective. */
 const FOCAL = 760
 /** The wall the shadow falls on, behind the mobile. */
@@ -46,6 +44,8 @@ export interface Moment {
   weights?: readonly number[]
   /** Horizontal direction of the light, -0.7 (from the left) to 0.7 (from the right). */
   lightX?: number
+  /** How far above the camera looks from, in radians. About 0.05 (level) to 0.55 (well above). */
+  tilt?: number
 }
 
 /** The light for an hour of the local day: from the left in the morning, from the right by evening. */
@@ -100,17 +100,19 @@ export type Drawing = WireDrawing | ShapeDrawing | JointDrawing
 
 type Vec = [number, number, number]
 
-function project([x, y, z]: Vec, centreX: number, focal = FOCAL): { x: number; y: number; s: number; z: number } {
-  const yy = y * COS_T + z * SIN_T
-  const zz = z * COS_T - y * SIN_T * 0.25
+function project([x, y, z]: Vec, centreX: number, focal = FOCAL, tilt = TILT): { x: number; y: number; s: number; z: number } {
+  const sinT = Math.sin(tilt)
+  const cosT = Math.cos(tilt)
+  const yy = y * cosT + z * sinT
+  const zz = z * cosT - y * sinT * 0.25
   const s = focal / (focal - zz)
   return { x: centreX + (x - centreX) * s, y: 10 + (yy - 10) * s, s, z: zz }
 }
 
-function onWall([x, y, z]: Vec, centreX: number, lightX: number, focal = FOCAL): { x: number; y: number } {
+function onWall([x, y, z]: Vec, centreX: number, lightX: number, focal = FOCAL, tilt = TILT): { x: number; y: number } {
   const d = z - WALL_Z
   // The shadow falls away from the light.
-  const p = project([x - d * 0.45 * lightX, y + d * 0.2, WALL_Z], centreX, focal)
+  const p = project([x - d * 0.45 * lightX, y + d * 0.2, WALL_Z], centreX, focal, tilt)
   return { x: p.x, y: p.y }
 }
 
@@ -136,6 +138,7 @@ function drift(index: number, t: number, amount: number): number {
 export function drawMobile(composition: MobileComposition, time = 0, turned = 0, moment: Moment = {}): Drawing[] {
   const cx = composition.hookX
   const focal = composition.focal ?? FOCAL
+  const tilt = Math.max(0.02, Math.min(0.6, moment.tilt ?? TILT))
   const sway = moment.sway ?? 0
   const lightX = moment.lightX ?? DEFAULT_LIGHT_X
   const lightZ = Math.sqrt(1 - lightX * lightX)
@@ -151,8 +154,8 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
   let index = 0
 
   const wire = (points: Vec[], curve: boolean, width = 2.1) => {
-    const p = points.map((v) => project(v, cx, focal))
-    const w = points.map((v) => onWall(v, cx, lightX, focal))
+    const p = points.map((v) => project(v, cx, focal, tilt))
+    const w = points.map((v) => onWall(v, cx, lightX, focal, tilt))
     const path = (q: { x: number; y: number }[]) =>
       curve && q.length === 3
         ? `M${n(q[0]!.x)} ${n(q[0]!.y)} Q${n(q[1]!.x)} ${n(q[1]!.y)} ${n(q[2]!.x)} ${n(q[2]!.y)}`
@@ -174,8 +177,8 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
       if (!sheet) return
       const angle = node.turn + drift(i + 20, time, 0.85) + turned * (1.5 + Math.min(level, 3) * 0.25)
       const centre: Vec = [top[0], top[1] + sheet.r, top[2]]
-      const p = project(centre, cx, focal)
-      const a = project(from, cx, focal)
+      const p = project(centre, cx, focal, tilt)
+      const a = project(from, cx, focal, tilt)
       wire([from, top], false, 1.1)
       const cos = Math.cos(angle)
       const sin = Math.sin(angle)
@@ -184,7 +187,7 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
       const nx = reverse ? sin : -sin
       const nz = Math.abs(cos)
       const lit = Math.max(0, nx * lightX + nz * lightZ)
-      const wall = onWall(centre, cx, lightX, focal)
+      const wall = onWall(centre, cx, lightX, focal, tilt)
       out.push({
         kind: 'shape',
         slot: node.slot,
@@ -220,7 +223,7 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
       const c: Vec = [2 * top[0] - (a[0] + b[0]) / 2, 2 * top[1] - (a[1] + b[1]) / 2, 2 * top[2] - (a[2] + b[2]) / 2]
       wire([a, c, b], true)
       for (const end of [a, b]) {
-        const q = project(end, cx, focal)
+        const q = project(end, cx, focal, tilt)
         out.push({ kind: 'joint', x: n(q.x), y: n(q.y), r: n(1.9 * q.s), depth: q.z + 0.02, haze: haze(q.z) })
       }
       if (node.ends[0]) place(a, node.ends[0], level + 1)

@@ -183,7 +183,7 @@ async function journeyA(page, base) {
   console.log('\nJourney A — the complete loop')
 
   await page.goto(`${base}#/`)
-  await expectVisible(page, 'Prepare for a conversation you are not looking forward to.', 'home opens with an invitation, not a dashboard')
+  await expectVisible(page, 'You are not starting from nothing.', 'home opens with an invitation, not a dashboard')
   await expectVisible(page, 'Or start from any other situation.', 'it offers to start from any real situation')
 
   // 1. Describe a situation.

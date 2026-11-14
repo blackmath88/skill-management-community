@@ -19,6 +19,29 @@ export function createDemoUserData(): UserData {
   const data = emptyUserData(T(0))
   data.profile.displayName = 'Demo records (fictional)'
 
+  // The fictional person's own map: a target, where they placed themselves, and a season under
+  // way. Placements are statements, not records, and the demo shows both kinds side by side.
+  data.profile.journey = {
+    version: 1,
+    targetId: 'leading',
+    claims: [
+      { capabilityId: 'frame-challenge', level: 'can-do', at: T(0) },
+      { capabilityId: 'make-tradeoff-visible', level: 'with-help', at: T(0) },
+      { capabilityId: 'clarify-ownership', level: 'with-help', at: T(0) },
+      { capabilityId: 'invite-disagreement', level: 'not-yet', at: T(0) },
+      { capabilityId: 'reflect-revise', level: 'regularly', at: T(0) },
+      { capabilityId: 'od-clarify-mandate', level: 'can-do', at: T(0) },
+      { capabilityId: 'ai-brief-assistant', level: 'regularly', at: T(0) },
+      { capabilityId: 'ai-check-before-trust', level: 'with-help', at: T(0) },
+      { capabilityId: 'compare-expectations', level: 'can-do', at: T(0) },
+    ],
+    seasons: [
+      { id: 'demo-season-1', branchId: 'direction', capabilityIds: ['frame-challenge'], startedOn: '2026-08-17', reviewOn: '2026-09-28', endedOn: '2026-09-30', closing: 'Naming the obstacle first became a habit in two meetings. In the third I skipped it under time pressure.' },
+      { id: 'demo-season-2', branchId: 'coordination', capabilityIds: ['clarify-ownership'], startedOn: '2026-10-01', reviewOn: '2026-12-11' },
+    ],
+    queue: ['relationships'],
+  }
+
   data.directions.push({
     id: 'demo-direction',
     text: 'I want recurring questions in my working groups to end with a decision somebody owns.',

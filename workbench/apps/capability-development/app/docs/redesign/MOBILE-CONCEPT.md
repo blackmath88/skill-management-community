@@ -15,6 +15,81 @@ it, the light in the room moves through the day.
 
 ![](mobile-3d.png)
 
+## The journey (current direction, 14 November, evening)
+
+The owner redirected the mobile from a quiet companion to the main screen: **your alter ego as a
+skill tree**. This section describes what is built for that. It supersedes the earlier rule that
+the mobile "does not grow with competence", and it departs from the repository's research in
+three places, listed at the end.
+
+![](mobile-tree.png)
+
+**1. Nobody starts from nothing.** `Begin` asks what you are building towards and where you
+already stand on its skills, in your own judgement (not yet · with help · I can do this · I do
+this regularly). The first version of the mobile is built from the answers at once.
+
+![](begin.png)
+
+**2. A placement is a statement, not evidence.** This is the mechanic that keeps the tree
+honest. What you say primes a piece; only what you record paints it. The two never merge, and a
+placement credits no practice experience.
+
+| Made as | Means exactly | Comes from |
+|---|---|---|
+| Wire outline | Nothing said, nothing recorded — a piece you could add | — |
+| Firm outline in the branch colour | The same, and part of your target | Your target |
+| Primed, unpainted | You placed yourself on it; no records yet | Your placement |
+| Painted | Applied in writing to a real situation | Records |
+| One engraved line | Rehearsed and reflected on | Records |
+| Two lines and a pierced hole | Tried for real, once | Records |
+| An inlaid ring | Tried for real more than once | Records |
+| A second, smaller pendant | Tried in more than one setting | Records |
+
+Detail accumulates and is never removed. Size and colour do not change with it.
+
+**3. A target constellation.** Three drafts, each cutting across branches: *Leading a group to a
+decision*, *Working well with AI*, *Future skills (a draft)*. Choosing one brings its pieces
+forward and draws the ones you lack as firm outlines. Switching loses nothing.
+
+**4. Time: seasons, and a road.** One branch is active at a time, for a chosen number of weeks,
+with a date to look back on. Past that date a season is "due a look", never late. The road shows
+*Now* (the season), *Next* (what you queued, then where your target is still open) and *Towards*
+(the target and how much of it is practised). Closing a season records what it left you with.
+
+**5. A piece is a door.** Selecting one opens its card: what it looks like in practice, where
+you place yourself, its dated history in your own words, and one action — *Start this* or
+*Practise this again* — which opens the plan with that skill already linked.
+
+![](mobile-tree-card.png)
+
+**Vocabulary.** Twenty-four skills on seven branches. Twelve were in the app (leadership,
+collaboration). Six come from the repository's "AI Skills in the Wild" scenario catalogue and six
+from the "Startkarte für OE-Praxis" in the skills research report, translated. All are
+provisional authored maps. "Future skills" is a target composed from these, because the research
+names future-skills frameworks without listing their contents and the product concept rules out
+a universal catalogue.
+
+**Why it should work on people** — hypotheses, none tested here. Building something from your own
+answers creates ownership and opens with strengths. A shared vocabulary gives words for what you
+already do. A chosen, visible target pulls harder than an abstract goal, and because you chose it
+the gap reads as a direction, not a deficit. An unfinished shape invites completion. A season
+makes "now" small enough to act on. Nothing is ever lost, so there is nothing to be anxious about
+returning to.
+
+**Departures from the repository's research, taken deliberately.**
+- *Alter ego first.* The research decision was a companion beside you, with "represents me"
+  tested separately.
+- *Richer reads as more capable.* The research called this its strongest objection. The tree
+  accepts it, so each visual step is tied to one checkable fact about the records.
+- *A shared vocabulary to place yourself against.* Consistent with "no universal taxonomy" only
+  while placement is private self-assessment and vocabularies stay swappable content packs.
+  There is no employer view and nothing is inferred.
+
+**Still open.** No XP on the main screen (it would turn the tree into a score). Seasons do not
+yet change what Practice suggests. The five-sheet personal mobile and its chosen memories still
+exist under Settings and as the side-rail mark; whether memories move onto skill pieces is
+undecided. The target lists and the branch structure need a real standard to be tried against.
+
 ## Grammar
 
 | Element | What it is | Rule |

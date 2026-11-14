@@ -9,9 +9,10 @@
 import { createRegistry, type ContentRegistry } from './registry'
 import { LEADERSHIP_PACK } from './leadership/pack'
 import { COLLABORATION_PACK } from './collaboration/pack'
+import { AI_PACK, ORGANISATIONAL_PACK } from './practice/packs'
 import type { ContentPack } from './types'
 
-export const INSTALLED_PACKS: readonly ContentPack[] = [LEADERSHIP_PACK, COLLABORATION_PACK]
+export const INSTALLED_PACKS: readonly ContentPack[] = [LEADERSHIP_PACK, COLLABORATION_PACK, AI_PACK, ORGANISATIONAL_PACK]
 
 export function createContentRegistry(packs: readonly ContentPack[] = INSTALLED_PACKS): ContentRegistry {
   return createRegistry(packs)

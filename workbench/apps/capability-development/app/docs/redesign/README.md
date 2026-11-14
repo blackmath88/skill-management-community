@@ -33,8 +33,11 @@ Before/after pairs at 1280 and 390 px are in `before/` and `after/`
 
 ## The mobile
 
-Concept, grammar, what it answers to and what it never answers to, and how it scales to a skill
-set of thirty: [MOBILE-CONCEPT.md](MOBILE-CONCEPT.md).
+Home is now the mobile as a skill tree: a first build from your own placements, a target
+constellation, seasons with a road ahead, and a card behind every piece. Concept, the piece
+states, and the departures from the earlier brief: [MOBILE-CONCEPT.md](MOBILE-CONCEPT.md).
+
+![](mobile-tree.png)
 
 ![](mobile-3d.png)
 

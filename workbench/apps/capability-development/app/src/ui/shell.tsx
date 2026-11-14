@@ -16,6 +16,7 @@ import { deriveMobileView } from '~/mobile/view'
 import { HomePage } from './pages/Home'
 import { PracticePage } from './pages/Practice'
 import { PreparePage } from './pages/Prepare'
+import { BeginPage } from './pages/Begin'
 import { RepertoirePage } from './pages/Repertoire'
 import { SituationsPage, NewSituationPage, SituationPage } from './pages/Situations'
 import { CampaignPage } from './pages/Campaign'
@@ -62,7 +63,7 @@ const NAV: { section: Section; route: Route; label: string }[] = [
 const SECTION_NAV: Record<Section, { route: Route; label: string; also?: Route['name'][] }[]> = {
   home: [],
   practice: [
-    { route: { name: 'practice' }, label: 'Overview', also: ['prepare', 'activity'] },
+    { route: { name: 'practice' }, label: 'Overview', also: ['prepare', 'practise', 'activity'] },
     { route: { name: 'campaign' }, label: 'Current journey' },
     { route: { name: 'situations' }, label: 'Situations', also: ['new-situation', 'situation'] },
   ],
@@ -108,6 +109,10 @@ function Page({ route }: { route: Route }) {
       return <PracticePage />
     case 'prepare':
       return <PreparePage key={route.situationId ?? 'new'} {...(route.situationId !== undefined ? { situationId: route.situationId } : {})} />
+    case 'begin':
+      return <BeginPage />
+    case 'practise':
+      return <PreparePage key={`skill-${route.capabilityId}`} capabilityId={route.capabilityId} />
     case 'repertoire':
       return <RepertoirePage />
     case 'situations':

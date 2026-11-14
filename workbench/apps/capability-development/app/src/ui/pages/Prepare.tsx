@@ -25,10 +25,11 @@ function inAWeek(): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
-export function PreparePage({ situationId }: { situationId?: string }) {
+export function PreparePage({ situationId, capabilityId }: { situationId?: string; capabilityId?: string }) {
   const { state, run, content } = useApp()
   const save = useSave()
-  const [capabilityIds, setCapabilityIds] = useState<string[]>([])
+  const [capabilityIds, setCapabilityIds] = useState<string[]>(capabilityId ? [capabilityId] : [])
+  const skill = capabilityId ? content.capability(capabilityId) : undefined
   const existing = situationId ? state.data.situations.find((s) => s.id === situationId) : undefined
   const [about, setAbout] = useState({ title: '', context: '', description: '', desiredOutcome: '' })
   const [title, setTitle] = useState('')
@@ -89,13 +90,24 @@ export function PreparePage({ situationId }: { situationId?: string }) {
 
   return (
     <div className="stack">
-      <PageHead kicker="Practice" title={existing ? 'Prepare the next attempt' : 'Prepare a difficult discussion'}>
+      <PageHead kicker="Practice" title={existing ? 'Prepare the next attempt' : skill ? 'Plan where you will try it' : 'Prepare a difficult discussion'}>
         <p>
           {existing
             ? 'Same situation, a fresh plan. What you learned last time is yours to use; nothing is carried over for you.'
             : 'A real one that is coming up. Write roles rather than names — “the project lead”, not who it is.'}
         </p>
       </PageHead>
+
+      {skill ? (
+        <section className="surface">
+          <p className="kicker">You are practising</p>
+          <p>
+            <strong>{skill.title}</strong>
+          </p>
+          <p className="meta">{skill.observable}</p>
+          <p className="meta">One way to try it: {skill.nextExperiment}</p>
+        </section>
+      ) : null}
 
       {existing ? (
         <section className="surface">
@@ -111,7 +123,7 @@ export function PreparePage({ situationId }: { situationId?: string }) {
       ) : (
         <section aria-labelledby="about-heading">
           <h2 id="about-heading">The discussion</h2>
-          <Field label="What is it about?" hint="A few words you would recognise it by.">
+          <Field label="What is it about?" hint={skill ? 'The real occasion where you will try this: a meeting, a task, a conversation.' : 'A few words you would recognise it by.'}>
             <input type="text" value={about.title} onChange={(e) => setAbout({ ...about, title: e.target.value })} />
           </Field>
           <Field label="Where, and with whom?" optional hint="The setting: “weekly team meeting”, “one-to-one with the project lead”.">
@@ -153,7 +165,7 @@ export function PreparePage({ situationId }: { situationId?: string }) {
           <input type="date" value={plan.reviewOn} onChange={set('reviewOn')} />
         </Field>
 
-        <details className="more">
+        <details className="more" open={capabilityId !== undefined ? true : undefined}>
           <summary>
             Name what you are practising <span className="meta">optional</span>
           </summary>

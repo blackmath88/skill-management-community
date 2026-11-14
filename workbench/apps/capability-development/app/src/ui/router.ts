@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react'
 export type Route =
   | { name: 'home' }
   | { name: 'practice' }
+  | { name: 'begin' }
+  | { name: 'practise'; capabilityId: string }
   | { name: 'prepare'; situationId?: string }
   | { name: 'repertoire' }
   | { name: 'situations' }
@@ -38,6 +40,10 @@ export function parseRoute(hash: string): Route {
   switch (head) {
     case 'practice':
       return { name: 'practice' }
+    case 'begin':
+      return { name: 'begin' }
+    case 'practise':
+      return second !== undefined ? { name: 'practise', capabilityId: decodeURIComponent(second) } : { name: 'practice' }
     case 'prepare':
       return second !== undefined ? { name: 'prepare', situationId: decodeURIComponent(second) } : { name: 'prepare' }
     case 'repertoire':
@@ -71,6 +77,10 @@ export function href(route: Route): string {
       return '#/'
     case 'practice':
       return '#/practice'
+    case 'begin':
+      return '#/begin'
+    case 'practise':
+      return `#/practise/${encodeURIComponent(route.capabilityId)}`
     case 'prepare':
       return route.situationId !== undefined ? `#/prepare/${encodeURIComponent(route.situationId)}` : '#/prepare'
     case 'repertoire':
@@ -106,10 +116,12 @@ export type Section = 'home' | 'practice' | 'repertoire' | 'settings'
 export function sectionOf(route: Route): Section {
   switch (route.name) {
     case 'home':
+    case 'begin':
     case 'unknown':
       return 'home'
     case 'practice':
     case 'prepare':
+    case 'practise':
     case 'campaign':
     case 'situations':
     case 'new-situation':

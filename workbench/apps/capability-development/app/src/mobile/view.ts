@@ -20,11 +20,31 @@ import {
   type MobilePalette,
 } from './catalogue'
 
+/**
+ * How one sheet is made. Used by the skill tree, where each step up means one checkable thing
+ * about the records behind it; see ~/mobile/tree. Absent, a sheet is simply painted.
+ */
+export interface SheetFinish {
+  state: 'outline' | 'claimed' | 'explored' | 'rehearsed' | 'tried' | 'repeated' | 'transferred'
+  /** Part of what the person is building towards. */
+  target: boolean
+  /** Drawn back, because something else is the subject right now. */
+  quiet: boolean
+}
+
 export interface MobileDrawing {
   composition: MobileComposition
   palette: MobilePalette
-  /** Slots that carry a memory. */
+  /** Slots that carry a mark: a memory on the personal mobile, the season's focus on the tree. */
   marked: readonly number[]
+  /** One per slot, when the sheets differ in how they are made. */
+  finish?: readonly SheetFinish[]
+  /** How much each slot weighs, 0 to 1. Defaults to 1 for a marked slot and 0 otherwise. */
+  weights?: readonly number[]
+  /** A name per slot, shown beside a sheet under the pointer or when selected. */
+  labels?: readonly string[]
+  /** Named groups of slots, captioned beneath where they hang. */
+  groups?: readonly { title: string; slots: readonly number[]; active?: boolean }[]
 }
 
 export interface MobileMemory {

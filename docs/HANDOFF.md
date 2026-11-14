@@ -130,3 +130,10 @@ Owner requested deployment for review. Added a branch-scoped Pages workflow that
 - Evidence (executed locally in the run): typecheck, lint, unit tests and production build passed; three browser suites passed against the built app in Chromium. Exact counts are in the run report and reproducible with the commands in the redesign notes.
 - Not done: no CI run was observed for this branch (the verification workflow triggers only on the preview branch); the hosted Pages preview still shows the earlier build.
 - Next: owner reviews the branch; if accepted, decide whether it replaces the preview branch, which is what triggers verification and Pages.
+
+## Skilling Me Softly: mobile as skill tree — 14 November 2026, evening
+
+- Authority: owner direction in conversation — the mobile becomes the main screen and alter ego, with a first build from self-placement, target constellations and a time-based road. Owner approved replacing the Pages preview with the redesign branch.
+- Changed: Home is the grown mobile as a skill tree; `Begin` flow; journey (placements, target, seasons, queue) as an optional `Profile.journey`; two vocabulary packs from this repository's research (AI practice, organisational practice); three draft targets. Detail: [mobile concept](../workbench/apps/capability-development/app/docs/redesign/MOBILE-CONCEPT.md).
+- Deliberate departures from earlier documents: the brief's "does not grow with competence" and the research decision to start with a companion rather than an alter ego. Both are recorded in the concept note with the reasoning.
+- Not done: XP on the main screen, seasons influencing Practice, a real organisational standard vocabulary, any pilot or user test. Effects on motivation are hypotheses.

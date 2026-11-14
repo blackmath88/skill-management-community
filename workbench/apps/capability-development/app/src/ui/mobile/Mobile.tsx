@@ -25,6 +25,7 @@ import { shapePath, VIEW_BOX } from '~/mobile/catalogue'
 import { drawMobile, lightForHour, roomLight, sheetColours, wireColour, type ShapeDrawing } from '~/mobile/scene'
 import type { MobileDrawing } from '~/mobile/view'
 import { onMobileNudge } from './nudge'
+import { SheetArt } from './SheetArt'
 
 function useReducedMotion(): boolean {
   const query = typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null
@@ -48,8 +49,13 @@ interface Pose {
   time: number
   turned: number
   sway: number
+  tilt: number
   weights: number[]
 }
+
+/** The camera's resting height, and how far a vertical drag may raise or lower it. */
+const TILT = 0.2
+const TILT_RANGE: [number, number] = [0.04, 0.5]
 
 export function Mobile({
   drawing,
@@ -68,20 +74,21 @@ export function Mobile({
   /** A quiet picture: no motion, no controls, no shadow. For use as a mark. */
   still?: boolean
 }) {
-  const { composition, palette, marked } = drawing
+  const { composition, palette, marked, finish, labels, groups } = drawing
+  const [hovered, setHovered] = useState<number | null>(null)
   const id = useId().replace(/:/g, '')
   const prefersReduced = useReducedMotion()
   const reduced = prefersReduced || still
   const count = composition.shapes.length
-  const targets: number[] = Array.from({ length: count }, (_, slot) => (marked.includes(slot) ? 1 : 0))
-  const markKey = targets.join('')
+  const targets: number[] = Array.from({ length: count }, (_, slot) => drawing.weights?.[slot] ?? (marked.includes(slot) ? 1 : 0))
+  const markKey = targets.map((w) => w.toFixed(2)).join(',')
   const [hour] = useState(() => new Date().getHours())
   const lightX = lightForHour(hour)
   const room = roomLight(hour)
-  const [pose, setPose] = useState<Pose>(() => ({ time: 0, turned: 0, sway: 0, weights: targets }))
+  const [pose, setPose] = useState<Pose>(() => ({ time: 0, turned: 0, sway: 0, tilt: TILT, weights: targets }))
   const motion = useRef({
     turned: 0, velocity: 0, sway: 0, swayVelocity: 0, lean: 0, leanTarget: 0,
-    time: 0, last: 0, dragging: false, lastX: 0, travelled: 0, visible: true,
+    time: 0, last: 0, dragging: false, lastX: 0, lastY: 0, travelled: 0, visible: true, tilt: TILT, calm: false,
     weights: targets, targets, entered: false,
   })
   const figure = useRef<HTMLElement>(null)
@@ -89,8 +96,8 @@ export function Mobile({
   // What is hung changed: tell the loop, or under reduced motion simply show it.
   useEffect(() => {
     const m = motion.current
-    const next = markKey.split('').map(Number)
-    const changed = m.targets.join('') !== markKey
+    const next = markKey === '' ? [] : markKey.split(',').map(Number)
+    const changed = m.targets.map((w) => w.toFixed(2)).join(',') !== markKey
     m.targets = next
     if (m.weights.length !== next.length) m.weights = next
     if (reduced) {
@@ -116,7 +123,8 @@ export function Mobile({
       const dt = m.last === 0 ? 0 : Math.min(0.05, (now - m.last) / 1000)
       m.last = now
       if (m.visible) {
-        m.time += dt
+        // Under the pointer it all but holds still, so a moving target can be aimed at.
+        m.time += dt * (m.calm ? 0.12 : 1)
         if (!m.dragging) {
           m.turned += m.velocity * dt
           m.velocity *= Math.exp(-dt / EASE)
@@ -130,7 +138,7 @@ export function Mobile({
           const target = m.targets[i] ?? 0
           return Math.abs(target - w) < 0.002 ? target : w + (target - w) * Math.min(1, dt * 2.6)
         })
-        setPose({ time: m.time, turned: m.turned + m.lean, sway: m.sway, weights: m.weights })
+        setPose({ time: m.time, turned: m.turned + m.lean, sway: m.sway, tilt: m.tilt, weights: m.weights })
       }
       frame = requestAnimationFrame(tick)
     }
@@ -175,6 +183,7 @@ export function Mobile({
           const m = motion.current
           m.dragging = true
           m.lastX = e.clientX
+          m.lastY = e.clientY
           m.travelled = 0
           m.velocity = 0
         },
@@ -188,11 +197,15 @@ export function Mobile({
             return
           }
           const dx = e.clientX - m.lastX
+          const dy = e.clientY - m.lastY
           m.lastX = e.clientX
-          m.travelled += Math.abs(dx)
+          m.lastY = e.clientY
+          m.travelled += Math.abs(dx) + Math.abs(dy)
           m.turned += dx * DRAG
+          // Dragging down looks from higher up; dragging up, from nearer level.
+          m.tilt = clamp(m.tilt + dy * 0.004, TILT_RANGE[0], TILT_RANGE[1])
           m.velocity = reduced ? 0 : dx * DRAG * 40
-          if (reduced) setPose((p) => ({ ...p, time: 0, turned: m.turned }))
+          if (reduced) setPose((p) => ({ ...p, time: 0, turned: m.turned, tilt: m.tilt }))
         },
         onPointerUp: () => {
           motion.current.dragging = false
@@ -207,6 +220,7 @@ export function Mobile({
     sway: reduced ? 0 : pose.sway,
     weights: pose.weights.length === count ? pose.weights : targets,
     lightX,
+    tilt: pose.tilt,
   })
   const description =
     `A mobile: the “${composition.title}” arrangement in ${palette.title.toLowerCase()}. ` +
@@ -222,6 +236,33 @@ export function Mobile({
     return { def, d, band, transform: `translate(${shape.x} ${shape.y}) scale(${(shape.scale * shape.squeeze).toFixed(3)} ${shape.scale}) rotate(${def.rot})` }
   }
 
+  const sheets = parts.filter((p): p is ShapeDrawing => p.kind === 'shape')
+  const named = labels ? sheets.filter((p) => p.slot === selectedSlot || p.slot === hovered) : []
+  const captionSize = Number((composition.viewBox ?? VIEW_BOX).split(' ')[2]) / 54
+  const captions: { title: string; x: number; y: number; active: boolean }[] = []
+  for (const group of [...(groups ?? [])]
+    .map((g) => {
+      const own = sheets.filter((p) => g.slots.includes(p.slot))
+      return own.length === 0
+        ? null
+        : {
+            title: g.title,
+            active: g.active ?? false,
+            x: own.reduce((sum, p) => sum + p.x, 0) / own.length,
+            y: Math.max(...own.map((p) => p.y + (composition.shapes[p.slot]?.r ?? 0) * p.scale * (finish?.[p.slot]?.state === 'transferred' ? 2.1 : 1))) + captionSize * 1.7,
+          }
+    })
+    .filter((g) => g !== null)
+    .sort((a, b) => a.x - b.x)) {
+    const width = (t: string) => t.length * captionSize * 0.7
+    let y = group.y
+    for (let pass = 0; pass < 6; pass += 1) {
+      const clash = captions.find((c) => Math.abs(c.x - group.x) < (width(c.title) + width(group.title)) / 2 + captionSize && Math.abs(c.y - y) < captionSize * 1.4)
+      if (!clash) break
+      y = clash.y + captionSize * 1.5
+    }
+    captions.push({ ...group, y })
+  }
   const [boxX, boxY, boxW, boxH] = (composition.viewBox ?? VIEW_BOX).split(' ').map(Number) as [number, number, number, number]
   const hookX = composition.hookX
 
@@ -249,6 +290,15 @@ export function Mobile({
               </linearGradient>
             )
           })}
+          {finish
+            ? composition.shapes.map((def, slot) =>
+                def.kind === 'ring' ? null : (
+                  <clipPath key={slot} id={`${id}-c${slot}`}>
+                    <path d={shapePath(def.kind, def.r)} />
+                  </clipPath>
+                ),
+              )
+            : null}
         </defs>
 
         {/* The room: light falling on the wall from the side the light comes from, and the fixing
@@ -267,11 +317,11 @@ export function Mobile({
         {still ? null : (
           <g filter={`url(#${id}-soft)`} opacity="0.1" fill="#2a251d" stroke="#2a251d">
             {parts.map((part, i) => {
-              if (part.kind !== 'shape') return null
+              if (part.kind !== 'shape' || finish?.[part.slot]?.state === 'outline') return null
               const s = sheet(part)
               if (!s) return null
               return (
-                <g key={i} transform={`translate(${part.shadow[0]} ${part.shadow[1]})`}>
+                <g key={i} transform={`translate(${part.shadow[0]} ${part.shadow[1]})`} opacity={finish?.[part.slot]?.state === 'claimed' ? 0.5 : 1}>
                   <path d={s.d} transform={s.transform} {...(s.def.kind === 'ring' ? { fill: 'none', strokeWidth: s.band } : { stroke: 'none' })} />
                 </g>
               )
@@ -292,45 +342,73 @@ export function Mobile({
           const colours = sheetColours(palette.tones[def.tone], part)
           const weight = pose.weights[part.slot] ?? 0
           const clickable = onSelect !== undefined && (selectable === 'all' || marked.includes(part.slot))
+          const made = finish?.[part.slot]
+          const solid = made === undefined || (made.state !== 'outline' && made.state !== 'claimed')
           const top = part.y - def.r * part.scale
           // The far edge of the sheet's thickness shows on the side turned away from the viewer.
           const rim = (part.reverse ? -1 : 1) * 1.7 * (1 - part.squeeze)
-          // The bead slides down the thread as the memory settles.
-          const along = 0.1 + 0.4 * easeOut(weight)
+          // The bead slides down the thread as it settles.
+          const isMarked = marked.includes(part.slot)
+          const along = 0.1 + 0.4 * easeOut(made ? 1 : weight)
           const inlay = Math.max(2.5, def.r * 0.18) * part.scale * weight
+          const subject = selectedSlot === part.slot || hovered === part.slot
           return (
-            <g key={i} className={clickable ? 'is-clickable' : undefined} onClick={() => (clickable ? pick(part.slot) : undefined)}>
+            <g
+              key={i}
+              className={clickable ? 'is-clickable' : undefined}
+              opacity={made?.quiet && !subject ? 0.5 : 1}
+              onClick={() => (clickable ? pick(part.slot) : undefined)}
+              onPointerEnter={() => {
+                if (!labels && !clickable) return
+                motion.current.calm = true
+                setHovered(part.slot)
+              }}
+              onPointerLeave={() => {
+                motion.current.calm = false
+                setHovered((h) => (h === part.slot ? null : h))
+              }}
+            >
+              {/* A generous target: the sheet is small and it moves. */}
+              {clickable ? <circle cx={part.x} cy={part.y} r={(def.r + 7) * part.scale} fill="transparent" /> : null}
               {selectedSlot === part.slot ? (
                 <ellipse cx={part.x} cy={part.y} rx={(def.r + 8) * part.scale * Math.max(0.4, part.squeeze)} ry={(def.r + 8) * part.scale} fill="none" stroke={palette.wire} strokeWidth="1.4" strokeDasharray="3 4" />
               ) : null}
-              {def.kind === 'ring' ? (
+              {solid ? (
+                <path d={s.d} transform={`translate(${rim} 0) ${s.transform}`} {...(def.kind === 'ring' ? { fill: 'none', stroke: colours.bottom, strokeWidth: s.band } : { fill: colours.bottom })} />
+              ) : null}
+              <g transform={s.transform}>
+                <SheetArt def={def} d={s.d} band={s.band} finish={made} colours={colours} tone={palette.tones[def.tone]} wire={palette.wire} gradient={`${id}-g${part.slot}`} clip={`${id}-c${part.slot}`} />
+              </g>
+              {/* A mark is carried by form, not by colour: a bead on the thread and, on the
+                  personal mobile, an inlay on the sheet. */}
+              {(made ? isMarked : weight > 0.01) ? (
                 <>
-                  <path d={s.d} transform={`translate(${rim} 0) ${s.transform}`} fill="none" stroke={colours.bottom} strokeWidth={s.band} />
-                  <path d={s.d} transform={s.transform} fill="none" stroke={`url(#${id}-g${part.slot})`} strokeWidth={s.band} />
-                </>
-              ) : (
-                <>
-                  <path d={s.d} transform={`translate(${rim} 0) ${s.transform}`} fill={colours.bottom} />
-                  <path d={s.d} transform={s.transform} fill={`url(#${id}-g${part.slot})`} stroke={colours.edge} strokeWidth="0.8" vectorEffect="non-scaling-stroke" strokeOpacity="0.55" />
-                </>
-              )}
-              {/* A mark is carried by form, not by colour: an inlay on the sheet and a bead on
-                  its thread. */}
-              {weight > 0.01 ? (
-                <>
-                  <ellipse cx={part.x} cy={part.y} rx={inlay * Math.max(0.3, part.squeeze)} ry={inlay} fill="#fffdf8" stroke={palette.wire} strokeWidth="1" />
+                  {made ? null : <ellipse cx={part.x} cy={part.y} rx={inlay * Math.max(0.3, part.squeeze)} ry={inlay} fill="#fffdf8" stroke={palette.wire} strokeWidth="1" />}
                   <circle
                     cx={part.threadTop[0] + (part.x - part.threadTop[0]) * along}
                     cy={part.threadTop[1] + (top - part.threadTop[1]) * along}
                     r={Math.min(3.2, def.r * 0.24) * part.scale}
                     fill={palette.wire}
-                    opacity={Math.min(1, weight * 3)}
+                    opacity={made ? 1 : Math.min(1, weight * 3)}
                   />
                 </>
               ) : null}
             </g>
           )
         })}
+        {/* A caption under each bough, so the picture reads as branches and not only as pieces.
+            Captions that would run into each other step down a line. */}
+        {captions.map((c) => (
+          <text key={c.title} className={`mobile__caption${c.active ? ' is-active' : ''}`} x={c.x} y={c.y} textAnchor="middle" style={{ fontSize: captionSize, strokeWidth: boxW / 160 }}>
+            {c.title}
+          </text>
+        ))}
+        {/* The name of the piece under the pointer, or the selected one, above everything. */}
+        {named.map((part) => (
+          <text key={part.slot} className="mobile__label" x={part.x} y={part.y - ((composition.shapes[part.slot]?.r ?? 0) + 7) * part.scale} textAnchor="middle" style={{ fontSize: boxW / 44, strokeWidth: boxW / 130 }}>
+            {labels?.[part.slot]}
+          </text>
+        ))}
       </svg>
       {still ? null : <figcaption className="visually-hidden">{description}</figcaption>}
       {still ? null : (

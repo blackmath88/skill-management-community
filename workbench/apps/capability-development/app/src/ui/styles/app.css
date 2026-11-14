@@ -454,3 +454,65 @@ details.more + .row, .field + .row { margin-top: var(--s4); }
   .home__lead > section .mobile--regular { margin-top: calc(-1 * var(--s5) - 2px); }
   .home__lead > section .mobile--regular svg { max-width: 30rem; }
 }
+
+.mobile__label { font: 600 11px var(--font-sans); fill: var(--ink); paint-order: stroke; stroke: var(--canvas); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+
+/* ---------- The main screen: the mobile as a skill tree */
+.tree-home { display: grid; gap: var(--s4); }
+.tree-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--s3); }
+.tree-head h1 { margin: 0; font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+.tree-head__target { min-width: min(100%, 17rem); }
+.tree-head__target label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-muted); }
+.tree-main { display: grid; gap: var(--s4); }
+.tree-stage { min-width: 0; }
+.tree-stage .mobile svg { max-height: min(78vh, 46rem); width: 100%; }
+.tree-stage__legend { text-align: center; margin: var(--s2) 0 0; }
+@media (min-width: 62rem) {
+  .tree-main { grid-template-columns: minmax(0, 2.1fr) minmax(17rem, 1fr); align-items: start; }
+  .tree-side { position: sticky; top: var(--s3); max-height: calc(100vh - 2 * var(--s3)); overflow-y: auto; }
+}
+.skill-card, .road { border: 1px solid var(--rule); border-radius: var(--radius-lg); background: var(--surface); padding: var(--s4); }
+.skill-card { border-color: var(--ink); }
+.skill-card h2, .road h2 { margin-bottom: var(--s2); }
+.skill-card .field { margin: var(--s3) 0; }
+.trail { list-style: none; margin: 0 0 var(--s3); padding: 0 0 0 var(--s3); border-left: 2px solid var(--rule); }
+.trail li { margin-bottom: var(--s2); position: relative; }
+.trail li::before { content: ''; position: absolute; left: calc(-1 * var(--s3) - 5px); top: 0.5em; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.trail li p { margin: 0; }
+.road__stops { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); }
+.road__stop { border-left: 3px solid var(--rule); padding-left: var(--s3); }
+.road__stop > :last-child { margin-bottom: 0; }
+.road__stop p { margin-bottom: var(--s2); }
+.road__stop--now { border-left-color: var(--accent); }
+.road__stop select { width: auto; flex: 1 1 8rem; }
+.road__list { list-style: none; margin: 0; padding: 0; }
+.season-bar { height: 6px; background: var(--surface-sunken); border-radius: 3px; margin: 0 0 var(--s3); overflow: hidden; }
+.season-bar span { display: block; height: 100%; background: var(--ink); border-radius: 3px; }
+.next-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s2) var(--s4); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: var(--s3) 0; }
+.next-strip p { margin: 0; flex: 1 1 18rem; }
+.branches__grid { display: grid; gap: var(--s4); grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.branch-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s1); }
+.branch-list.is-active h3 { box-shadow: inset 0 -2px 0 var(--accent); display: inline-block; }
+.piece-button { width: 100%; display: block; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--s2) var(--s3); font-weight: 500; min-height: 44px; }
+.piece-button:hover:not(:disabled) { background: var(--surface); color: var(--ink); border-color: var(--ink); }
+.piece-button[aria-pressed='true'] { border-color: var(--ink); background: var(--surface); box-shadow: inset 3px 0 0 var(--ink); }
+.piece-button .meta { display: block; font-weight: 400; font-size: 0.8rem; }
+.piece-button--outline { border-style: dashed; }
+.piece-button--claimed { border-style: dotted; border-color: var(--ink-muted); }
+.placing h3 { margin-top: var(--s4); }
+.placing__row { border: none; border-top: 1px solid var(--rule); border-radius: 0; padding: var(--s3) 0; margin: 0; }
+.placing__row legend { padding: 0; font-size: 1rem; }
+.placing__row .meta { margin: 0 0 var(--s2); max-width: var(--measure); }
+.placing__levels { display: flex; flex-wrap: wrap; gap: var(--s1); }
+.placing__levels label { border: 1px solid var(--rule-strong); border-radius: 999px; padding: 0.35rem 0.8rem; font-weight: 500; font-size: 0.88rem; cursor: pointer; margin: 0; min-height: 36px; display: inline-flex; align-items: center; }
+.placing__levels label.is-on { background: var(--ink); color: var(--surface); }
+.placing__levels input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.placing__levels label:focus-within { outline: 3px solid var(--focus); outline-offset: 1px; }
+
+@media (min-width: 60rem) { main:has(.tree-home) { max-width: 82rem; } }
+
+.mobile__caption { font: 600 11px var(--font-sans); letter-spacing: 0.04em; fill: var(--ink-muted); paint-order: stroke; stroke: var(--canvas); stroke-linejoin: round; pointer-events: none; text-transform: uppercase; }
+.mobile__caption.is-active { fill: var(--accent-strong); }
+
+@media (max-width: 46rem) { .mobile__caption { display: none; } }
+.skill-card .tag { margin-left: var(--s2); }
