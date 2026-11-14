@@ -88,8 +88,8 @@ export function SheetArt({
         <g clipPath={`url(#${clip})`} fill="none" strokeLinecap="round">
           {(level >= 4 ? [0.2, 0.46] : [0.32]).map((at) => (
             <g key={at}>
-              <path d={line(r * at)} stroke={colours.bottom} strokeWidth="1.2" strokeOpacity="0.85" vectorEffect="non-scaling-stroke" />
-              <path d={line(r * at + 1.1)} stroke={colours.edge} strokeWidth="0.7" strokeOpacity="0.6" vectorEffect="non-scaling-stroke" />
+              <path d={line(r * at)} stroke={mix(colours.bottom, '#000000', 0.35)} strokeWidth="1.7" vectorEffect="non-scaling-stroke" />
+              <path d={line(r * at + 1.5)} stroke={colours.edge} strokeWidth="0.9" strokeOpacity="0.8" vectorEffect="non-scaling-stroke" />
             </g>
           ))}
         </g>
@@ -98,10 +98,10 @@ export function SheetArt({
         <path d={d} fill="none" stroke={colours.bottom} strokeWidth={level >= 4 ? band * 0.34 : band * 0.16} strokeOpacity="0.55" strokeDasharray={level >= 4 ? undefined : '1.5 3'} />
       ) : null}
       {level >= 4 && !ring && def.kind !== 'crescent' ? (
-        <circle cx="0" cy={-r * 0.6} r={Math.max(1.3, r * 0.1)} fill={PAPER} stroke={colours.bottom} strokeWidth="0.7" />
+        <circle cx="0" cy={-r * 0.58} r={Math.max(1.6, r * 0.13)} fill={PAPER} stroke={mix(colours.bottom, '#000000', 0.3)} strokeWidth="0.9" />
       ) : null}
       {level >= 5 ? (
-        <circle cx="0" cy={ring ? 0 : -r * 0.14} r={ring ? Math.max(1.5, r - band - 2.2) : r * 0.27} fill="none" stroke={colours.edge} strokeWidth="1.5" strokeOpacity="0.95" />
+        <circle cx="0" cy={ring ? 0 : -r * 0.14} r={ring ? Math.max(1.5, r - band - 2.2) : r * 0.3} fill="none" stroke={mix(colours.edge, '#ffffff', 0.45)} strokeWidth="1.9" />
       ) : null}
       {level >= 6 ? (
         <>

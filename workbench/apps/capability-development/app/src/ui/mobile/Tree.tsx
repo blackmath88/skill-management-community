@@ -12,11 +12,13 @@ import { useMemo, useState } from 'react'
 import { chooseTarget, endSeason, placeSkills, startSeason } from '~/application/commands'
 import { TARGETS } from '~/content/targets'
 import { CLAIM_LEVELS, type ClaimLevel } from '~/domain/types'
-import { mobilePalette } from '~/mobile/catalogue'
+import { mobilePalette, shapePath, type MobilePalette } from '~/mobile/catalogue'
+import { sheetColours } from '~/mobile/scene'
 import { growMobile } from '~/mobile/grow'
-import { CLAIM_LABEL, deriveTree, PIECE_LABEL, skillTrail, type Piece, type Tree } from '~/mobile/tree'
+import { CLAIM_LABEL, deriveTree, PIECE_LABEL, PIECE_STATES, skillTrail, type Piece, type Tree } from '~/mobile/tree'
 import type { SheetFinish } from '~/mobile/view'
 import { Mobile } from './Mobile'
+import { SheetArt } from './SheetArt'
 import { formatDate, formatDateTime, SaveStatus, useSave } from '../primitives'
 import { href } from '../router'
 import { useApp } from '../state'
@@ -33,6 +35,50 @@ export function todayLocal(offsetDays = 0): string {
 function useTree(): Tree {
   const { state, content, capabilities } = useApp()
   return useMemo(() => deriveTree(state.data, capabilities, content.capabilityGroups(), todayLocal()), [state.data, capabilities, content])
+}
+
+/** The key to the picture: one disc per state, drawn by the same code that draws the tree. */
+function PieceKey({ palette }: { palette: MobilePalette }) {
+  const def = { kind: 'disc' as const, r: 15, rot: 0, tone: 0 as const, name: 'key' }
+  const colours = sheetColours(palette.tones[0], { light: 0.8, reverse: false, haze: 0 })
+  return (
+    <details className="more piece-key">
+      <summary>How to read the pieces</summary>
+      <div className="more__body">
+        <svg width="0" height="0" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="key-g" gradientUnits="userSpaceOnUse" x1="0" y1="-15" x2="0" y2="15">
+              <stop offset="0" stopColor={colours.top} />
+              <stop offset="1" stopColor={colours.bottom} />
+            </linearGradient>
+            <clipPath id="key-c">
+              <path d={shapePath('disc', 15)} />
+            </clipPath>
+          </defs>
+        </svg>
+        <ul className="piece-key__list">
+          {PIECE_STATES.map((state) => (
+            <li key={state}>
+              <svg viewBox="-20 -20 40 52" width="34" height="44" aria-hidden="true" focusable="false">
+                <SheetArt def={def} d={shapePath('disc', 15)} band={6} finish={{ state, target: false, quiet: false }} colours={colours} tone={palette.tones[0]} wire={palette.wire} gradient="key-g" clip="key-c" />
+              </svg>
+              <span>{PIECE_LABEL[state]}</span>
+            </li>
+          ))}
+          <li>
+            <svg viewBox="-20 -20 40 52" width="34" height="44" aria-hidden="true" focusable="false">
+              <SheetArt def={def} d={shapePath('disc', 15)} band={6} finish={{ state: 'outline', target: true, quiet: false }} colours={colours} tone={palette.tones[0]} wire={palette.wire} gradient="key-g" clip="key-c" />
+            </svg>
+            <span>Not started, and part of your target</span>
+          </li>
+        </ul>
+        <p className="meta">
+          Detail is added and never taken away. A bead on a thread marks this season’s focus. Size and colour never
+          change with progress: a more worked piece is not a bigger one.
+        </p>
+      </div>
+    </details>
+  )
 }
 
 function SkillCard({ piece, onClose }: { piece: Piece; onClose: () => void }) {
@@ -330,6 +376,7 @@ export function TreeHome() {
             selectedSlot={selected}
             onSelect={(slot) => setSelected(selected === slot ? null : slot)}
           />
+          <PieceKey palette={palette} />
           <p className="meta tree-stage__legend">
             {tree.totals.practised} practised · {tree.totals.have - tree.totals.practised} placed by you · {tree.totals.pieces - tree.totals.have} outlines you
             could add. <a href={href({ name: 'begin' })}>Place yourself on more skills</a>

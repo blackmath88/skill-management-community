@@ -45,7 +45,10 @@ placement credits no practice experience.
 | An inlaid ring | Tried for real more than once | Records |
 | A second, smaller pendant | Tried in more than one setting | Records |
 
-Detail accumulates and is never removed. Size and colour do not change with it.
+Detail accumulates and is never removed. Size and colour do not change with it. The same key is
+on the main screen under "How to read the pieces".
+
+![](mobile-key.png)
 
 **3. A target constellation.** Three drafts, each cutting across branches: *Leading a group to a
 decision*, *Working well with AI*, *Future skills (a draft)*. Choosing one brings its pieces
