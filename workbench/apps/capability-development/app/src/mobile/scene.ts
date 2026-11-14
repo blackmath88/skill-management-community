@@ -86,7 +86,17 @@ export interface ShapeDrawing {
   shadow: [number, number]
 }
 
-export type Drawing = WireDrawing | ShapeDrawing
+/** Where a thread is tied to the end of an arm: a small loop bent into the wire. */
+export interface JointDrawing {
+  kind: 'joint'
+  x: number
+  y: number
+  r: number
+  depth: number
+  haze: number
+}
+
+export type Drawing = WireDrawing | ShapeDrawing | JointDrawing
 
 type Vec = [number, number, number]
 
@@ -209,6 +219,10 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
       // The control point that makes the bow pass through the point it hangs from.
       const c: Vec = [2 * top[0] - (a[0] + b[0]) / 2, 2 * top[1] - (a[1] + b[1]) / 2, 2 * top[2] - (a[2] + b[2]) / 2]
       wire([a, c, b], true)
+      for (const end of [a, b]) {
+        const q = project(end, cx, focal)
+        out.push({ kind: 'joint', x: n(q.x), y: n(q.y), r: n(1.9 * q.s), depth: q.z + 0.02, haze: haze(q.z) })
+      }
       if (node.ends[0]) place(a, node.ends[0], level + 1)
       if (node.ends[1]) place(b, node.ends[1], level + 1)
       if (node.centre) place(top, node.centre, level + 1)
@@ -235,6 +249,18 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0,
   const ceiling: Vec = [cx, -6, 0]
   place(ceiling, composition.root, 0)
   return out.sort((p, q) => p.depth - q.depth)
+}
+
+/**
+ * The room's light for an hour of the local day: its colour on the wall and how strong it is.
+ * Cool and clear in the morning, warm towards evening, low at night. A clock, not a mood.
+ */
+export function roomLight(hour: number): { colour: string; strength: number } {
+  const h = ((hour % 24) + 24) % 24
+  if (h < 6 || h >= 21) return { colour: '#fff3dc', strength: 0.3 }
+  if (h < 11) return { colour: '#ffffff', strength: 0.75 }
+  if (h < 16) return { colour: '#fffdf4', strength: 0.7 }
+  return { colour: '#ffeccb', strength: 0.62 }
 }
 
 /** Linear mix of two #rrggbb colours. */

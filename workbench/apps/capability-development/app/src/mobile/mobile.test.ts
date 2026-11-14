@@ -6,7 +6,7 @@ import type { AppearanceMobile, UserData } from '~/domain/types'
 import { NOW, registry, reviewedRealAttempt, testDeps, activity } from '~/test-helpers/fixtures'
 import { COMPOSITIONS, PALETTES, SLOT_COUNT, composition, mobilePalette, shapePath } from './catalogue'
 import { deriveMobileView } from './view'
-import { drawMobile, lightForHour, mix, sheetColours } from './scene'
+import { drawMobile, lightForHour, mix, roomLight, sheetColours } from './scene'
 import { growMobile } from './grow'
 
 const deps = testDeps()
@@ -254,5 +254,19 @@ describe('grown mobiles', () => {
   it('skips an empty branch and survives no branches at all', () => {
     expect(growMobile('t', 'T', branches([0, 3, 0])).shapes).toHaveLength(3)
     expect(drawMobile(growMobile('t', 'T', []))).toBeInstanceOf(Array)
+  })
+})
+
+describe('the room it hangs in', () => {
+  it('has a warmer, lower light towards evening and a dim one at night, from the clock alone', () => {
+    expect(roomLight(9).strength).toBeGreaterThan(roomLight(18).strength)
+    expect(roomLight(18).strength).toBeGreaterThan(roomLight(23).strength)
+    expect(roomLight(2)).toEqual(roomLight(23))
+    expect(roomLight(18).colour).not.toBe(roomLight(9).colour)
+  })
+  it('ties a loop at both ends of every arm', () => {
+    const joints = drawMobile(COMPOSITIONS[0]!).filter((p) => p.kind === 'joint')
+    expect(joints).toHaveLength(6)
+    expect(drawMobile(COMPOSITIONS[2]!).filter((p) => p.kind === 'joint')).toHaveLength(0)
   })
 })

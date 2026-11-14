@@ -40,9 +40,22 @@ a shadow on the wall behind — with no WebGL and no added dependency.
 | What you hang on it | The bead slides down the thread, that sheet hangs a little lower, the arms above tip towards it | Your choice, one sheet at a time, reversible |
 | Something being saved nearby | A small stir | It carries no information about what was saved |
 | Arriving on screen | Settles into its pose | |
-| The hour | Light from the left in the morning, from the right by evening; the shadow follows | The local clock, nothing about you |
+| The hour | Light from the left in the morning, from the right by evening; the shadow follows. The light on the wall is clear in the morning, warm towards evening, low at night | The local clock, nothing about you |
 | Where it is shown | Hero on a first visit, companion on Home, a still mark in the side rail, a small witness when a reflection is saved, a wide map on Repertoire | Same object, different distance |
 | Reduced motion | Rests in its authored pose. A drag follows the hand without coasting, the button steps it round, a new memory is simply there | |
+
+## Setting and staging
+
+It hangs somewhere. A fixing at the top, a pool of light on the wall behind it, and its shadow
+falling on that wall are what make it an object in a room and not a picture on a page. Small
+made-object details carry the same weight: a loop bent into the wire wherever a thread is tied,
+a bead where a memory sits.
+
+On a wide Home it hangs from the top edge of the page, so the thread reads as coming from the
+ceiling. It is lowered in when it arrives, then left to settle. Its controls stay quiet until
+the pointer or the keyboard reaches them.
+
+![](mobile-stage.png)
 
 ## What it never answers to
 

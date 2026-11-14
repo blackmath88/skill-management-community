@@ -22,7 +22,7 @@
  */
 import { useEffect, useId, useRef, useState } from 'react'
 import { shapePath, VIEW_BOX } from '~/mobile/catalogue'
-import { drawMobile, lightForHour, sheetColours, wireColour, type ShapeDrawing } from '~/mobile/scene'
+import { drawMobile, lightForHour, roomLight, sheetColours, wireColour, type ShapeDrawing } from '~/mobile/scene'
 import type { MobileDrawing } from '~/mobile/view'
 import { onMobileNudge } from './nudge'
 
@@ -75,7 +75,9 @@ export function Mobile({
   const count = composition.shapes.length
   const targets: number[] = Array.from({ length: count }, (_, slot) => (marked.includes(slot) ? 1 : 0))
   const markKey = targets.join('')
-  const [lightX] = useState(() => lightForHour(new Date().getHours()))
+  const [hour] = useState(() => new Date().getHours())
+  const lightX = lightForHour(hour)
+  const room = roomLight(hour)
   const [pose, setPose] = useState<Pose>(() => ({ time: 0, turned: 0, sway: 0, weights: targets }))
   const motion = useRef({
     turned: 0, velocity: 0, sway: 0, swayVelocity: 0, lean: 0, leanTarget: 0,
@@ -220,10 +222,18 @@ export function Mobile({
     return { def, d, band, transform: `translate(${shape.x} ${shape.y}) scale(${(shape.scale * shape.squeeze).toFixed(3)} ${shape.scale}) rotate(${def.rot})` }
   }
 
+  const [boxX, boxY, boxW, boxH] = (composition.viewBox ?? VIEW_BOX).split(' ').map(Number) as [number, number, number, number]
+  const hookX = composition.hookX
+
   return (
     <figure className={`mobile mobile--${size}${still ? ' mobile--still' : ''}`} ref={figure}>
-      <svg viewBox={composition.viewBox ?? VIEW_BOX} aria-hidden="true" focusable="false" {...pointer}>
+      <svg viewBox={composition.viewBox ?? VIEW_BOX} aria-hidden="true" focusable="false" className={reduced ? undefined : 'mobile__arrive'} {...pointer}>
         <defs>
+          <radialGradient id={`${id}-room`}>
+            <stop offset="0" stopColor={room.colour} stopOpacity={room.strength} />
+            <stop offset="0.55" stopColor={room.colour} stopOpacity={room.strength * 0.35} />
+            <stop offset="1" stopColor={room.colour} stopOpacity="0" />
+          </radialGradient>
           <filter id={`${id}-soft`} x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="5" />
           </filter>
@@ -241,11 +251,23 @@ export function Mobile({
           })}
         </defs>
 
+        {/* The room: light falling on the wall from the side the light comes from, and the fixing
+            the whole thing hangs from. They are what make the shadow a shadow on something. */}
+        {still ? null : (
+          <>
+            <ellipse cx={boxX + boxW / 2 - lightX * boxW * 0.16} cy={boxY + boxH * 0.46} rx={boxW * 0.52} ry={boxH * 0.56} fill={`url(#${id}-room)`} />
+            <g className="mobile__fixing">
+              <rect x={hookX - 9} y={boxY} width="18" height="3.2" rx="1.6" fill={palette.wire} opacity="0.85" />
+              <circle cx={hookX} cy={boxY + 6.4} r="2.4" fill="none" stroke={palette.wire} strokeWidth="1.2" />
+            </g>
+          </>
+        )}
+
         {/* The shadow on the wall: the same sheets, displaced by the light and blurred. */}
         {still ? null : (
           <g filter={`url(#${id}-soft)`} opacity="0.1" fill="#2a251d" stroke="#2a251d">
             {parts.map((part, i) => {
-              if (part.kind === 'wire') return null
+              if (part.kind !== 'shape') return null
               const s = sheet(part)
               if (!s) return null
               return (
@@ -260,6 +282,9 @@ export function Mobile({
         {parts.map((part, i) => {
           if (part.kind === 'wire') {
             return <path key={i} d={part.d} fill="none" stroke={wireColour(palette.wire, part.haze)} strokeWidth={part.width} strokeLinecap="round" />
+          }
+          if (part.kind === 'joint') {
+            return <circle key={i} cx={part.x} cy={part.y} r={part.r} fill="#f3efe6" stroke={wireColour(palette.wire, part.haze)} strokeWidth={Math.max(0.8, part.r * 0.55)} />
           }
           const s = sheet(part)
           if (!s) return null

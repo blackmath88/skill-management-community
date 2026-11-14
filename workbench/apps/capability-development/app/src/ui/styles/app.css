@@ -441,3 +441,16 @@ details.more > .more__body > .panel:first-child { border-top: none; padding-top:
 .record-list details.more > summary { padding: var(--s1) 0; font-size: 0.92rem; }
 details.more + .row, .field + .row { margin-top: var(--s4); }
 .panel--accent .row + .meta, .panel--accent .row + div { margin-top: var(--s3); }
+
+/* ---------- Staging the mobile
+ * It arrives the way something hung arrives: lowered in, then left to settle. On a wide Home it
+ * hangs from the top edge of the page, so its thread reads as coming from the ceiling, not from
+ * a picture frame. */
+@keyframes mobile-arrive { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+.mobile__arrive { animation: mobile-arrive 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.mobile__controls { margin-top: calc(-1 * var(--s2)); opacity: 0.75; transition: opacity 150ms; }
+.mobile:hover .mobile__controls, .mobile__controls:focus-within { opacity: 1; }
+@media (min-width: 60rem) {
+  .home__lead > section .mobile--regular { margin-top: calc(-1 * var(--s5) - 2px); }
+  .home__lead > section .mobile--regular svg { max-width: 30rem; }
+}
