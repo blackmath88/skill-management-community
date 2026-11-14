@@ -126,7 +126,10 @@ try {
   check((await page.locator('.piece-button--outline').count()) === 22, 'and everything else is an outline that could be added')
   await sees(page, '0 practised · 2 placed by you', 'a placement is never counted as practice')
   await page.locator('.piece-button', { hasText: 'Brief the assistant' }).click()
-  await sees(page, 'Your own placement, no records yet', 'a skill opens a card that says exactly where it stands')
+  // Scoped to the card: the key to the pieces, closed further down, holds the same words.
+  check(await page.locator('.skill-card').getByText('Your own placement, no records yet').isVisible(), 'a skill opens a card that says exactly where it stands')
+  await page.getByText('How to read the pieces').click()
+  check((await page.locator('.piece-key__list li').count()) === 8, 'and the key shows every way a piece can be made')
   await sees(page, 'You placed yourself: i do this regularly', 'and its history begins with that placement, dated')
   check((await page.locator('main .mobile svg text.mobile__label').count()) === 1, 'the selected piece is named on the mobile')
   await page.getByRole('button', { name: 'Close' }).click()
