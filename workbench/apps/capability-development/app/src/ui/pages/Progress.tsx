@@ -23,7 +23,7 @@ export function ProgressPage() {
   return (
     <div className="stack">
       <header>
-        <p className="kicker">What your records show</p>
+        <p className="kicker">How it is counted</p>
         <h1>Two different things, kept apart</h1>
         <div className="lede">
           <p>

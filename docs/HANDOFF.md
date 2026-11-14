@@ -122,3 +122,11 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 ## GitHub Pages preview setup — 12 November 2026
 
 Owner requested deployment for review. Added a branch-scoped Pages workflow that runs npm ci and npm run verify before uploading only app/dist. Added app/DEPLOYMENT.md with source branch, expected URL, privacy boundaries and later promotion instructions. GitHub Pages was observed configured for GitHub Actions. This adds preview deployment, not a merge or effectiveness claim. See Actions for live build/deployment results.
+
+## Skilling Me Softly redesign pass — 14 November 2026
+
+- Authority: owner-supplied execution brief for one autonomous redesign run; owner named this repository. No merge, no deployment, no dependency or workflow change.
+- Changed: branch `redesign/personal-shell` from `ccr-cda53478-1fik71` at d5efbbe. App shell, Home, short development flow, Practice, Repertoire, Settings and a personal SVG mobile. Detail, decisions and limitations: [redesign notes](../workbench/apps/capability-development/app/docs/redesign/README.md).
+- Evidence (executed locally in the run): typecheck, lint, unit tests and production build passed; three browser suites passed against the built app in Chromium. Exact counts are in the run report and reproducible with the commands in the redesign notes.
+- Not done: no CI run was observed for this branch (the verification workflow triggers only on the preview branch); the hosted Pages preview still shows the earlier build.
+- Next: owner reviews the branch; if accepted, decide whether it replaces the preview branch, which is what triggers verification and Pages.

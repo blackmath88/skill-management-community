@@ -28,7 +28,7 @@ export function CampaignPage() {
   if (!campaign) {
     return (
       <div className="stack">
-        <PageHead kicker="Campaign" title="No campaign yet">
+        <PageHead kicker="Current journey" title="No journey is running">
           <p>
             A campaign starts from a situation. <a href={href({ name: 'situations' })}>Pick one, or describe a new one</a>.
           </p>
@@ -50,7 +50,7 @@ export function CampaignPage() {
 
   return (
     <div className="stack">
-      <PageHead kicker="Campaign" title={definition?.title ?? campaign.definitionId}>
+      <PageHead kicker="Current journey" title={definition?.title ?? campaign.definitionId}>
         <p>{campaign.purpose}</p>
         <p className="meta">
           {CAMPAIGN_STATE_LABEL[campaign.state]} · on{' '}

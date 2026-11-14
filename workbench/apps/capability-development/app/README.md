@@ -1,5 +1,10 @@
 # Skilling Me Softly
 
+> **Redesign branch.** This branch reorganises the interface around Home, Practice, Repertoire
+> and Settings, adds a short "prepare a discussion" flow and a personal SVG mobile. What changed,
+> what did not, screenshots and limitations: [docs/redesign/README.md](docs/redesign/README.md).
+> Sections below that describe the earlier navigation are historical where they differ.
+
 A local-first capability-development application. You choose a direction or start from a situation
 you are actually in, work through a bounded campaign, rehearse, try something for real, review what
 happened, and see what your own records do and do not show.

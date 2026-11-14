@@ -125,8 +125,13 @@ export function HomePage() {
 
   if (data.situations.length === 0 && data.activities.length === 0) return <FirstVisit />
 
-  const [primary, ...others] = summary.nextActions
-  const pending = primary && primary.kind !== 'nothing-pending' ? primary : null
+  // Lead with something that is actually waiting: a plan to finish, an attempt to record, a
+  // reflection to write, a running journey. The summary's general suggestions (write a direction,
+  // start a journey) are real but are not "the next thing", so they are listed further down.
+  // Which suggestions exist is the domain's decision; only their placement is decided here.
+  const WAITING = ['review-attempt', 'record-attempt', 'finish-plan', 'continue-campaign', 'decide-hypothesis']
+  const pending = summary.nextActions.find((a) => WAITING.includes(a.kind)) ?? null
+  const others = summary.nextActions.filter((a) => a !== pending)
   const latestReview = [...data.reviews].sort((a, b) => b.reviewedAt.localeCompare(a.reviewedAt))[0]
   const reviewed = latestReview ? data.activities.find((a) => a.id === latestReview.activityId) : undefined
   const continues = latestReview && ['repeat', 'adapt', 'transfer'].includes(latestReview.nextMove)
@@ -139,7 +144,7 @@ export function HomePage() {
         <div className="stack">
           <header>
             <p className="kicker">{state.namespace === 'demo' ? 'Home · fictional demo' : 'Home'}</p>
-            <h1>{pending ? pending.label : 'Nothing is waiting for you.'}</h1>
+            <h1>{pending ? pending.label : continues ? 'Pick up where you left it.' : 'Nothing is waiting for you.'}</h1>
           </header>
           {pending ? (
             <div className="next">
@@ -151,6 +156,19 @@ export function HomePage() {
                   {actionVerb(pending)}
                 </a>
                 <a href={href({ name: 'prepare' })}>Prepare a new discussion</a>
+              </div>
+            </div>
+          ) : continues && reviewed ? (
+            <div className="next">
+              <p className="next__reason">
+                Last time you decided to {NEXT_MOVE_LABEL[latestReview.nextMove].toLowerCase()}. When the next occasion
+                is in sight, plan it — or leave it; nothing is overdue.
+              </p>
+              <div className="row">
+                <a className="btn btn--primary btn--large" href={href({ name: 'prepare', situationId: reviewed.situationId })}>
+                  Prepare the next attempt
+                </a>
+                <a href={href({ name: 'prepare' })}>Prepare a different discussion</a>
               </div>
             </div>
           ) : (
@@ -202,7 +220,7 @@ export function HomePage() {
               <dd>{NEXT_MOVE_LABEL[latestReview.nextMove]}</dd>
             </dl>
             <div className="row">
-              {continues ? (
+              {continues && pending ? (
                 <a className="btn btn--quiet" href={href({ name: 'prepare', situationId: reviewed.situationId })}>
                   Prepare the next attempt
                 </a>
@@ -213,7 +231,7 @@ export function HomePage() {
         </section>
       ) : null}
 
-      {waiting.length > 0 || others.some((a) => a.kind !== 'nothing-pending') ? (
+      {waiting.length > 0 || others.some((a) => a.kind !== 'nothing-pending' && a.kind !== 'describe-situation') ? (
         <section aria-labelledby="open-heading">
           <h2 id="open-heading">Also open</h2>
           <ul className="record-list">
@@ -230,7 +248,7 @@ export function HomePage() {
               </li>
             ))}
             {others
-              .filter((a) => a.kind !== 'nothing-pending' && !waiting.some((w) => w.id === a.activityId))
+              .filter((a) => a.kind !== 'nothing-pending' && a.kind !== 'describe-situation' && !waiting.some((w) => w.id === a.activityId))
               .map((action) => (
                 <li key={`${action.kind}-${action.activityId ?? action.campaignId ?? action.hypothesisId ?? ''}`}>
                   <a href={actionHref(action)}>{action.label}</a>

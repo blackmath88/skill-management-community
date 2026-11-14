@@ -151,7 +151,7 @@ async function readExperienceTotal(page) {
 /**
  * Polls the total until it reaches the expected value.
  *
- * A save is asynchronous: clicking "Save the review" returns before IndexedDB has acknowledged
+ * A save is asynchronous: clicking "Save the reflection" returns before IndexedDB has acknowledged
  * the write, so reading the page straight afterwards can catch the state from before it. Polling
  * is about the test's timing, not about the application being eventually consistent — the
  * assertion still fails if the number never arrives.
@@ -252,8 +252,8 @@ async function journeyA(page, base) {
 
   await fill(page, 'What you observed', 'The long version was mostly me justifying asking at all.')
   await fill(page, 'A competing explanation that also fits', 'Writing a question down may simply be harder than saying it.')
-  await clickButton(page, 'Save the review')
-  await expectVisible(page, 'Your review', 'the review is saved')
+  await clickButton(page, 'Save the reflection')
+  await expectVisible(page, 'Your reflection', 'the review is saved')
   await waitForSaved(page)
 
   await expectExperienceTotal(page, 2, 'a reviewed rehearsal counts 2 (rehearsal 1 + competing explanation 1)')
@@ -276,7 +276,7 @@ async function journeyA(page, base) {
   await fill(page, 'What you observed', 'Nobody in the room could name the approver.')
   await fill(page, 'A competing explanation that also fits', 'They may have known and not wanted to say it in that room.')
   await page.getByLabel('What you have decided to do').selectOption('escalate')
-  await clickButton(page, 'Save the review')
+  await clickButton(page, 'Save the reflection')
   await expectVisible(page, 'Take it to somebody with the authority', 'a partial result can be recorded as needing escalation')
   await waitForSaved(page)
 
@@ -345,7 +345,7 @@ async function journeyB(page, base) {
   await fill(page, 'What you observed', 'No reply to a direct written question in two weeks.')
   await fill(page, 'A competing explanation that also fits', 'The request may have gone to somebody who also cannot decide it.')
   await page.getByLabel('What you have decided to do').selectOption('stop')
-  await clickButton(page, 'Save the review')
+  await clickButton(page, 'Save the reflection')
 
   await waitForSaved(page)
   await expectExperienceTotal(page, 1, 'an absent opportunity earns nothing for the attempt, and 1 for reviewing why')

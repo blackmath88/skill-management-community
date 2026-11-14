@@ -228,7 +228,8 @@ try {
   for (let i = 0; i < 3; i += 1) {
     await page.getByRole('link', { name: 'Home', exact: true }).click()
     await page.waitForTimeout(350)
-    await page.getByRole('link', { name: 'Your assemblage', exact: true }).click()
+    await page.getByRole('link', { name: 'Settings', exact: true }).click()
+    await page.getByRole('link', { name: 'Earlier assemblage', exact: true }).click()
     await page.waitForTimeout(1400)
   }
   check('three rounds of leaving and returning leave the screen working', (await page.locator('.assemblage-list > li').count()) >= 5)

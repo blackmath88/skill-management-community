@@ -143,7 +143,7 @@ export function AiSparring({
                   checked={include.review}
                   onChange={(e) => setInclude({ ...include, review: e.target.checked })}
                 />
-                Your review
+                Your reflection
               </label>
             </li>
           ) : null}

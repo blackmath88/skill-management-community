@@ -26,7 +26,7 @@ export function RecordsPage() {
 
   return (
     <div className="stack">
-      <PageHead kicker="All records" title="Everything that is stored">
+      <PageHead kicker="History" title="Everything that is stored">
         <p>
           This is all of it. Nothing is kept anywhere else, nothing is sent anywhere, and anything here can be deleted.
         </p>

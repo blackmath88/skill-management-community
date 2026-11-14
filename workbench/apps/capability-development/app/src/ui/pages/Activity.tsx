@@ -547,7 +547,7 @@ function ReviewPanel({ activityId }: { activityId: string }) {
   if (existing && !editing) {
     return (
       <section className="panel">
-        <h2>Your review</h2>
+        <h2>Your reflection</h2>
         <dl className="pairs">
           <dt>Observed</dt>
           <dd>{existing.observation}</dd>
@@ -567,7 +567,7 @@ function ReviewPanel({ activityId }: { activityId: string }) {
           <dd>{NEXT_MOVE_LABEL[existing.nextMove]}</dd>
         </dl>
         <button type="button" className="btn-quiet" onClick={() => setEditing(true)}>
-          Change the review
+          Change the reflection
         </button>
       </section>
     )
@@ -621,7 +621,7 @@ function ReviewPanel({ activityId }: { activityId: string }) {
             })
         }
       >
-        Save the review
+        Save the reflection
       </button>
       <SaveStatus state={save.state} />
     </section>

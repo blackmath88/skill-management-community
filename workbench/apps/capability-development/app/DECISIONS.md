@@ -345,3 +345,13 @@ every starting point, and then up to eight commands in sequence against generate
 asserts the result validates every time. The reviewer's observation was that 311 green tests
 coexisted with this defect because nothing saved a command's output and read it back. That is now
 the one thing that file does.
+
+## Redesign pass: shell, short flow, personal mobile (14 November 2026)
+
+Recorded in full, with screenshots and the list of what was not done, in
+[docs/redesign/README.md](docs/redesign/README.md). In brief: four destinations replace the
+eight-item navigation with every earlier address kept; Home leads with one action and the latest
+reflection; "prepare a discussion" is a shorter door onto the existing Situation and
+PracticeActivity commands; the personal mobile is an optional `Appearance.mobile` field whose
+memories are attempted activities the person chose, never derived; a saved emblem or assemblage
+is never rewritten. Schema version, export format version and appearance version are unchanged.

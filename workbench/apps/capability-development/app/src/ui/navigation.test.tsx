@@ -141,7 +141,7 @@ function inputValues(selector = 'input[type="text"]'): string[] {
 describe('navigating between two records of the same kind', () => {
   it('does not carry one activity’s review into another’s form', async () => {
     // The proven defect: with no key on the page, activity 2's review form arrived pre-filled
-    // with activity 1's review, and one click on "Save the review" stored it against activity 2.
+    // with activity 1's review, and one click on "Save the reflection" stored it against activity 2.
     const store = createMemoryStore()
     await store.save('personal', twoOfEach(), 0)
     await mount(store)

@@ -66,7 +66,7 @@ export function buildContext(data: UserData, content: ContentRegistry, selection
     items.push({
       recordId: review.id,
       recordKind: 'review',
-      label: 'Your review',
+      label: 'Your reflection',
       text: `Observed: ${review.observation}\nYou take it to mean: ${review.interpretation}\nCompeting explanation you wrote: ${review.alternativeExplanation}`,
     })
   }
