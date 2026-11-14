@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Skilling Me Softly — a local-first capability-development application. Separately runnable derivative of blackmath88/leader-me; see PROVENANCE.md.",
+  "description": "Skilling Me Softly \u2014 a local-first capability-development application. Separately runnable derivative of blackmath88/leader-me; see PROVENANCE.md.",
   "engines": {
     "node": ">=22.12"
   },
@@ -17,7 +17,9 @@
     "test:watch": "vitest",
     "test:browser": "node tests/browser/journey.mjs",
     "test:browser:assemblage": "node tests/browser/assemblage.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build",
+    "test:browser:redesign": "node tests/browser/redesign.mjs",
+    "screenshots": "node tests/browser/screenshots.mjs"
   },
   "dependencies": {
     "react": "19.3.1",

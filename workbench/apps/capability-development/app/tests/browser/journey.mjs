@@ -183,8 +183,8 @@ async function journeyA(page, base) {
   console.log('\nJourney A — the complete loop')
 
   await page.goto(`${base}#/`)
-  await expectVisible(page, 'What would be useful next?', 'home opens with a question, not a dashboard')
-  await expectVisible(page, 'start from a situation', 'it offers to start from a real situation')
+  await expectVisible(page, 'Prepare for a conversation you are not looking forward to.', 'home opens with an invitation, not a dashboard')
+  await expectVisible(page, 'Or start from any other situation.', 'it offers to start from any real situation')
 
   // 1. Describe a situation.
   await page.goto(`${base}#/situations/new`)
@@ -360,8 +360,8 @@ async function journeyB(page, base) {
   await expectVisible(page, 'This campaign is stopped', 'the campaign is stopped')
   await expectVisible(page, 'Nothing was deleted by closing the campaign', 'and nothing was deleted with it')
 
-  // The barrier the person recorded is shown on the home screen as their own observation.
-  await page.goto(`${base}#/`)
+  // The barrier the person recorded is shown under Practice as their own observation.
+  await page.goto(`${base}#/practice`)
   await expectVisible(page, 'Barriers you have noticed', 'the barriers are reported as the person’s own observations')
   await expectVisible(page, 'Nobody involved is clearly allowed to decide this', 'the recorded barrier is still there after stopping')
   await page.goto(`${base}#/records`)
@@ -426,6 +426,7 @@ async function checkAiConsent(page, base) {
   await page.getByRole('radio', { name: /Fictional demo/ }).check()
   await page.waitForTimeout(600)
   await page.goto(`${base}#/activity/demo-activity-real`)
+  await page.getByText('Think it through with the sparring partner').click()
   await clickButton(page, 'Use the sparring partner')
   await expectVisible(page, 'Nothing is included unless you tick it', 'the panel says nothing is included unless you tick it')
 

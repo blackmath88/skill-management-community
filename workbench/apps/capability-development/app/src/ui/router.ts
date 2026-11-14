@@ -1,6 +1,12 @@
 /**
  * A small hash router.
  *
+ * The application has four destinations — Home, Practice, Repertoire, Settings — and every route
+ * belongs to exactly one of them (`sectionOf`). The routes that existed before that structure
+ * (`campaign`, `situations`, `progress`, `records`, `content`, `assemblage`) are all still
+ * served at the same address, each inside the destination it now belongs to, so no saved link
+ * and no bookmark stops working.
+ *
  * A routing library was not added for this: the whole application is nine screens with no nested
  * layouts and no data loading, and a hash route keeps the built app openable from a file path as
  * well as a server. If deep linking or nested layouts ever matter, this is the one file to replace.
@@ -9,6 +15,9 @@ import { useEffect, useState } from 'react'
 
 export type Route =
   | { name: 'home' }
+  | { name: 'practice' }
+  | { name: 'prepare'; situationId?: string }
+  | { name: 'repertoire' }
   | { name: 'situations' }
   | { name: 'new-situation' }
   | { name: 'situation'; id: string }
@@ -27,6 +36,12 @@ export function parseRoute(hash: string): Route {
   if (parts.length === 0) return { name: 'home' }
   const [head, second] = parts
   switch (head) {
+    case 'practice':
+      return { name: 'practice' }
+    case 'prepare':
+      return second !== undefined ? { name: 'prepare', situationId: decodeURIComponent(second) } : { name: 'prepare' }
+    case 'repertoire':
+      return { name: 'repertoire' }
     case 'situations':
       if (second === 'new') return { name: 'new-situation' }
       if (second !== undefined) return { name: 'situation', id: decodeURIComponent(second) }
@@ -54,6 +69,12 @@ export function href(route: Route): string {
   switch (route.name) {
     case 'home':
       return '#/'
+    case 'practice':
+      return '#/practice'
+    case 'prepare':
+      return route.situationId !== undefined ? `#/prepare/${encodeURIComponent(route.situationId)}` : '#/prepare'
+    case 'repertoire':
+      return '#/repertoire'
     case 'situations':
       return '#/situations'
     case 'new-situation':
@@ -76,6 +97,33 @@ export function href(route: Route): string {
       return '#/settings'
     case 'unknown':
       return `#/${route.path}`
+  }
+}
+
+export type Section = 'home' | 'practice' | 'repertoire' | 'settings'
+
+/** Which of the four destinations a route belongs to. Total: every route has one. */
+export function sectionOf(route: Route): Section {
+  switch (route.name) {
+    case 'home':
+    case 'unknown':
+      return 'home'
+    case 'practice':
+    case 'prepare':
+    case 'campaign':
+    case 'situations':
+    case 'new-situation':
+    case 'situation':
+    case 'activity':
+      return 'practice'
+    case 'repertoire':
+    case 'progress':
+    case 'records':
+    case 'content':
+      return 'repertoire'
+    case 'settings':
+    case 'assemblage':
+      return 'settings'
   }
 }
 

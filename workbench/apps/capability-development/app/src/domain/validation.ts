@@ -32,6 +32,7 @@ import {
   type Appearance,
   type AppearanceAssemblage,
   type AppearanceMarker,
+  type AppearanceMobile,
   type AppearancePiece,
   type AssistanceLevel,
   type Attempt,
@@ -339,6 +340,42 @@ export function validateAppearanceAssemblage(
   return { ok: true, data }
 }
 
+/** Cap on hung memories, so an import cannot arrive with thousands of them. */
+export const MAX_MOBILE_MEMORIES = 8
+
+function readAppearanceMobile(r: Reader, v: unknown, path: string): AppearanceMobile | undefined {
+  const o = r.obj(v, path)
+  if (!o) return undefined
+  const version = r.int(o, 'version', path, { min: 1 })
+  if (version !== 1) {
+    r.fail(`${path}.version`, 'must be mobile version 1')
+    return undefined
+  }
+  const memories = r.arr(o, 'memories', path)
+  if (memories.length > MAX_MOBILE_MEMORIES) {
+    r.fail(`${path}.memories`, `holds more than ${MAX_MOBILE_MEMORIES} memories`)
+    return undefined
+  }
+  const seen = new Set<number>()
+  return {
+    version: 1,
+    compositionId: r.str(o, 'compositionId', path, { nonEmpty: true, max: 64 }),
+    paletteId: r.str(o, 'paletteId', path, { nonEmpty: true, max: 64 }),
+    memories: memories.flatMap((m, i) => {
+      const mo = r.obj(m, `${path}.memories[${i}]`)
+      if (!mo) return []
+      const slot = r.int(mo, 'slot', `${path}.memories[${i}]`, { min: 0, max: MAX_MOBILE_MEMORIES - 1 })
+      const activityId = r.str(mo, 'activityId', `${path}.memories[${i}]`, { nonEmpty: true, max: 200 })
+      if (seen.has(slot)) {
+        r.fail(`${path}.memories[${i}].slot`, 'is used by more than one memory')
+        return []
+      }
+      seen.add(slot)
+      return [{ slot, activityId }]
+    }),
+  }
+}
+
 function readAppearance(r: Reader, v: unknown, path: string): Appearance | undefined {
   const o = r.obj(v, path)
   if (!o) return undefined
@@ -357,6 +394,10 @@ function readAppearance(r: Reader, v: unknown, path: string): Appearance | undef
   if (o.assemblage !== undefined) {
     const assemblage = readAppearanceAssemblage(r, o.assemblage, `${path}.assemblage`)
     if (assemblage) appearance.assemblage = assemblage
+  }
+  if (o.mobile !== undefined) {
+    const mobile = readAppearanceMobile(r, o.mobile, `${path}.mobile`)
+    if (mobile) appearance.mobile = mobile
   }
   return appearance
 }

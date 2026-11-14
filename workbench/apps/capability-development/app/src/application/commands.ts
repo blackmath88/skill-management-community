@@ -28,6 +28,7 @@ import type {
   AiProposal,
   Appearance,
   AppearanceAssemblage,
+  AppearanceMobile,
   AssistanceLevel,
   Attempt,
   AttemptOutcome,
@@ -56,7 +57,7 @@ import type {
   Visibility,
   WorkingHypothesis,
 } from '~/domain/types'
-import { MAX_ATTRIBUTION_LENGTH } from '~/domain/validation'
+import { MAX_ATTRIBUTION_LENGTH, MAX_MOBILE_MEMORIES } from '~/domain/validation'
 import type { CommandDeps } from './ports'
 import { fail, ok, type CommandOutcome } from './results'
 
@@ -945,11 +946,65 @@ export function saveAssemblage(
     palette: previous?.palette ?? 'slate',
     accessories: previous?.accessories ?? [],
     assemblage,
+    ...(previous?.mobile ? { mobile: previous.mobile } : {}),
   }
   return ok(
     { ...data, profile: { ...data.profile, appearance, updatedAt: deps.clock.now() } },
     assemblage,
   )
+}
+
+/**
+ * Saves the personal mobile: its composition, its palette and the memories hung on it.
+ *
+ * Cosmetic, like every appearance command: it records no practice and credits nothing. What it
+ * does check is that a memory points at an activity that exists and was actually attempted, so a
+ * memory can never be hung on something that has not happened, and that no shape carries two.
+ * Everything else about the saved appearance — emblem, palette, a legacy assemblage — is kept
+ * exactly as it was.
+ */
+export function saveMobile(data: UserData, mobile: AppearanceMobile, deps: CommandDeps): CommandOutcome<AppearanceMobile> {
+  if (mobile.version !== 1) return fail('validation', 'That mobile format cannot be saved by this build.')
+  const errors: string[] = []
+  text(mobile.compositionId, 'The composition', errors, { required: true, max: 64 })
+  text(mobile.paletteId, 'The palette', errors, { required: true, max: 64 })
+  if (mobile.memories.length > MAX_MOBILE_MEMORIES) errors.push(`A mobile carries at most ${MAX_MOBILE_MEMORIES} memories.`)
+  const slots = new Set<number>()
+  const attempted = new Set(data.attempts.map((a) => a.activityId))
+  for (const memory of mobile.memories) {
+    if (!Number.isInteger(memory.slot) || memory.slot < 0 || memory.slot >= MAX_MOBILE_MEMORIES) {
+      errors.push('A memory was placed on a shape that does not exist.')
+      continue
+    }
+    if (slots.has(memory.slot)) errors.push('Each shape can carry one memory.')
+    slots.add(memory.slot)
+    // A memory already saved may outlive its record (deletion is tolerated on read), but a new
+    // one cannot be hung on a record that is not there or has not been attempted.
+    const alreadySaved = data.profile.appearance?.mobile?.memories.some(
+      (m) => m.slot === memory.slot && m.activityId === memory.activityId,
+    )
+    if (alreadySaved) continue
+    if (!data.activities.some((a) => a.id === memory.activityId)) errors.push('That record no longer exists, so it cannot be chosen as a memory.')
+    else if (!attempted.has(memory.activityId)) errors.push('Only something you have actually attempted can be chosen as a memory.')
+  }
+  if (errors.length > 0) return fail('validation', ...new Set(errors))
+  const previous = data.profile.appearance
+  const saved: AppearanceMobile = {
+    version: 1,
+    compositionId: mobile.compositionId,
+    paletteId: mobile.paletteId,
+    memories: [...mobile.memories].sort((a, b) => a.slot - b.slot).map((m) => ({ slot: m.slot, activityId: m.activityId })),
+  }
+  const appearance: Appearance = {
+    version: 1,
+    mode: previous?.mode ?? 'character',
+    emblem: previous?.emblem ?? '◆',
+    palette: previous?.palette ?? 'slate',
+    accessories: previous?.accessories ?? [],
+    ...(previous?.assemblage ? { assemblage: previous.assemblage } : {}),
+    mobile: saved,
+  }
+  return ok({ ...data, profile: { ...data.profile, appearance, updatedAt: deps.clock.now() } }, saved)
 }
 
 export function saveAppearance(data: UserData, appearance: Appearance, deps: CommandDeps): CommandOutcome<Appearance> {
@@ -960,7 +1015,12 @@ export function saveAppearance(data: UserData, appearance: Appearance, deps: Com
   // Keep whatever assemblage is already saved unless this call carries one. The emblem controls
   // and the assemblage are separate screens, and saving one must not quietly reset the other.
   const kept = appearance.assemblage ?? data.profile.appearance?.assemblage
-  const merged: Appearance = { ...appearance, ...(kept ? { assemblage: kept } : {}) }
+  const keptMobile = appearance.mobile ?? data.profile.appearance?.mobile
+  const merged: Appearance = {
+    ...appearance,
+    ...(kept ? { assemblage: kept } : {}),
+    ...(keptMobile ? { mobile: keptMobile } : {}),
+  }
   const next = { ...data, profile: { ...data.profile, appearance: merged, updatedAt: deps.clock.now() } }
   return ok(next, merged)
 }

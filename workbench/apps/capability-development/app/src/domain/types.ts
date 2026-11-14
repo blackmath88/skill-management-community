@@ -511,6 +511,34 @@ export interface AppearanceAssemblage {
 }
 
 /**
+ * One memory the person chose to hang on their mobile.
+ *
+ * `activityId` points at a PracticeActivity the person attempted. The domain stores the
+ * identifier and does not resolve it: a presentation must tolerate the record having been
+ * deleted since, show that plainly, and never substitute a different record.
+ */
+export interface AppearanceMobileMemory {
+  /** Which hanging shape carries the memory. An index into the composition's shapes. */
+  slot: number
+  activityId: Id
+}
+
+/**
+ * The personal mobile: one curated composition, one palette, and the memories the person chose.
+ *
+ * Composition and palette identifiers are opaque strings to the domain, as the assemblage's are.
+ * A presentation that does not know an identifier draws its own default rather than failing, and
+ * does not rewrite the saved value. Nothing here is derived from records: memories are selected
+ * by the person, one at a time, and an empty list is a complete mobile.
+ */
+export interface AppearanceMobile {
+  version: 1
+  compositionId: string
+  paletteId: string
+  memories: AppearanceMobileMemory[]
+}
+
+/**
  * Cosmetic choices only. Appearance never certifies competence and is never derived from
  * evidence; see experience.ts for the retention policy that keeps the two apart.
  */
@@ -530,6 +558,12 @@ export interface Appearance {
    * everything else about the appearance still means exactly what it meant.
    */
   assemblage?: AppearanceAssemblage
+  /**
+   * The personal mobile, when the person has changed it from the default or hung a memory on it.
+   * Optional for the same reason the assemblage is: older record sets simply do not have it, and
+   * an older build drops it on read without changing what the rest of the appearance means.
+   */
+  mobile?: AppearanceMobile
 }
 
 export interface Profile {

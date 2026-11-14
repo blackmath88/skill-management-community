@@ -20,6 +20,8 @@ import { exportFileName, exportUserData, parseImport } from '~/storage/portabili
 import type { ImportResult } from '~/storage/types'
 import { ConfirmButton, Field, formatDateTime, PageHead, SaveStatus, useSave } from '../primitives'
 import { useApp } from '../state'
+import { href } from '../router'
+import { MobileEditor } from '../mobile/MobilePanel'
 
 const EMBLEMS = ['◆', '▲', '●', '■', '✦', '⌘']
 const PALETTES = ['slate', 'clay', 'moss', 'ink']
@@ -41,13 +43,20 @@ const MODES: { value: PresentationMode; label: string; hint: string }[] = [
 export function SettingsPage() {
   const { state, content, session, aiProvider, presentation } = useApp()
 
+  const legacy = state.data.profile.appearance?.assemblage
   return (
     <div className="stack">
-      <PageHead kicker="Settings" title="Your records and this app" />
+      <PageHead kicker="Settings" title="Your mobile, your direction, your data" />
+
+      <section className="panel" id="appearance" aria-labelledby="mobile-settings-heading">
+        <h2 id="mobile-settings-heading">Your mobile</h2>
+        <MobileEditor />
+      </section>
+
       <DirectionSection />
-      <AppearanceSection />
-      <SharePackageSection />
+
       <PortabilitySection />
+      <SharePackageSection />
 
       <section className="panel">
         <h2>What is true about privacy here</h2>
@@ -83,15 +92,6 @@ export function SettingsPage() {
         </ul>
       </section>
 
-      <section className="panel panel--quiet">
-        <h2>The character or emblem receives only this</h2>
-        <p className="hint">
-          Shown so the boundary is checkable rather than asserted. No journal text, no situation description and no
-          evidence reaches a renderer.
-        </p>
-        <pre>{JSON.stringify(presentation, null, 2)}</pre>
-      </section>
-
       <section className="panel panel--caution">
         <h2>Delete everything in {state.namespace === 'demo' ? 'the demo' : 'your records'}</h2>
         <p>
@@ -104,6 +104,27 @@ export function SettingsPage() {
         />
       </section>
 
+      <details className="more">
+        <summary>Earlier appearance settings</summary>
+        <div className="more__body">
+          <p className="hint">
+            The emblem and the faceted assemblage came before the mobile. Whatever you saved there is kept exactly as
+            you left it and exported with your records; the mobile does not replace or rewrite it.
+          </p>
+          <p>
+            <a href={href({ name: 'assemblage' })}>Open the assemblage</a>
+            <span className="meta">
+              {' '}
+              · {legacy ? `you have a saved composition of ${legacy.pieces.length} piece${legacy.pieces.length === 1 ? '' : 's'}` : 'nothing saved there'}
+            </span>
+          </p>
+          <AppearanceSection />
+        </div>
+      </details>
+
+      <details className="more">
+        <summary>Technical details</summary>
+        <div className="more__body">
       <section className="panel panel--quiet">
         <h2>Versions</h2>
         <dl className="pairs">
@@ -111,6 +132,8 @@ export function SettingsPage() {
           <dd>{state.data.schemaVersion}</dd>
           <dt>Storage revision</dt>
           <dd>{state.revision}</dd>
+          <dt>Last saved</dt>
+          <dd>{state.savedAt ? formatDateTime(state.savedAt) : 'nothing saved yet'}</dd>
           <dt>Content packs</dt>
           <dd>{content.packs.map((pack) => `${pack.id} v${pack.version}`).join(', ')}</dd>
           <dt>Practice experience convention</dt>
@@ -123,6 +146,16 @@ export function SettingsPage() {
           records are stored, and neither is a change to the content.
         </p>
       </section>
+      <section className="panel panel--quiet">
+        <h2>The character or emblem receives only this</h2>
+        <p className="hint">
+          Shown so the boundary is checkable rather than asserted. No journal text, no situation description and no
+          evidence reaches a renderer.
+        </p>
+        <pre>{JSON.stringify(presentation, null, 2)}</pre>
+      </section>
+        </div>
+      </details>
     </div>
   )
 }

@@ -1,5 +1,10 @@
 /**
- * One activity: finish the plan, record what happened, review it, attach evidence.
+ * One activity, shown as the flow it is: plan, rehearse if you want, try it, reflect.
+ *
+ * The page always says where the person is (`FlowSteps`) and boxes exactly one thing — the step
+ * that is theirs to do now. Finished steps stay on the page as the record they became. Material
+ * that supports the flow without being a step of it (the sparring partner, how the attempt is
+ * counted, pausing and deleting) sits in labelled disclosures below, reachable and out of the way.
  *
  * Three product rules show up as interface behaviour here. An attempt can only be recorded once,
  * and "the cue never arrived" is offered as an ordinary outcome rather than hidden. A review asks
@@ -40,6 +45,8 @@ import {
   OUTCOME_LABEL,
 } from './labels'
 import { RehearsalPanel } from './Rehearsal'
+import { DISCUSSION_REHEARSAL } from '~/content/discussion'
+import { MemoryOffer } from '../mobile/MobilePanel'
 import { AiSparring } from './AiSparring'
 
 export function ActivityPage({ id }: { id: string }) {
@@ -74,7 +81,7 @@ export function ActivityPage({ id }: { id: string }) {
 
   return (
     <div className="stack">
-      <PageHead kicker="Activity" title={activity.title}>
+      <PageHead kicker="Practice" title={activity.title}>
         <div className="row">
           <KindTag kind={activity.kind} />
           <RouteTag route={activity.route} />
@@ -94,10 +101,36 @@ export function ActivityPage({ id }: { id: string }) {
         ) : null}
       </PageHead>
 
+      <FlowSteps
+        kind={activity.kind}
+        planReady={planReadiness(activity.kind, activity.plan).ready}
+        attempted={attempt !== undefined}
+        reviewed={review !== undefined}
+      />
+
+      {activity.state === 'paused' ? (
+        <p className="done-note">This is paused. Nothing is waiting for you; resume it under “Pause, abandon or delete” below.</p>
+      ) : null}
+
       <PlanPanel activity={activity} locked={attempt !== undefined} />
 
       {activity.kind === 'rehearsal' && (template?.rehearsal || activity.state !== 'reviewed') ? (
         <RehearsalPanel script={template?.rehearsal} activityId={activity.id} />
+      ) : null}
+
+      {activity.kind === 'real-attempt' && !attempt && activity.state !== 'abandoned' ? (
+        <details className="more">
+          <summary>
+            Rehearse your opening first <span className="meta">optional</span>
+          </summary>
+          <div className="more__body">
+            <p className="hint">
+              Try your first sentences against a scripted counterpart. Nothing typed here is saved, and a rehearsal is
+              never counted as the real conversation.
+            </p>
+            <RehearsalPanel script={template?.rehearsal ?? DISCUSSION_REHEARSAL} />
+          </div>
+        </details>
       ) : null}
 
       {attempt ? (
@@ -133,18 +166,33 @@ export function ActivityPage({ id }: { id: string }) {
         </section>
       ) : null}
 
-      {attempt ? (
-        <AiSparring
-          purpose="review"
-          activityId={activity.id}
-          {...(attempt ? { attemptId: attempt.id } : {})}
-          {...(review ? { reviewId: review.id } : {})}
-          situationId={activity.situationId}
-        />
+      {review && activity.state === 'reviewed' ? (
+        <section className="panel--accent" aria-labelledby="done-heading">
+          <h2 id="done-heading">Reflection saved</h2>
+          <p>
+            You decided: <strong>{NEXT_MOVE_LABEL[review.nextMove].toLowerCase()}</strong>.{' '}
+            {review.nextMove === 'pause' || review.nextMove === 'stop'
+              ? 'Nothing is waiting for you on this.'
+              : review.nextMove === 'escalate'
+                ? 'That is a complete answer, not a lesser one.'
+                : 'When the next occasion is in sight, you can plan it from here.'}
+          </p>
+          <div className="row">
+            {review.nextMove === 'repeat' || review.nextMove === 'adapt' || review.nextMove === 'transfer' ? (
+              <a className="btn btn--primary" href={href({ name: 'prepare', situationId: activity.situationId })}>
+                Prepare the next attempt
+              </a>
+            ) : null}
+            <a className="btn btn--quiet" href={href({ name: 'home' })}>
+              Back to Home
+            </a>
+          </div>
+          <MemoryOffer activityId={activity.id} />
+        </section>
       ) : null}
 
       <section className="panel">
-        <h2>Evidence</h2>
+        <h2>Supporting evidence</h2>
         <p className="hint">
           Evidence is what the records can point at. Something somebody else said is kept separately from your own
           observation, and an account that contradicts yours is kept rather than resolved.
@@ -181,7 +229,25 @@ export function ActivityPage({ id }: { id: string }) {
         <EvidenceForm activityId={activity.id} capabilityIds={activity.capabilityIds} />
       </section>
 
+      {attempt ? (
+        <details className="more">
+          <summary>Think it through with the sparring partner</summary>
+          <div className="more__body">
+            <AiSparring
+              purpose="review"
+              activityId={activity.id}
+              {...(attempt ? { attemptId: attempt.id } : {})}
+              {...(review ? { reviewId: review.id } : {})}
+              situationId={activity.situationId}
+            />
+          </div>
+        </details>
+      ) : null}
+
       {credit ? (
+        <details className="more">
+          <summary>How this is counted</summary>
+          <div className="more__body">
         <section className="panel panel--quiet">
           <h2>Practice experience from this activity</h2>
           <p>
@@ -193,10 +259,15 @@ export function ActivityPage({ id }: { id: string }) {
             <a href={href({ name: 'progress' })}>How this is counted</a>.
           </p>
         </section>
+          </div>
+        </details>
       ) : null}
 
-      <section className="panel panel--quiet">
-        <h2>Pause, abandon or delete</h2>
+      <details className="more">
+        <summary>Pause, abandon or delete</summary>
+        <div className="more__body">
+      <section className="panel">
+        <h2 className="visually-hidden">Pause, abandon or delete</h2>
         <div className="row">
           {activity.state !== 'paused' && activity.state !== 'reviewed' && activity.state !== 'abandoned' ? (
             <button
@@ -266,7 +337,50 @@ export function ActivityPage({ id }: { id: string }) {
         </p>
         <SaveStatus state={save.state} />
       </section>
+        </div>
+      </details>
     </div>
+  )
+}
+
+const FLOW_LABELS: Record<'observation' | 'rehearsal' | 'real-attempt', readonly string[]> = {
+  observation: ['Plan', 'Observe', 'Reflect'],
+  rehearsal: ['Plan', 'Rehearse', 'Reflect'],
+  'real-attempt': ['Plan', 'Rehearse', 'Try it', 'Reflect'],
+}
+
+/** Where this activity is. Text carries the state; the coloured rule only repeats it. */
+function FlowSteps({
+  kind,
+  planReady,
+  attempted,
+  reviewed,
+}: {
+  kind: 'observation' | 'rehearsal' | 'real-attempt'
+  planReady: boolean
+  attempted: boolean
+  reviewed: boolean
+}) {
+  const labels = FLOW_LABELS[kind]
+  const last = labels.length - 1
+  const tryIndex = last - 1
+  const current = reviewed ? labels.length : attempted ? last : planReady ? tryIndex : 0
+  return (
+    <ol className="flow-steps" aria-label="Where this is">
+      {labels.map((label, index) => {
+        const optional = kind === 'real-attempt' && index === 1
+        const done = optional ? attempted : index < current
+        const now = index === current
+        return (
+          <li key={label} className={now ? 'is-current' : done ? 'is-done' : ''} {...(now ? { 'aria-current': 'step' as const } : {})}>
+            <span className="flow-steps__label">{label}</span>
+            <span className="flow-steps__state">
+              {now ? 'now' : optional && !attempted ? 'optional' : done ? (optional ? 'behind you' : 'done') : 'to come'}
+            </span>
+          </li>
+        )
+      })}
+    </ol>
   )
 }
 
@@ -280,7 +394,8 @@ function PlanPanel({
   const { run } = useApp()
   const save = useSave()
   const [plan, setPlan] = useState<ActivityPlan>(activity.plan)
-  const [editing, setEditing] = useState(false)
+  // An unfinished plan opens ready to finish: that is the step the person is on.
+  const [editing, setEditing] = useState(() => !locked && !planReadiness(activity.kind, activity.plan).ready)
   const required = requiredPlanFields(activity.kind)
   const readiness = planReadiness(activity.kind, plan)
 
@@ -372,7 +487,7 @@ function AttemptForm({ activityId, kind }: { activityId: string; kind: 'observat
   const [assistance, setAssistance] = useState<AssistanceLevel>('none')
 
   return (
-    <section className="panel panel--accent">
+    <section className="panel--accent">
       <h2>Record what happened</h2>
       <p className="hint">
         {kind === 'real-attempt'
@@ -459,8 +574,8 @@ function ReviewPanel({ activityId }: { activityId: string }) {
   }
 
   return (
-    <section className="panel panel--accent">
-      <h2>Review it</h2>
+    <section className="panel--accent">
+      <h2>Reflect on it</h2>
       <p className="hint">
         What you observed is kept apart from what you take it to mean, on purpose. The competing explanation is the part
         that does the work: it is what stops a single account from becoming the whole story.
