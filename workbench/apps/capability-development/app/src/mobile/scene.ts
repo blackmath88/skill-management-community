@@ -23,9 +23,36 @@ const COS_T = Math.cos(TILT)
 const FOCAL = 760
 /** The wall the shadow falls on, behind the mobile. */
 const WALL_Z = -150
-/** Light from the upper left, in front. Only its horizontal part shades the sheets. */
-const LIGHT_X = -0.58
-const LIGHT_Z = 0.815
+/** Light from the upper left, in front, unless told otherwise. Only its horizontal part shades the sheets. */
+const DEFAULT_LIGHT_X = -0.58
+/** How far an arm tips for one memory more on one side than the other, and the most it ever tips. */
+const TIP_PER_MEMORY = 0.085
+const MAX_TIP = 0.19
+/** How much lower a sheet hangs when it carries a memory. */
+const MEMORY_STRETCH = 7
+
+/**
+ * Everything about a moment that is not the arrangement itself.
+ *
+ * All of it is optional and all of it is cosmetic. `weights` is the one input that comes from the
+ * person's choices: one number per slot, 0 for a bare sheet and 1 for a sheet carrying a memory
+ * (values in between while a memory settles). A weighted sheet hangs a little lower and tips the
+ * arms above it, the way a real mobile answers to what is hung on it. Nothing else about the
+ * person reaches this function — not how much they have recorded, not how well anything went.
+ */
+export interface Moment {
+  /** How the threads are swinging, about -0.4 to 0.4. Sheets lag behind a turn and swing back. */
+  sway?: number
+  weights?: readonly number[]
+  /** Horizontal direction of the light, -0.7 (from the left) to 0.7 (from the right). */
+  lightX?: number
+}
+
+/** The light for an hour of the local day: from the left in the morning, from the right by evening. */
+export function lightForHour(hour: number): number {
+  const h = Math.max(6, Math.min(20, hour))
+  return Number((-0.62 + ((h - 6) / 14) * 1.24).toFixed(3))
+}
 
 export interface WireDrawing {
   kind: 'wire'
@@ -63,16 +90,17 @@ export type Drawing = WireDrawing | ShapeDrawing
 
 type Vec = [number, number, number]
 
-function project([x, y, z]: Vec, centreX: number): { x: number; y: number; s: number; z: number } {
+function project([x, y, z]: Vec, centreX: number, focal = FOCAL): { x: number; y: number; s: number; z: number } {
   const yy = y * COS_T + z * SIN_T
   const zz = z * COS_T - y * SIN_T * 0.25
-  const s = FOCAL / (FOCAL - zz)
+  const s = focal / (focal - zz)
   return { x: centreX + (x - centreX) * s, y: 10 + (yy - 10) * s, s, z: zz }
 }
 
-function onWall([x, y, z]: Vec, centreX: number): { x: number; y: number } {
+function onWall([x, y, z]: Vec, centreX: number, lightX: number, focal = FOCAL): { x: number; y: number } {
   const d = z - WALL_Z
-  const p = project([x + d * 0.26, y + d * 0.2, WALL_Z], centreX)
+  // The shadow falls away from the light.
+  const p = project([x - d * 0.45 * lightX, y + d * 0.2, WALL_Z], centreX, focal)
   return { x: p.x, y: p.y }
 }
 
@@ -95,14 +123,26 @@ function drift(index: number, t: number, amount: number): number {
  * radians the person has turned it by: the top arm follows it directly and everything hanging
  * lower swings a little further, the way lighter parts of a real mobile do.
  */
-export function drawMobile(composition: MobileComposition, time = 0, turned = 0): Drawing[] {
+export function drawMobile(composition: MobileComposition, time = 0, turned = 0, moment: Moment = {}): Drawing[] {
   const cx = composition.hookX
+  const focal = composition.focal ?? FOCAL
+  const sway = moment.sway ?? 0
+  const lightX = moment.lightX ?? DEFAULT_LIGHT_X
+  const lightZ = Math.sqrt(1 - lightX * lightX)
+  const weight = (slot: number) => Math.max(0, Math.min(1, moment.weights?.[slot] ?? 0))
+  const carried = (hang: Hang | null | undefined): number => {
+    if (!hang) return 0
+    const node = hang.node
+    if (node.kind === 'shape') return weight(node.slot)
+    if (node.kind === 'arm') return carried(node.ends[0]) + carried(node.ends[1]) + carried(node.centre)
+    return node.hangs.reduce((sum, item) => sum + carried(item.hang), 0)
+  }
   const out: Drawing[] = []
   let index = 0
 
   const wire = (points: Vec[], curve: boolean, width = 2.1) => {
-    const p = points.map((v) => project(v, cx))
-    const w = points.map((v) => onWall(v, cx))
+    const p = points.map((v) => project(v, cx, focal))
+    const w = points.map((v) => onWall(v, cx, lightX, focal))
     const path = (q: { x: number; y: number }[]) =>
       curve && q.length === 3
         ? `M${n(q[0]!.x)} ${n(q[0]!.y)} Q${n(q[1]!.x)} ${n(q[1]!.y)} ${n(q[2]!.x)} ${n(q[2]!.y)}`
@@ -113,16 +153,19 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0)
   }
 
   const place = (from: Vec, hang: Hang, level: number): void => {
-    const top: Vec = [from[0], from[1] + hang.thread, from[2]]
     const node = hang.node
     const i = index++
+    // A thread swings from where it is tied: the further down, the further it lags.
+    const stretch = node.kind === 'shape' ? MEMORY_STRETCH * weight(node.slot) : 0
+    const lag = node.kind === 'shape' ? -sway * (hang.thread + 30) * 0.55 : -sway * hang.thread * 0.2
+    const top: Vec = [from[0] + lag, from[1] + hang.thread + stretch, from[2]]
     if (node.kind === 'shape') {
       const sheet = composition.shapes[node.slot]
       if (!sheet) return
-      const angle = node.turn + drift(i + 20, time, 0.85) + turned * (1.5 + level * 0.25)
+      const angle = node.turn + drift(i + 20, time, 0.85) + turned * (1.5 + Math.min(level, 3) * 0.25)
       const centre: Vec = [top[0], top[1] + sheet.r, top[2]]
-      const p = project(centre, cx)
-      const a = project(from, cx)
+      const p = project(centre, cx, focal)
+      const a = project(from, cx, focal)
       wire([from, top], false, 1.1)
       const cos = Math.cos(angle)
       const sin = Math.sin(angle)
@@ -130,8 +173,8 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0)
       const reverse = cos < 0
       const nx = reverse ? sin : -sin
       const nz = Math.abs(cos)
-      const lit = Math.max(0, nx * LIGHT_X + nz * LIGHT_Z)
-      const wall = onWall(centre, cx)
+      const lit = Math.max(0, nx * lightX + nz * lightZ)
+      const wall = onWall(centre, cx, lightX, focal)
       out.push({
         kind: 'shape',
         slot: node.slot,
@@ -150,12 +193,19 @@ export function drawMobile(composition: MobileComposition, time = 0, turned = 0)
       return
     }
     wire([from, top], false, 1.2)
-    const angle = node.turn + drift(i, time, 0.5 - Math.min(level, 2) * 0.08) + turned * (1 + level * 0.45)
+    const free = node.kind === 'arm' ? (composition.armTurn ?? 1) : 1
+    const angle = node.turn + (drift(i, time, 0.5 - Math.min(level, 2) * 0.08) + turned * (1 + Math.min(level, 3) * 0.4)) * free
     const cos = Math.cos(angle)
     const sin = Math.sin(angle)
     if (node.kind === 'arm') {
-      const a: Vec = [top[0] - node.left * cos, top[1] + node.drop, top[2] - node.left * sin]
-      const b: Vec = [top[0] + node.right * cos, top[1] + node.drop, top[2] + node.right * sin]
+      // The arm tips towards whichever side carries more memories.
+      // A long arm tips through a smaller angle, so its ends never fall further than a short one's.
+      const lever = Math.min(1, 60 / Math.max(node.left, node.right))
+      const tip = Math.max(-MAX_TIP, Math.min(MAX_TIP, (carried(node.ends[1]) - carried(node.ends[0])) * TIP_PER_MEMORY)) * lever
+      const reach = Math.cos(tip)
+      const fall = Math.sin(tip)
+      const a: Vec = [top[0] - node.left * cos * reach, top[1] + node.drop - node.left * fall, top[2] - node.left * sin * reach]
+      const b: Vec = [top[0] + node.right * cos * reach, top[1] + node.drop + node.right * fall, top[2] + node.right * sin * reach]
       // The control point that makes the bow pass through the point it hangs from.
       const c: Vec = [2 * top[0] - (a[0] + b[0]) / 2, 2 * top[1] - (a[1] + b[1]) / 2, 2 * top[2] - (a[2] + b[2]) / 2]
       wire([a, c, b], true)

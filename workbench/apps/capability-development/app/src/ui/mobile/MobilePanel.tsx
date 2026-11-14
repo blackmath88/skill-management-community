@@ -131,9 +131,12 @@ export function MemoryOffer({ activityId }: { activityId: string }) {
   const hung = view.memories.find((m) => m.activityId === activityId)
   if (hung) {
     return (
-      <p className="meta">
-        This is hung on {hung.shapeName} of your mobile. <a href={href({ name: 'home' })}>See it on Home</a>.
-      </p>
+      <div className="memory-offer">
+        <Mobile drawing={view.drawing} size="small" selectedSlot={hung.slot} />
+        <p className="meta">
+          This is hung on {hung.shapeName} of your mobile. <a href={href({ name: 'home' })}>See it on Home</a>.
+        </p>
+      </div>
     )
   }
   const slot = view.freeSlots[0]
@@ -146,7 +149,9 @@ export function MemoryOffer({ activityId }: { activityId: string }) {
     )
   }
   return (
-    <div>
+    <div className="memory-offer">
+      <Mobile drawing={view.drawing} size="small" />
+      <div>
       <button
         type="button"
         className="btn-quiet"
@@ -159,6 +164,7 @@ export function MemoryOffer({ activityId }: { activityId: string }) {
         record from Home. Nothing changes if you do not.
       </p>
       <SaveStatus state={save.state} />
+      </div>
     </div>
   )
 }

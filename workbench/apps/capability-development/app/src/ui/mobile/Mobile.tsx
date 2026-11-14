@@ -1,21 +1,30 @@
 /**
- * The personal mobile, drawn as SVG from a three-dimensional model.
+ * The mobile, drawn as SVG from a three-dimensional model, and how it behaves.
  *
  * ~/mobile/scene does the geometry; this file paints it — matte sheet metal under a soft light,
- * thin wire, a shadow on the wall behind — and lets the person turn it: drag it, or press the
- * labelled "Turn it" button. Left alone it drifts slowly, each arm and each shape at its own
- * pace. With reduced motion it does not move by itself at all: it rests in its authored pose, a
- * drag follows the hand without coasting, and the button steps it round.
+ * thin wire, a shadow on the wall behind — and gives it its manners:
  *
- * The picture is still decoration with one convenience (clicking a shape that carries a memory
- * selects it). Every such action exists as a labelled HTML control beside it, so the SVG is
- * hidden from assistive technology and described in a sentence. It receives a MobileDrawing only
- * — geometry, colours and which shapes are marked — never a title or a line of anybody's writing.
+ *   - Left alone it drifts, each arm and sheet at its own pace.
+ *   - It can be turned: drag it, or press the labelled "Turn it" button. A push eases out, and
+ *     the sheets lag behind on their threads and swing back.
+ *   - Under a mouse it leans a little towards the pointer.
+ *   - It settles into place when it first appears, and stirs when something is saved nearby.
+ *   - When a memory is hung, its bead slides down the thread and the arms above it tip.
+ *   - Its light comes from where the day's light would: left in the morning, right by evening.
+ *
+ * With reduced motion none of that happens by itself. It rests in its authored pose; a drag
+ * follows the hand without coasting; the button steps it round; a new memory is simply there.
+ *
+ * The picture is never the only way to anything. Whatever a click on a sheet does is also a
+ * labelled HTML control beside it, so the SVG is hidden from assistive technology and described
+ * in a sentence. It receives a MobileDrawing only — geometry, colours and which sheets are
+ * marked — never a title or a line of anybody's writing.
  */
 import { useEffect, useId, useRef, useState } from 'react'
 import { shapePath, VIEW_BOX } from '~/mobile/catalogue'
-import { drawMobile, sheetColours, wireColour, type ShapeDrawing } from '~/mobile/scene'
+import { drawMobile, lightForHour, sheetColours, wireColour, type ShapeDrawing } from '~/mobile/scene'
 import type { MobileDrawing } from '~/mobile/view'
+import { onMobileNudge } from './nudge'
 
 function useReducedMotion(): boolean {
   const query = typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null
@@ -32,29 +41,74 @@ function useReducedMotion(): boolean {
 /** Radians of turn per pixel dragged, and how long a push takes to die away, in seconds. */
 const DRAG = 0.011
 const EASE = 1.5
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
+const easeOut = (t: number) => 1 - (1 - t) * (1 - t)
+
+interface Pose {
+  time: number
+  turned: number
+  sway: number
+  weights: number[]
+}
 
 export function Mobile({
   drawing,
   selectedSlot = null,
   onSelect,
+  selectable = 'marked',
   size = 'regular',
+  still = false,
 }: {
   drawing: MobileDrawing
   selectedSlot?: number | null
   onSelect?: (slot: number) => void
-  size?: 'regular' | 'small'
+  /** Which sheets a click selects: only those carrying a mark, or every one. */
+  selectable?: 'marked' | 'all'
+  size?: 'regular' | 'small' | 'wide'
+  /** A quiet picture: no motion, no controls, no shadow. For use as a mark. */
+  still?: boolean
 }) {
   const { composition, palette, marked } = drawing
   const id = useId().replace(/:/g, '')
-  const reduced = useReducedMotion()
-  const [pose, setPose] = useState({ time: 0, turned: 0 })
-  const motion = useRef({ turned: 0, velocity: 0, time: 0, last: 0, dragging: false, lastX: 0, travelled: 0, visible: true })
+  const prefersReduced = useReducedMotion()
+  const reduced = prefersReduced || still
+  const count = composition.shapes.length
+  const targets: number[] = Array.from({ length: count }, (_, slot) => (marked.includes(slot) ? 1 : 0))
+  const markKey = targets.join('')
+  const [lightX] = useState(() => lightForHour(new Date().getHours()))
+  const [pose, setPose] = useState<Pose>(() => ({ time: 0, turned: 0, sway: 0, weights: targets }))
+  const motion = useRef({
+    turned: 0, velocity: 0, sway: 0, swayVelocity: 0, lean: 0, leanTarget: 0,
+    time: 0, last: 0, dragging: false, lastX: 0, travelled: 0, visible: true,
+    weights: targets, targets, entered: false,
+  })
   const figure = useRef<HTMLElement>(null)
 
-  // The drift. Only while the mobile is on screen, and never under reduced motion.
+  // What is hung changed: tell the loop, or under reduced motion simply show it.
+  useEffect(() => {
+    const m = motion.current
+    const next = markKey.split('').map(Number)
+    const changed = m.targets.join('') !== markKey
+    m.targets = next
+    if (m.weights.length !== next.length) m.weights = next
+    if (reduced) {
+      m.weights = next
+      setPose((p) => ({ ...p, weights: next }))
+    } else if (changed) {
+      // Hanging something sets the whole thing moving a little.
+      m.velocity += 0.45
+    }
+  }, [markKey, reduced])
+
   useEffect(() => {
     const m = motion.current
     if (reduced || typeof requestAnimationFrame !== 'function') return
+    if (!m.entered) {
+      // Settle into place on arrival: wound back a little, easing to the authored pose.
+      m.entered = true
+      m.turned = -0.9
+      m.velocity = 0.9 / EASE
+    }
     let frame = 0
     const tick = (now: number) => {
       const dt = m.last === 0 ? 0 : Math.min(0.05, (now - m.last) / 1000)
@@ -65,7 +119,16 @@ export function Mobile({
           m.turned += m.velocity * dt
           m.velocity *= Math.exp(-dt / EASE)
         }
-        setPose({ time: m.time, turned: m.turned })
+        // The threads are a spring chasing the turn: they lag, overshoot and settle.
+        const want = clamp(m.velocity * 0.09, -0.4, 0.4)
+        m.swayVelocity += ((want - m.sway) * 34 - m.swayVelocity * 4.2) * dt
+        m.sway += m.swayVelocity * dt
+        m.lean += (m.leanTarget - m.lean) * Math.min(1, dt * 3.5)
+        m.weights = m.weights.map((w, i) => {
+          const target = m.targets[i] ?? 0
+          return Math.abs(target - w) < 0.002 ? target : w + (target - w) * Math.min(1, dt * 2.6)
+        })
+        setPose({ time: m.time, turned: m.turned + m.lean, sway: m.sway, weights: m.weights })
       }
       frame = requestAnimationFrame(tick)
     }
@@ -77,9 +140,13 @@ export function Mobile({
           })
         : null
     if (observer && figure.current) observer.observe(figure.current)
+    const stopListening = onMobileNudge((strength) => {
+      m.velocity += 0.7 * strength
+    })
     return () => {
       cancelAnimationFrame(frame)
       observer?.disconnect()
+      stopListening()
       m.last = 0
     }
   }, [reduced])
@@ -88,60 +155,74 @@ export function Mobile({
     const m = motion.current
     if (reduced) {
       m.turned += angle
-      setPose({ time: 0, turned: m.turned })
+      setPose((p) => ({ ...p, time: 0, turned: m.turned }))
     } else {
       m.velocity += angle * 2.4
     }
   }
 
-  /** A click that ended a drag is not a click on a shape. */
+  /** A click that ended a drag is not a click on a sheet. */
   const pick = (slot: number) => {
     if (motion.current.travelled < 5) onSelect?.(slot)
   }
 
-  const pointer = {
-    onPointerDown: (e: React.PointerEvent) => {
-      const m = motion.current
-      m.dragging = true
-      m.lastX = e.clientX
-      m.travelled = 0
-      m.velocity = 0
-    },
-    onPointerMove: (e: React.PointerEvent) => {
-      const m = motion.current
-      if (!m.dragging) return
-      const dx = e.clientX - m.lastX
-      m.lastX = e.clientX
-      m.travelled += Math.abs(dx)
-      m.turned += dx * DRAG
-      m.velocity = reduced ? 0 : dx * DRAG * 40
-      if (reduced) setPose({ time: 0, turned: m.turned })
-    },
-    onPointerUp: () => {
-      motion.current.dragging = false
-    },
-    onPointerLeave: () => {
-      motion.current.dragging = false
-    },
-  }
+  const pointer = still
+    ? {}
+    : {
+        onPointerDown: (e: React.PointerEvent) => {
+          const m = motion.current
+          m.dragging = true
+          m.lastX = e.clientX
+          m.travelled = 0
+          m.velocity = 0
+        },
+        onPointerMove: (e: React.PointerEvent) => {
+          const m = motion.current
+          if (!m.dragging) {
+            if (e.pointerType === 'mouse' && !reduced) {
+              const box = e.currentTarget.getBoundingClientRect()
+              m.leanTarget = ((e.clientX - box.left) / box.width - 0.5) * 0.3
+            }
+            return
+          }
+          const dx = e.clientX - m.lastX
+          m.lastX = e.clientX
+          m.travelled += Math.abs(dx)
+          m.turned += dx * DRAG
+          m.velocity = reduced ? 0 : dx * DRAG * 40
+          if (reduced) setPose((p) => ({ ...p, time: 0, turned: m.turned }))
+        },
+        onPointerUp: () => {
+          motion.current.dragging = false
+        },
+        onPointerLeave: () => {
+          motion.current.dragging = false
+          motion.current.leanTarget = 0
+        },
+      }
 
-  const parts = drawMobile(composition, reduced ? 0 : pose.time, pose.turned)
+  const parts = drawMobile(composition, reduced ? 0 : pose.time, pose.turned, {
+    sway: reduced ? 0 : pose.sway,
+    weights: pose.weights.length === count ? pose.weights : targets,
+    lightX,
+  })
   const description =
-    `Your mobile: the “${composition.title}” arrangement in ${palette.title.toLowerCase()}. ` +
+    `A mobile: the “${composition.title}” arrangement in ${palette.title.toLowerCase()}. ` +
     (marked.length === 0
-      ? 'No memories are hung on it.'
-      : `${marked.length} of its ${composition.shapes.length} shapes ${marked.length === 1 ? 'carries a memory' : 'carry memories'}, listed next to it.`)
+      ? 'None of its sheets is marked.'
+      : `${marked.length} of its ${count} sheets ${marked.length === 1 ? 'is' : 'are'} marked, listed next to it.`)
 
   const sheet = (shape: ShapeDrawing) => {
     const def = composition.shapes[shape.slot]
     if (!def) return null
-    const d = def.kind === 'ring' ? shapePath('ring', def.r - 4) : shapePath(def.kind, def.r)
-    return { def, d, transform: `translate(${shape.x} ${shape.y}) scale(${(shape.scale * shape.squeeze).toFixed(3)} ${shape.scale}) rotate(${def.rot})` }
+    const band = def.r * 0.42
+    const d = def.kind === 'ring' ? shapePath('ring', def.r - band / 2) : shapePath(def.kind, def.r)
+    return { def, d, band, transform: `translate(${shape.x} ${shape.y}) scale(${(shape.scale * shape.squeeze).toFixed(3)} ${shape.scale}) rotate(${def.rot})` }
   }
 
   return (
-    <figure className={`mobile mobile--${size}`} ref={figure}>
-      <svg viewBox={VIEW_BOX} aria-hidden="true" focusable="false" {...pointer}>
+    <figure className={`mobile mobile--${size}${still ? ' mobile--still' : ''}`} ref={figure}>
+      <svg viewBox={composition.viewBox ?? VIEW_BOX} aria-hidden="true" focusable="false" {...pointer}>
         <defs>
           <filter id={`${id}-soft`} x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="5" />
@@ -161,18 +242,20 @@ export function Mobile({
         </defs>
 
         {/* The shadow on the wall: the same sheets, displaced by the light and blurred. */}
-        <g filter={`url(#${id}-soft)`} opacity="0.1" fill="#2a251d" stroke="#2a251d">
-          {parts.map((part, i) => {
-            if (part.kind === 'wire') return null
-            const s = sheet(part)
-            if (!s) return null
-            return (
-              <g key={i} transform={`translate(${part.shadow[0]} ${part.shadow[1]})`}>
-                <path d={s.d} transform={s.transform} {...(s.def.kind === 'ring' ? { fill: 'none', strokeWidth: 8 } : { stroke: 'none' })} />
-              </g>
-            )
-          })}
-        </g>
+        {still ? null : (
+          <g filter={`url(#${id}-soft)`} opacity="0.1" fill="#2a251d" stroke="#2a251d">
+            {parts.map((part, i) => {
+              if (part.kind === 'wire') return null
+              const s = sheet(part)
+              if (!s) return null
+              return (
+                <g key={i} transform={`translate(${part.shadow[0]} ${part.shadow[1]})`}>
+                  <path d={s.d} transform={s.transform} {...(s.def.kind === 'ring' ? { fill: 'none', strokeWidth: s.band } : { stroke: 'none' })} />
+                </g>
+              )
+            })}
+          </g>
+        )}
 
         {parts.map((part, i) => {
           if (part.kind === 'wire') {
@@ -182,29 +265,23 @@ export function Mobile({
           if (!s) return null
           const { def } = s
           const colours = sheetColours(palette.tones[def.tone], part)
-          const isMarked = marked.includes(part.slot)
-          const selectable = isMarked && onSelect !== undefined
+          const weight = pose.weights[part.slot] ?? 0
+          const clickable = onSelect !== undefined && (selectable === 'all' || marked.includes(part.slot))
           const top = part.y - def.r * part.scale
           // The far edge of the sheet's thickness shows on the side turned away from the viewer.
           const rim = (part.reverse ? -1 : 1) * 1.7 * (1 - part.squeeze)
+          // The bead slides down the thread as the memory settles.
+          const along = 0.1 + 0.4 * easeOut(weight)
+          const inlay = Math.max(2.5, def.r * 0.18) * part.scale * weight
           return (
-            <g key={i} className={selectable ? 'is-clickable' : undefined} onClick={() => (selectable ? pick(part.slot) : undefined)}>
+            <g key={i} className={clickable ? 'is-clickable' : undefined} onClick={() => (clickable ? pick(part.slot) : undefined)}>
               {selectedSlot === part.slot ? (
-                <ellipse
-                  cx={part.x}
-                  cy={part.y}
-                  rx={(def.r + 9) * part.scale * Math.max(0.4, part.squeeze)}
-                  ry={(def.r + 9) * part.scale}
-                  fill="none"
-                  stroke={palette.wire}
-                  strokeWidth="1.4"
-                  strokeDasharray="3 4"
-                />
+                <ellipse cx={part.x} cy={part.y} rx={(def.r + 8) * part.scale * Math.max(0.4, part.squeeze)} ry={(def.r + 8) * part.scale} fill="none" stroke={palette.wire} strokeWidth="1.4" strokeDasharray="3 4" />
               ) : null}
               {def.kind === 'ring' ? (
                 <>
-                  <path d={s.d} transform={`translate(${rim} 0) ${s.transform}`} fill="none" stroke={colours.bottom} strokeWidth="8" />
-                  <path d={s.d} transform={s.transform} fill="none" stroke={`url(#${id}-g${part.slot})`} strokeWidth="8" />
+                  <path d={s.d} transform={`translate(${rim} 0) ${s.transform}`} fill="none" stroke={colours.bottom} strokeWidth={s.band} />
+                  <path d={s.d} transform={s.transform} fill="none" stroke={`url(#${id}-g${part.slot})`} strokeWidth={s.band} />
                 </>
               ) : (
                 <>
@@ -212,20 +289,26 @@ export function Mobile({
                   <path d={s.d} transform={s.transform} fill={`url(#${id}-g${part.slot})`} stroke={colours.edge} strokeWidth="0.8" vectorEffect="non-scaling-stroke" strokeOpacity="0.55" />
                 </>
               )}
-              {/* A memory is carried by a mark, not by a colour: an inlay on the sheet and a
-                  bead on its thread. */}
-              {isMarked ? (
+              {/* A mark is carried by form, not by colour: an inlay on the sheet and a bead on
+                  its thread. */}
+              {weight > 0.01 ? (
                 <>
-                  <ellipse cx={part.x} cy={part.y} rx={Math.max(2.5, def.r * 0.18) * part.scale * Math.max(0.3, part.squeeze)} ry={Math.max(2.5, def.r * 0.18) * part.scale} fill="#fffdf8" stroke={palette.wire} strokeWidth="1" />
-                  <circle cx={(part.threadTop[0] + part.x) / 2} cy={(part.threadTop[1] + top) / 2} r={3.2 * part.scale} fill={palette.wire} />
+                  <ellipse cx={part.x} cy={part.y} rx={inlay * Math.max(0.3, part.squeeze)} ry={inlay} fill="#fffdf8" stroke={palette.wire} strokeWidth="1" />
+                  <circle
+                    cx={part.threadTop[0] + (part.x - part.threadTop[0]) * along}
+                    cy={part.threadTop[1] + (top - part.threadTop[1]) * along}
+                    r={Math.min(3.2, def.r * 0.24) * part.scale}
+                    fill={palette.wire}
+                    opacity={Math.min(1, weight * 3)}
+                  />
                 </>
               ) : null}
             </g>
           )
         })}
       </svg>
-      <figcaption className="visually-hidden">{description}</figcaption>
-      {size === 'regular' ? (
+      {still ? null : <figcaption className="visually-hidden">{description}</figcaption>}
+      {still ? null : (
         <p className="mobile__controls">
           <button type="button" className="btn-link" onClick={() => turnBy(0.7)}>
             Turn it
@@ -235,7 +318,7 @@ export function Mobile({
             · or drag
           </span>
         </p>
-      ) : null}
+      )}
     </figure>
   )
 }

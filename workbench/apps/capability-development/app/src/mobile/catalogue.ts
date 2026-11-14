@@ -53,6 +53,12 @@ export interface MobileComposition {
   hookX: number
   root: Hang
   shapes: MobileShape[]
+  /** Set by generated arrangements, which size their own frame. Authored ones use VIEW_BOX. */
+  viewBox?: string
+  /** Camera distance. Larger arrangements are seen from further away, or perspective distorts them. */
+  focal?: number
+  /** How freely the arms turn, 0 to 1. Large arrangements keep their arms nearly in the picture plane so the boughs stay apart. */
+  armTurn?: number
 }
 
 export const VIEW_BOX = '-30 -6 380 288'

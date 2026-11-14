@@ -47,6 +47,7 @@ import {
 import { RehearsalPanel } from './Rehearsal'
 import { DISCUSSION_REHEARSAL } from '~/content/discussion'
 import { MemoryOffer } from '../mobile/MobilePanel'
+import { nudgeMobile } from '../mobile/nudge'
 import { AiSparring } from './AiSparring'
 
 export function ActivityPage({ id }: { id: string }) {
@@ -719,6 +720,8 @@ function EvidenceForm({ activityId, capabilityIds }: { activityId: string; capab
                   setText('')
                   setAttribution('')
                   setOpen(false)
+                  // Something was added to the room: if a mobile is on screen, it stirs.
+                  nudgeMobile(0.6)
                 }
               })
           }

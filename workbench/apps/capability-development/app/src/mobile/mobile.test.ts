@@ -6,7 +6,8 @@ import type { AppearanceMobile, UserData } from '~/domain/types'
 import { NOW, registry, reviewedRealAttempt, testDeps, activity } from '~/test-helpers/fixtures'
 import { COMPOSITIONS, PALETTES, SLOT_COUNT, composition, mobilePalette, shapePath } from './catalogue'
 import { deriveMobileView } from './view'
-import { drawMobile, mix, sheetColours } from './scene'
+import { drawMobile, lightForHour, mix, sheetColours } from './scene'
+import { growMobile } from './grow'
 
 const deps = testDeps()
 const base = (): AppearanceMobile => ({ version: 1, compositionId: 'cascade', paletteId: 'moss-ink', memories: [] })
@@ -174,5 +175,84 @@ describe('the three-dimensional drawing', () => {
   it('mixes colours as #rrggbb', () => {
     expect(mix('#000000', '#ffffff', 0.5)).toBe('#808080')
     expect(sheetColours('#b4532a', { light: 1, reverse: false, haze: 0 }).top).toMatch(/^#[0-9a-f]{6}$/)
+  })
+})
+
+describe('what the mobile answers to', () => {
+  const arc = COMPOSITIONS[0]!
+  const sheetAt = (parts: ReturnType<typeof drawMobile>, slot: number) => parts.find((p) => p.kind === 'shape' && p.slot === slot) as Extract<ReturnType<typeof drawMobile>[number], { kind: 'shape' }>
+
+  it('hangs a weighted sheet lower and tips the arm towards it, and nothing else moves it', () => {
+    const bare = drawMobile(arc)
+    const weighted = drawMobile(arc, 0, 0, { weights: [1, 0, 0, 0, 0] })
+    expect(sheetAt(weighted, 0).y).toBeGreaterThan(sheetAt(bare, 0).y)
+    // Its neighbour on the same small arm is carried down less: the arm between them has tipped.
+    expect(sheetAt(weighted, 0).y - sheetAt(bare, 0).y).toBeGreaterThan(sheetAt(weighted, 1).y - sheetAt(bare, 1).y + 3)
+    // And the far side of the whole mobile rises, as the top arm tips towards the weight.
+    expect(sheetAt(weighted, 4).y).toBeLessThan(sheetAt(bare, 4).y)
+    expect(drawMobile(arc, 0, 0, { weights: [0, 0, 0, 0, 0] })).toEqual(bare)
+  })
+  it('balances again when both sides carry the same', () => {
+    const bare = drawMobile(arc)
+    const both = drawMobile(arc, 0, 0, { weights: [1, 1, 0, 0, 0] })
+    // Both hang lower by the same stretch, so the arm between them is level.
+    expect(Math.abs(sheetAt(both, 0).y - sheetAt(bare, 0).y - (sheetAt(both, 1).y - sheetAt(bare, 1).y))).toBeLessThan(2)
+  })
+  it('swings sheets on their threads without moving where the arrangement hangs', () => {
+    const calm = drawMobile(arc)
+    const swinging = drawMobile(arc, 0, 0, { sway: 0.3 })
+    expect(sheetAt(swinging, 2).x).not.toBe(sheetAt(calm, 2).x)
+    expect(JSON.stringify(swinging)).not.toMatch(/NaN/)
+  })
+  it('takes its light from the hour: left in the morning, right by evening, shadow opposite', () => {
+    expect(lightForHour(7)).toBeLessThan(0)
+    expect(lightForHour(19)).toBeGreaterThan(0)
+    expect(lightForHour(3)).toBe(lightForHour(6))
+    const morning = sheetAt(drawMobile(arc, 0, 0, { lightX: lightForHour(7) }), 2)
+    const evening = sheetAt(drawMobile(arc, 0, 0, { lightX: lightForHour(19) }), 2)
+    expect(morning.shadow[0]).toBeGreaterThan(evening.shadow[0])
+  })
+})
+
+describe('grown mobiles', () => {
+  const branches = (sizes: number[]) => sizes.map((n, b) => ({ title: `Branch ${b}`, leaves: Array.from({ length: n }, (_, k) => `Skill ${b}.${k}`) }))
+
+  it('grows one sheet per skill for small and large sets alike', () => {
+    for (const sizes of [[1], [2, 3], [2, 3, 3, 2, 2], [6, 5, 7, 6, 6], [8, 8, 8, 8, 8, 8, 8]]) {
+      const total = sizes.reduce((a, b) => a + b, 0)
+      const grown = growMobile('t', 'T', branches(sizes))
+      expect(grown.shapes).toHaveLength(total)
+      const slots = drawMobile(grown, 3, 1.2).flatMap((p) => (p.kind === 'shape' ? [p.slot] : [])).sort((a, b) => a - b)
+      expect(slots).toEqual(Array.from({ length: total }, (_, i) => i))
+      expect(JSON.stringify(drawMobile(grown, 3, 1.2))).not.toMatch(/NaN|Infinity/)
+    }
+  })
+  it('carries thirty skills in five branches', () => {
+    const grown = growMobile('t', 'T', branches([6, 5, 7, 6, 6]))
+    expect(grown.shapes).toHaveLength(30)
+    expect(grown.shapes.map((s) => s.name)).toContain('Skill 2.6')
+  })
+  it('gives each branch its own form, so branches are not told apart by colour alone', () => {
+    const grown = growMobile('t', 'T', branches([4, 4, 4, 4, 4]))
+    const kinds = [0, 4, 8, 12, 16].map((slot) => grown.shapes[slot]!.kind)
+    expect(new Set(kinds).size).toBe(5)
+    expect(new Set(grown.shapes.slice(0, 4).map((s) => s.kind)).size).toBe(1)
+  })
+  it('is the same mobile every time, and frames itself however it is turned', () => {
+    const a = growMobile('t', 'T', branches([6, 5, 7, 6, 6]))
+    expect(growMobile('t', 'T', branches([6, 5, 7, 6, 6]))).toEqual(a)
+    const [left, , width, height] = a.viewBox!.split(' ').map(Number) as [number, number, number, number]
+    for (let turned = 0; turned < 6.3; turned += 0.4) {
+      for (const p of drawMobile(a, 0, turned)) {
+        if (p.kind !== 'shape') continue
+        expect(p.x).toBeGreaterThan(left)
+        expect(p.x).toBeLessThan(left + width)
+        expect(p.y).toBeLessThan(height)
+      }
+    }
+  })
+  it('skips an empty branch and survives no branches at all', () => {
+    expect(growMobile('t', 'T', branches([0, 3, 0])).shapes).toHaveLength(3)
+    expect(drawMobile(growMobile('t', 'T', []))).toBeInstanceOf(Array)
   })
 })

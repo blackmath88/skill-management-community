@@ -12,6 +12,7 @@ import { href } from '../router'
 import { useApp } from '../state'
 import { formatDateTime, KindTag, PageHead, StageMark } from '../primitives'
 import { NEXT_MOVE_LABEL, OUTCOME_LABEL } from './labels'
+import { SkillMobile } from '../mobile/SkillMobile'
 
 export function RepertoirePage() {
   const { state, models, capabilities } = useApp()
@@ -90,6 +91,7 @@ export function RepertoirePage() {
             A position on a described ladder, with the records it rests on. Only records you linked to a capability
             count towards it.
           </p>
+          <SkillMobile />
           {practised.length === 0 ? (
             <p className="empty">
               None of your records is linked to a capability yet. You can link one when you attach evidence to an
@@ -98,7 +100,7 @@ export function RepertoirePage() {
           ) : (
             <ul className="record-list">
               {practised.map((row) => (
-                <li key={row.evidence.capabilityId} className="capability">
+                <li key={row.evidence.capabilityId} id={`capability-${row.evidence.capabilityId}`} className="capability">
                   <div className="capability__head">
                     <h3>{row.title}</h3>
                     <StageMark stage={row.evidence.stage} />

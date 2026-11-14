@@ -11,6 +11,8 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { href, sectionOf, useRoute, type Route, type Section } from './router'
 import { useApp } from './state'
 import { StatusGate } from './primitives'
+import { Mobile } from './mobile/Mobile'
+import { deriveMobileView } from '~/mobile/view'
 import { HomePage } from './pages/Home'
 import { PracticePage } from './pages/Practice'
 import { PreparePage } from './pages/Prepare'
@@ -187,6 +189,11 @@ export function Shell(): ReactNode {
             ))}
           </ul>
         </nav>
+        {state.status === 'ready' ? (
+          <div className="app-side__mark">
+            <Mobile drawing={{ ...deriveMobileView(state.data).drawing, marked: [] }} size="small" still />
+          </div>
+        ) : null}
         <div className="app-side__foot">
           <fieldset className="ns-switch">
             <legend className="visually-hidden">Which records you are looking at</legend>

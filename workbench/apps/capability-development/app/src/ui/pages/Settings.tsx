@@ -22,6 +22,7 @@ import { ConfirmButton, Field, formatDateTime, PageHead, SaveStatus, useSave } f
 import { useApp } from '../state'
 import { href } from '../router'
 import { MobileEditor } from '../mobile/MobilePanel'
+import { MobileLab } from '../mobile/SkillMobile'
 
 const EMBLEMS = ['◆', '▲', '●', '■', '✦', '⌘']
 const PALETTES = ['slate', 'clay', 'moss', 'ink']
@@ -154,6 +155,7 @@ export function SettingsPage() {
         </p>
         <pre>{JSON.stringify(presentation, null, 2)}</pre>
       </section>
+          <MobileLab />
         </div>
       </details>
     </div>
