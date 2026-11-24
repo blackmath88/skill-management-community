@@ -473,7 +473,7 @@ async function checkAccessibilityBasics(page, base) {
 await ensureBuild()
 const { server, port } = await serveDist()
 const base = `http://127.0.0.1:${port}/index.html`
-const browser = await playwright.chromium.launch({ args: ['--no-sandbox'] })
+const browser = await playwright.chromium.launch({ ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader'] })
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } })
 const page = await context.newPage()
 page.__base = base

@@ -1,3 +1,4 @@
+import { Studio } from '~/assemblage/Studio'
 /**
  * Home: the next useful action, and nothing that rewards coming back.
  *
@@ -52,6 +53,8 @@ export function HomePage() {
           </p>
         )}
       </header>
+
+      <Studio />
 
       <section className="panel panel--accent">
         <h2>Next</h2>

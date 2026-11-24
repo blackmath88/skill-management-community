@@ -206,3 +206,66 @@ dl.pairs dd { margin: 0; }
 }
 .emblem--journey { border-radius: 50%; }
 .emblem--evidence { border-style: dashed; }
+
+/* The assemblage is a quiet work surface, with ordinary controls around it. */
+.assemblage { background: #f1eee6; border: 1px solid #dedacf; border-radius: 22px; overflow: hidden; color: #353b34; }
+.assemblage > header { padding: 30px 36px 0; }
+.assemblage h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); letter-spacing: -.04em; font-weight: 500; }
+.assemblage-view { position: relative; height: 510px; }
+.assemblage-static, .assemblage-gpu { position: absolute; inset: 0; width: 100%; height: 100%; }
+.assemblage-gpu:empty { pointer-events: none; }
+.assemblage-gpu canvas { display: block; width: 100%; height: 100%; }
+.assemblage-backend { position: absolute; bottom: 12px; left: 24px; font-size: 11px; letter-spacing: .08em; color: #62685c; }
+.assemblage > header { display: flex; justify-content: space-between; gap: 25px; }
+.assemblage-edition { font-size: 9px; line-height: 1.5; letter-spacing: .19em; text-align: right; padding-top: 7px; white-space: nowrap; }
+.assemblage-view-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; padding: 8px 24px 24px; }
+.assemblage button { min-height: 44px; background: transparent; color: #3f493e; border: 1px solid #c4c8ba; border-radius: 6px; padding: 8px 12px; font: inherit; cursor: pointer; }
+.assemblage button:hover { background: #e7e6dc; }
+.assemblage button:disabled { opacity: .45; cursor: default; }
+.assemblage button[aria-pressed=true] { border-color: #485d4b; background: #e1e5d8; box-shadow: inset 0 0 0 1px #485d4b; }
+.assemblage label { font-size: 13px; }
+.assemblage-workbench { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(245px, 1fr); border-top: 1px solid #d8d8cc; }
+.assemblage-tools { padding: 26px; }
+.assemblage-section-heading { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-bottom: 18px; }
+.assemblage-section-heading span { font-size: 12px; color: #62685c; }
+.assemblage h3 { font-weight: 550; }
+.assemblage-tray { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.assemblage-tray button { position: relative; display: flex; flex-direction: column; align-items: center; padding: 15px 6px 9px; min-width: 0; }
+.assemblage-tray strong { font-size: 11px; font-weight: 600; margin-top: 8px; }
+.assemblage-tray button > span:last-child { font-size: 10px; color: #6b7066; }
+.assemblage-tray small { position: absolute; top: 5px; left: 8px; font: 9px var(--font-mono); color: #74796d; }
+.piece-swatch { width: 37px; height: 31px; clip-path: polygon(20% 0,80% 5%,100% 40%,85% 92%,28% 100%,0 65%); box-shadow: inset -9px -6px #0002; }
+.piece-swatch--spire { width: 26px; height: 40px; }
+.piece-swatch--foundation { width: 50px; height: 19px; margin-top: 12px; }
+.piece-swatch--wedge { clip-path: polygon(0 100%,80% 0,100% 100%); }
+.piece-swatch--bridge { clip-path: polygon(0 100%,0 25%,20% 0,80% 0,100% 25%,100% 100%,70% 100%,70% 50%,30% 50%,30% 100%); }
+.piece-swatch--portal { clip-path: polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%,25% 0,25% 30%,25% 70%,75% 70%,75% 30%,25% 30%); }
+.assemblage-palette { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin: 22px 0; }
+.assemblage-palette button { padding: 8px 4px; font-size: 10px; }
+.assemblage-palette button > span { display: flex; justify-content: center; margin-bottom: 6px; }
+.assemblage-palette i { width: 12px; height: 12px; border-radius: 50%; margin: 0 -1px; }
+.assemblage-inspector { padding-top: 18px; border-top: 1px solid #d8d8cc; }
+.assemblage-inspector > button { margin-top: 16px; }
+.assemblage .hint { font-size: 12px; line-height: 1.65; }
+.assemblage-memories { padding: 26px; background: #e9e9df; border-left: 1px solid #d8d8cc; }
+.assemblage-memory-list { display: flex; flex-direction: column; gap: 8px; }
+.assemblage-memory-list button { display: flex; text-align: left; align-items: center; gap: 13px; border-color: transparent; border-bottom-color: #d0d3c4; border-radius: 0; font-size: 13px; }
+.assemblage-memory-list small { display: block; color: #646c5c; font-size: 10px; margin-top: 2px; }
+.memory-symbol { width: 28px; font-size: 26px; color: #6e725b; }
+.assemblage-evidence { margin-top: 20px; padding: 16px; background: #f8f7ef; border-radius: 8px; font-size: 13px; }
+.assemblage-evidence label { display: block; margin-top: 14px; }
+.assemblage-evidence button { margin-top: 12px; font-size: 12px; }
+.assemblage details { font-size: 12px; margin-top: 20px; }
+.assemblage summary { cursor: pointer; min-height: 44px; padding: 10px 0; }
+.assemblage-bottom { border-top: 1px solid #d8d8cc; padding: 16px 26px; }
+.assemblage-bottom > p { font-size: 12px; margin: 0; }
+.assemblage-file-controls { max-width: 600px; display: grid; gap: 12px; }
+.assemblage select, .assemblage textarea { width: 100%; }
+@media(max-width:700px) {
+  .assemblage > header { padding: 24px 20px 0; }
+  .assemblage-edition { display: none; }
+  .assemblage-view { height: 370px; }
+  .assemblage-workbench { grid-template-columns: 1fr; }
+  .assemblage-memories { border-left: 0; border-top: 1px solid #d8d8cc; }
+  .assemblage-tools, .assemblage-memories { padding: 20px; }
+}

@@ -23,17 +23,9 @@ import { useApp } from '../state'
 
 const EMBLEMS = ['◆', '▲', '●', '■', '✦', '⌘']
 const PALETTES = ['slate', 'clay', 'moss', 'ink']
-/**
- * The presentation modes.
- *
- * Only the emblem's shape changes today: the character and journey views described in
- * ../../../VISUAL-DIRECTIONS.md are not built, and choosing one of those worlds is design work
- * that has not happened. The labels say what the setting does now rather than what it is meant to
- * become, because a setting that promises a figure which does not exist is a small lie told on
- * every visit.
- */
+/** Legacy emblem choices remain independent of the Home assemblage and its palette. */
 const MODES: { value: PresentationMode; label: string; hint: string }[] = [
-  { value: 'character', label: 'Solid emblem', hint: 'A square mark. Intended later to carry a character; that view is not built yet.' },
+  { value: 'character', label: 'Solid emblem', hint: 'A square mark for this settings preview. Arrange Living Assemblage on Home.' },
   { value: 'journey', label: 'Round emblem', hint: 'A round mark. Intended later to show your records as a path; that view is not built yet.' },
   { value: 'evidence', label: 'Outlined emblem', hint: 'An outlined mark, for the plainest presentation.' },
 ]

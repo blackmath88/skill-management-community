@@ -1,3 +1,4 @@
+import { parseComposition } from '~/assemblage/model'
 /**
  * Runtime validation for untrusted UserData (imports, stored snapshots).
  *
@@ -253,6 +254,10 @@ function readProfile(r: Reader, v: unknown): Profile {
   if (o.appearance !== undefined) {
     const appearance = readAppearance(r, o.appearance, `${path}.appearance`)
     if (appearance) profile.appearance = appearance
+  }
+  if (o.assemblage !== undefined) {
+    try { profile.assemblage = parseComposition(o.assemblage) }
+    catch (error) { r.fail('profile.assemblage', error instanceof Error ? error.message : 'Invalid composition') }
   }
   return profile
 }
@@ -600,6 +605,9 @@ function checkRelationships(r: Reader, data: UserData, options: ValidationOption
   const reviewIds = new Set(data.reviews.map((rv) => rv.id))
   const evidenceIds = new Set(data.evidence.map((e) => e.id))
 
+  data.profile.assemblage?.markers.forEach((m, i) => {
+    if (m.evidenceId && !evidenceIds.has(m.evidenceId)) r.fail(`profile.assemblage.markers[${i}]`, 'refers to missing evidence')
+  })
   const capabilities = options.knownCapabilityIds ? new Set(options.knownCapabilityIds) : null
   const methods = options.knownMethodIds ? new Set(options.knownMethodIds) : null
   const definitions = options.knownCampaignIds ? new Set(options.knownCampaignIds) : null

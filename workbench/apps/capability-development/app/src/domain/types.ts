@@ -1,3 +1,4 @@
+import type { Composition } from '~/assemblage/model'
 /**
  * Personal records and derived read models.
  *
@@ -475,6 +476,7 @@ export interface Appearance {
 }
 
 export interface Profile {
+  assemblage?: Composition
   displayName?: string
   /** Which content packs the user selected. Empty means every installed pack. */
   selectedPackIds: Id[]

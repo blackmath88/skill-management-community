@@ -122,3 +122,19 @@ Validation: foundation structure passed; 91 relative documentation links resolve
 ## GitHub Pages preview setup — 12 November 2026
 
 Owner requested deployment for review. Added a branch-scoped Pages workflow that runs npm ci and npm run verify before uploading only app/dist. Added app/DEPLOYMENT.md with source branch, expected URL, privacy boundaries and later promotion instructions. GitHub Pages was observed configured for GitHub Actions. This adds preview deployment, not a merge or effectiveness claim. See Actions for live build/deployment results.
+
+## Living Assemblage implementation — 12 November 2026
+
+- Implemented in the existing app on local branch `living-assemblage`, based on preview source
+  `03c8601d117d37270c731a68a70e4cd96d7fb243`. The main-branch build mandate and all linked notes were
+  read first. No current Observatory snapshot; direct repository and dependency inspection used.
+- Added an original six-piece catalogue, four palettes, static/GPU presentation, assisted contact
+  placement, selection, rotations, undo, curated memory markers and real record resolution.
+- Reused the existing session queue, revision checks, snapshot validation, IndexedDB and deletion
+  cascades. Added appearance-only export/import with ID remapping and atomic validation. Existing
+  React, Vite, state and storage workflows retained; no app scaffold, server, push or deployment.
+- Software WebGPU and forced WebGL 2 rendered; no-GPU and loading failures preserve static controls.
+  Actual device destruction/context loss restore fallback. See app/ASSEMBLAGE-NOTES.md for commands,
+  rights, exact stack, the development-only Rapier transitive-dependency deviation and test limits.
+- Next: review the composition on target hardware and a physical mobile device, then assess whether
+  the optional renderer cost is justified. No learning-effectiveness claim or pilot authorised.

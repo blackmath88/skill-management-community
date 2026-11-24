@@ -30,6 +30,15 @@ export function deleteEvidenceCascade(
   const at = now ?? new Date().toISOString()
   return {
     ...data,
+    profile: data.profile.assemblage ? { ...data.profile, assemblage: {
+      ...data.profile.assemblage,
+      markers: data.profile.assemblage.markers.flatMap(m => {
+        if (!m.evidenceId || !evidenceIds.has(m.evidenceId)) return [m]
+        if (!m.retainUnlinked) return []
+        const { evidenceId: _removed, ...decoration } = m
+        return [decoration]
+      }),
+    } } : data.profile,
     evidence: data.evidence.filter((e) => !evidenceIds.has(e.id)),
     hypotheses: data.hypotheses.map((h) => {
       if (!h.evidenceIds.some((id) => evidenceIds.has(id))) return h

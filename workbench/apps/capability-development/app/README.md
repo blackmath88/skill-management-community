@@ -191,9 +191,9 @@ These are things that are genuinely true of this build, not caveats for form's s
   built in, so the titles, authors and attributed claims behind all five methods were recorded as
   written down, not as checked. The Methods page shows this. They must be checked before this
   content is used anywhere outside this repository.
-- **One visual presentation.** The four worlds in `../VISUAL-DIRECTIONS.md` are not built, and the
-  character is a CSS emblem rather than the predecessor's 3-D figure. That was deliberate; see
-  [PROVENANCE.md](PROVENANCE.md).
+- **One assemblage presentation.** The richer multi-world proposals are not built. Home now has
+  the bounded Living Assemblage prototype; the legacy settings emblem remains separate. See
+  [assemblage notes](ASSEMBLAGE-NOTES.md).
 - **The data-minimisation check is narrow.** Validation refuses something that looks like an email
   address or a phone number in an evidence *attribution* — one structured field. It does not stop a
   name in that field, and it does not look at free text at all: notes, reviews, descriptions and
@@ -221,3 +221,13 @@ through `aria-describedby`.
 
 Not yet done: no screen-reader pass with a real assistive technology, and no contrast audit beyond
 choosing the palette for it.
+
+## Living Assemblage
+
+Home now includes an original six-piece composition with assisted placement, undo, four palettes,
+curated evidence markers, motion-off and appearance-only JSON portability. It progressively
+enhances a static SVG view using Three.js WebGPURenderer with explicit WebGL 2 fallback.
+The existing profile/session/IndexedDB boundaries persist it. See [implementation and rights
+notes](ASSEMBLAGE-NOTES.md) for the actual renderer checks, dependency caveat and limitations.
+Run `npm run test:assemblage` for the integrated browser journey and `npm run test:renderers`
+against a running production preview for the backend/failure matrix.
